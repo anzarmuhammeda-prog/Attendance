@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DARKSTORE ATT - Professional Master Control Terminal</title>
   
-  <!-- Firebase Core Architecture SDK Modules -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -96,6 +95,9 @@
     .submit-block-btn { background: #10b981; color: #060b13; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: bold; margin-top: 15px; }
     .submit-block-btn:disabled { background: #1e293b; color: #64748b; cursor: not-allowed; }
     .admin-section, .store-section { display: none; }
+    
+    /* Small UI adjustment utility class */
+    .action-btn-small { background: #334155; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -116,9 +118,32 @@
       </div>
     </div>
 
-    <!-- ADMIN CONSOLE -->
     <div id="admin-view" class="admin-section panel-box" style="background: #151026; border-color: #5b21b6;">
       <h3 style="color: #a78bfa;">⚡ System Network Configuration Matrix</h3>
+      
+      <div id="admin-pin-panel" style="background: #251b3d; border: 1px dashed #a78bfa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="color: #c084fc; margin: 0 0 10px 0; font-size: 14px;">🔒 Master Location Authorization Keys (PINs)</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="color: #e2e8f0;">MBZ City PIN</label>
+            <input type="text" id="pin-cfg-mbz" maxlength="4" style="padding: 6px; background: #130f26; border: 1px solid #5b21b6; color: #fff; border-radius: 4px; width: 100%; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="color: #e2e8f0;">Khalifa City PIN</label>
+            <input type="text" id="pin-cfg-khalifa" maxlength="4" style="padding: 6px; background: #130f26; border: 1px solid #5b21b6; color: #fff; border-radius: 4px; width: 100%; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="color: #e2e8f0;">Al Raha PIN</label>
+            <input type="text" id="pin-cfg-raha" maxlength="4" style="padding: 6px; background: #130f26; border: 1px solid #5b21b6; color: #fff; border-radius: 4px; width: 100%; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="color: #e2e8f0;">Yas Island PIN</label>
+            <input type="text" id="pin-cfg-yas" maxlength="4" style="padding: 6px; background: #130f26; border: 1px solid #5b21b6; color: #fff; border-radius: 4px; width: 100%; box-sizing: border-box;">
+          </div>
+        </div>
+        <button class="add-btn" style="background: #a78bfa; width: auto; padding: 6px 15px;" onclick="saveSystemPinUpdates()">Save Modified Gatekeeper PINs</button>
+      </div>
+
       <label style="color: #c084fc; margin-bottom: 8px;">Live Regional Node Operations Tracker Grid:</label>
       <div class="table-container">
         <table style="min-width: 700px;">
@@ -167,7 +192,23 @@
       </div>
     </div>
 
-    <!-- FIELD WORKSPACE -->
+    <div id="teamleader-pin-box" class="panel-box" style="max-width: 420px; margin: 15px auto 25px auto; text-align: center; background: #0e1726; border-color: #00b4d8;">
+      <div style="font-size: 28px; margin-bottom: 5px;">🔒</div>
+      <h3 style="color: #00b4d8; margin-bottom: 4px; border: none; padding: 0;">TL Verification Gateway</h3>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0 0 15px 0;">Enter local verification code to switch terminal access on.</p>
+      
+      <div style="text-align: left; margin-bottom: 12px;">
+        <label>Selected Location</label>
+        <select id="pin-login-store-select" class="form-input" onchange="syncSelectedStoreToTerminal()"></select>
+      </div>
+      <div style="text-align: left; margin-bottom: 18px;">
+        <label>Secure Store PIN</label>
+        <input type="password" id="pin-login-value-input" maxlength="4" placeholder="••••" style="width: 100%; padding: 10px; background: #132237; border: 1px solid #1e293b; border-radius: 6px; color: #fff; text-align: center; font-size: 18px; letter-spacing: 6px; box-sizing: border-box;">
+      </div>
+      <button class="add-btn" style="background: #00b4d8; font-size: 14px;" onclick="validateStoreTerminalAccessKey()">Unlock Field Workspace →</button>
+      <p id="pin-validation-fail-msg" style="color: #ef4444; font-size: 12px; margin-top: 10px; display: none; font-weight: bold;">❌ Pin verification failed. Roster locked.</p>
+    </div>
+
     <div id="store-view" class="store-section panel-box">
       <h3 id="workspace-title-label">Shift Team Attendance Builder</h3>
       <button class="bulk-btn" onclick="bulkPopulateEntireStoreRoster()">⚡ Pre-populate All Active Roster Rows as Present</button>
@@ -232,7 +273,6 @@
       <button id="final-submit-btn" class="submit-block-btn" onclick="transmitStagedRosterToCloud()" disabled>Transmit Complete Store Sheet to Cloud Database</button>
     </div>
 
-    <!-- MAIN CENTRAL LEDGER -->
     <h3 id="ledger-title-label" style="color: #fff; font-size: 16px;">Live Transmitted Logs Ledger</h3>
     <div class="table-container">
       <table>
@@ -264,6 +304,15 @@
   let activeStoresList = ["QAA1 - MBZ CITY", "QAA6 - Khalifa City", "QDG5 - Business Bay 2", "QDC6 - Qusais 2", "QAA7 - Al Raha", "QDD3 - Yas Island"];
   let fullEmployeeDirectory = [];
 
+  // Local storage mapping system for customized terminal authorization pins
+  const fallbackStorePins = {
+    "QAA1 - MBZ CITY": "1001",
+    "QAA6 - Khalifa City": "1002",
+    "QAA7 - Al Raha": "1003",
+    "QDD3 - Yas Island": "1004"
+  };
+  let activeSystemPINMatrix = JSON.parse(localStorage.getItem('darkstore_terminal_pins')) || fallbackStorePins;
+
   const todayDateStr = new Date().toISOString().split('T')[0];
   document.getElementById('form-date').value = todayDateStr;
 
@@ -284,6 +333,7 @@
   }
 
   function logout() { auth.signOut(); }
+  
   function displayLoginWindow() {
     document.getElementById("login-view").style.display = "block";
     document.getElementById("dashboard-view").style.display = "none";
@@ -293,7 +343,6 @@
     document.getElementById("login-view").style.display = "none";
     document.getElementById("dashboard-view").style.display = "block";
     
-    // Extracted Username display logic for simple identification
     const prefixName = email.split('@')[0].toUpperCase();
     document.getElementById("user-role").innerHTML = `GUARD: <span style="color:#00d2ff; font-weight:bold;">${prefixName}</span>`;
 
@@ -302,13 +351,18 @@
     if(email === "anzarmuhammed.a@gmail.com" || email === "admin@attendance.com" || email === "anzar.mhd@gmail.com") {
       isAdmin = true;
       document.getElementById("admin-view").style.display = "block";
+      document.getElementById("teamleader-pin-box").style.display = "none"; // Admin bypasses PIN gate completely
       document.getElementById("store-view").style.display = "block";
       dateField.removeAttribute("min");
       dateField.removeAttribute("max");
+      
+      // Load PIN configs inside admin values directly
+      syncAdminPinConfigFields();
     } else {
       isAdmin = false;
       document.getElementById("admin-view").style.display = "none";
-      document.getElementById("store-view").style.display = "block";
+      document.getElementById("teamleader-pin-box").style.display = "block"; // Force layout lock until PIN matches
+      document.getElementById("store-view").style.display = "none";
       
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
@@ -319,6 +373,50 @@
     temporaryRosterList = [];
     renderTemporaryStagedTable();
     syncLiveSystemDataMatrix();
+  }
+
+  // Pin validation operations
+  function syncSelectedStoreToTerminal() {
+    const selected = document.getElementById("pin-login-store-select").value;
+    document.getElementById("form-store-code").value = selected;
+    filterEmployeeDropdownByStore();
+  }
+
+  function validateStoreTerminalAccessKey() {
+    const selectedStore = document.getElementById("pin-login-store-select").value;
+    const inputPin = document.getElementById("pin-login-value-input").value;
+    const errorAlert = document.getElementById("pin-validation-fail-msg");
+
+    // Match mapping token rules
+    const correctPin = activeSystemPINMatrix[selectedStore] || "1234";
+
+    if (inputPin === correctPin) {
+      errorAlert.style.display = "none";
+      document.getElementById("pin-login-value-input").value = "";
+      alert(`Access Granted for ${selectedStore}`);
+      
+      document.getElementById("teamleader-pin-box").style.display = "none";
+      document.getElementById("store-view").style.display = "block";
+    } else {
+      errorAlert.style.display = "block";
+    }
+  }
+
+  function syncAdminPinConfigFields() {
+    document.getElementById("pin-cfg-mbz").value = activeSystemPINMatrix["QAA1 - MBZ CITY"] || "1001";
+    document.getElementById("pin-cfg-khalifa").value = activeSystemPINMatrix["QAA6 - Khalifa City"] || "1002";
+    document.getElementById("pin-cfg-raha").value = activeSystemPINMatrix["QAA7 - Al Raha"] || "1003";
+    document.getElementById("pin-cfg-yas").value = activeSystemPINMatrix["QDD3 - Yas Island"] || "1004";
+  }
+
+  function saveSystemPinUpdates() {
+    activeSystemPINMatrix["QAA1 - MBZ CITY"] = document.getElementById("pin-cfg-mbz").value;
+    activeSystemPINMatrix["QAA6 - Khalifa City"] = document.getElementById("pin-cfg-khalifa").value;
+    activeSystemPINMatrix["QAA7 - Al Raha"] = document.getElementById("pin-cfg-raha").value;
+    activeSystemPINMatrix["QDD3 - Yas Island"] = document.getElementById("pin-cfg-yas").value;
+
+    localStorage.setItem('darkstore_terminal_pins', JSON.stringify(activeSystemPINMatrix));
+    alert("🚀 System PIN parameters structural deployment completed successfully!");
   }
 
   function syncLiveSystemDataMatrix() {
@@ -340,6 +438,7 @@
     const adminAssignStore = document.getElementById("admin-assign-store");
     const adminRosterViewStore = document.getElementById("admin-roster-view-store");
     const adminFilterDropdown = document.getElementById("filter-store-dropdown");
+    const pinLoginStoreSelect = document.getElementById("pin-login-store-select");
 
     const buildOptions = (targetEl, includeAll = false) => {
       targetEl.innerHTML = includeAll ? `<option value="All">All Operations Combined</option>` : "";
@@ -350,7 +449,9 @@
     buildOptions(adminAssignStore);
     buildOptions(adminRosterViewStore);
     buildOptions(adminFilterDropdown, true);
+    buildOptions(pinLoginStoreSelect);
 
+    syncSelectedStoreToTerminal();
     filterEmployeeDropdownByStore();
     loadHistoricalLedgerStream();
   }
@@ -358,6 +459,7 @@
   function filterEmployeeDropdownByStore() {
     const targetStore = document.getElementById("form-store-code").value;
     const empSelect = document.getElementById("form-employee-select");
+    if(!empSelect) return;
     empSelect.innerHTML = "";
     
     const filteredStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === targetStore);
@@ -522,12 +624,20 @@
       temporaryRosterList = [];
       renderTemporaryStagedTable();
       loadHistoricalLedgerStream();
-      if(isAdmin) { calculateNetworkHealthGrid(); }
+      
+      // If a non-admin team leader submitted, reset view state to re-lock the screen
+      if(!isAdmin) {
+        document.getElementById("teamleader-pin-box").style.display = "block";
+        document.getElementById("store-view").style.display = "none";
+      } else {
+        calculateNetworkHealthGrid();
+      }
     }).catch(err => alert("Error processing batch write: " + err.message));
   }
 
   function loadHistoricalLedgerStream() {
     const tbody = document.getElementById("attendance-table-body");
+    if(!tbody) return;
     tbody.innerHTML = "<tr><td colspan='8' style='color:#00d2ff; text-align:center;'>Syncing...</td></tr>";
     
     let query = db.collection("attendance_ledger").orderBy("createdAt", "desc");
@@ -538,6 +648,10 @@
       query = query.limit(100);
     } else {
       const localStoreTargetCode = document.getElementById("form-store-code").value;
+      if(!localStoreTargetCode) {
+        tbody.innerHTML = "<tr><td colspan='8' style='color:#64748b; text-align:center;'>Awaiting active node configuration...</td></tr>";
+        return;
+      }
       query = query.where("storeCode", "==", localStoreTargetCode).limit(50);
     }
 
@@ -559,7 +673,7 @@
           <td><span class="user-badge">${guardName}</span> <span style="color:#64748b; font-size:11px;">at ${data.transmissionTime || ''}</span></td>
         </tr>`;
       });
-    }).catch(err => { tbody.innerHTML = `<tr><td colspan='8' style="color: #ef4444; text-align:center;">Sync Failure.</td></tr>`; });
+    }).catch(err => { tbody.innerHTML = `<tr><td colspan='8' style='color: #ef4444; text-align:center;'>Sync Failure.</td></tr>`; });
   }
 
   /* ================= ADMIN MANAGEMENT SETTINGS ================= */
