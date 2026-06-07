@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMAZON DARKSTORE LOGISTICS - MASTER COMMAND TERMINAL</title>
+  <title>AMAZON DARKSTORE LOGISTICS - MULTI-PAGE PORTAL</title>
   
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -15,24 +15,27 @@
       background-color: #060b13; 
       color: #e2e8f0; 
       margin: 0; 
-      padding: 15px; 
-      display: flex; 
-      justify-content: center; 
-      align-items: flex-start; 
-      min-height: 95vh; 
+      padding: 0; 
+      min-height: 100vh; 
     }
     
+    /* LOGIN VIEW (ISOLATED FULL PAGE) */
+    .login-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: radial-gradient(circle at center, #0f1c30 0%, #060b13 100%);
+    }
     .login-box { 
       background: #0b1424; 
       padding: 40px 30px; 
       width: 100%;
-      max-width: 360px; 
+      max-width: 380px; 
       border-radius: 16px; 
-      box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.5); 
+      box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.6); 
       border: 1px solid #1e293b;
       text-align: center; 
-      margin-top: 10vh;
-      display: block;
       box-sizing: border-box;
     }
     .login-box h2 { margin: 0 0 5px 0; color: #ff9900; font-size: 26px; letter-spacing: 1px; }
@@ -47,17 +50,62 @@
       border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 15px;
     }
 
+    /* MAIN APP WORKSPACE NAVIGATION LAYOUT */
     .dashboard-container { 
-      max-width: 1400px; width: 100%; background: #0b1424; padding: 20px; 
-      border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); border: 1px solid #1e293b;
       display: none; 
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    /* SYSTEM NAVIGATION HEADER BAR */
+    .app-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      background: #0b1424;
+      border-bottom: 1px solid #1e293b; 
+      padding: 15px 25px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-header h2 { margin: 0; font-size: 20px; color: #fff; display: flex; align-items: center; gap: 10px;}
+    .app-header h2 span { color: #ff9900; font-size: 13px; font-family: monospace; }
+    
+    .nav-tabs { display: flex; gap: 8px; }
+    .nav-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+    .nav-tab-btn:hover { color: #fff; background: #132237; }
+    .nav-tab-btn.active { 
+      background: #ff9900; 
+      color: #060b13; 
+      border-color: #ff9900;
+    }
+    .nav-tab-btn.admin-tab { border: 1px dashed #c084fc; color: #c084fc; }
+    .nav-tab-btn.admin-tab.active { background: #c084fc; color: #151221; border-color: #c084fc;}
+
+    .logout-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;}
+    
+    /* PAGE VIEW CONTAINERS */
+    .page-view {
+      display: none; /* Controlled via JS switching */
+      padding: 25px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
       box-sizing: border-box;
     }
-    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 20px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
-    .header h2 { margin: 0; font-size: 22px; color: #fff; }
-    .header h2 span { color: #ff9900; font-size: 16px; margin-left: 10px; }
-    .logout-btn { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    
+    .page-view.active-page { display: block; }
+
     .panel-box { background: #111c2e; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
     .panel-box h3 { margin-top: 0; color: #ff9900; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;}
     
@@ -70,7 +118,7 @@
     select, input.form-input { width: 100%; padding: 10px; background: #1c2d42; border: 1px solid #2e415a; border-radius: 6px; box-sizing: border-box; font-size: 13px; color: white; }
     
     .add-btn { width: 100%; background: #ff9900; color: #060b13; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
-    .bulk-btn { background: #6366f1; color: white; border: none; padding: 10px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; }
+    .bulk-btn { background: #6366f1; color: white; border: none; padding: 10px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
     .bulk-btn:hover { background: #4f46e5; }
     .export-btn { background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
     
@@ -84,19 +132,16 @@
     .status-Absent { background: rgba(239, 68, 68, 0.15); color: #f87171; }
     .status-Week-Off { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
     .status-Half-Day { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-    
     .status-Pending { background: rgba(239, 68, 68, 0.15); color: #f87171; }
     .status-Resolved { background: rgba(16, 185, 129, 0.15); color: #34d399; }
 
     .role-label { color: #38bdf8; font-size: 11px; text-transform: uppercase; font-weight: bold; background: rgba(56, 189, 248, 0.1); padding: 2px 6px; border-radius: 4px;}
     .user-badge { color: #a78bfa; font-size: 11px; font-family: monospace; background: rgba(167, 139, 250, 0.1); padding: 2px 6px; border-radius: 4px;}
 
-    /* ENHANCED LIVE ANALYTICS COMPONENT STYLING */
     .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
-    .analytics-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 8px; text-align: center; transition: all 0.3s ease; }
+    .analytics-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 8px; text-align: center; }
     .analytics-card .num { font-size: 20px; font-weight: bold; margin-top: 4px; }
     
-    /* ATTENDANCE CAPACITY INDICATOR RULES */
     .capacity-danger { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.05) !important; color: #f87171 !important; }
     .capacity-warn { border-color: #f59e0b !important; background: rgba(245, 158, 11, 0.05) !important; color: #fbbf24 !important; }
     .capacity-optimal { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.05) !important; color: #34d399 !important; }
@@ -104,89 +149,41 @@
     .submit-block-btn { background: #10b981; color: #060b13; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: bold; margin-top: 15px; }
     .submit-block-btn:disabled { background: #1e293b; color: #64748b; cursor: not-allowed; }
     
-    .admin-section, .store-section { display: none; }
     .action-btn-small { background: #334155; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-right: 4px;}
     .action-btn-small:hover { background: #475569; }
   </style>
 </head>
 <body>
 
-  <div id="login-view" class="login-box">
-    <h2>AMAZON LOGISTICS</h2>
-    <p>Darkstore Network Access Node</p>
-    <input type="email" id="email" placeholder="Corporate Operator Email">
-    <input type="password" id="password" placeholder="System Encryption Key">
-    <button class="login-btn" onclick="login()">Authenticate Interface →</button>
+  <div id="login-view" class="login-screen">
+    <div class="login-box">
+      <h2>AMAZON LOGISTICS</h2>
+      <p>Darkstore Network Access Node</p>
+      <input type="email" id="email" placeholder="Corporate Operator Email">
+      <input type="password" id="password" placeholder="System Encryption Key">
+      <button class="login-btn" onclick="login()">Authenticate Interface →</button>
+    </div>
   </div>
 
   <div id="dashboard-view" class="dashboard-container">
-    <div class="header">
-      <h2>DARKSTORE CONTROLS <span>// Corporate Operations Portal</span></h2>
-      <div style="display: flex; align-items: center; gap: 20px;">
-        <span id="user-role" style="color: #94a3b8; font-family: monospace;">Validating Secure Session...</span>
-        <button class="logout-btn" onclick="logout()">Disconnect Terminal</button>
-      </div>
-    </div>
-
-    <div id="admin-view" class="admin-section panel-box" style="background: #151221; border-color: #4c1d95;">
-      <h3 style="color: #c084fc;">⚡ Enterprise Infrastructure Settings Control Panel</h3>
+    
+    <div class="app-header">
+      <h2>AMAZON CONTROLS <span id="user-role">// Operator Frame</span></h2>
       
-      <div style="background: #1e1730; border: 1px dashed #a78bfa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <h4 style="color: #e9d5ff; margin: 0 0 10px 0; font-size: 14px;">🔒 Site Authorization Gateway Matrix (Dynamic PIN Assignment Tokens)</h4>
-        <div id="dynamic-admin-pin-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;"></div>
-        <button class="add-btn" style="background: #c084fc; color: #151221; width: auto; padding: 8px 20px;" onclick="saveConfiguredPinsToCloudStore()">Commit Custom PIN Updates</button>
+      <div class="nav-tabs">
+        <button id="tab-attendance" class="nav-tab-btn active" onclick="switchPage('attendance-page')">📝 Attendance Marking</button>
+        <button id="tab-history" class="nav-tab-btn" onclick="switchPage('history-page')">📊 History Logs Engine</button>
+        <button id="tab-reports" class="nav-tab-btn" onclick="switchPage('reports-page')">📢 System Incident Reports</button>
+        <button id="tab-admin" class="nav-tab-btn admin-tab" style="display:none;" onclick="switchPage('admin-page')">⚡ Admin Infrastructure</button>
       </div>
 
-      <label style="color: #a78bfa; margin-bottom: 8px;">Regional Store Sync Health Metrics Grid:</label>
-      <div class="table-container">
-        <table style="min-width: 700px;">
-          <thead>
-            <tr><th>Location Identifier</th><th>Reporting Progress</th><th>Fulfillment Floor Strength</th><th>Last Synchronization Point Log</th></tr>
-          </thead>
-          <tbody id="admin-health-grid-body"></tbody>
-        </table>
-      </div>
-
-      <div class="grid-admin">
-        <div>
-          <label>Register New Branch Location Option</label>
-          <div class="admin-input-group">
-            <input type="text" id="new-store-input" class="form-input" placeholder="e.g., QAA9 - Al Ain">
-            <button class="add-btn" style="background:#c084fc; color:#151221; width:auto;" onclick="addNewStoreOption()">+</button>
-          </div>
-          <div id="admin-stores-list" style="max-height: 140px; overflow-y: auto; margin-top: 10px;"></div>
-        </div>
-
-        <div>
-          <label style="color: #c084fc;">Onboard Personnel & Assign Shift Roster</label>
-          <div class="admin-input-group">
-            <select id="admin-assign-store" class="form-input"></select>
-            <input type="text" id="admin-new-emp-name" class="form-input" placeholder="Worker Full Name">
-            <select id="admin-assign-role" class="form-input">
-              <option value="Warehouse Associate">Warehouse Associate</option>
-              <option value="Housekeeping">Housekeeping</option>
-              <option value="Team Leader">Team Leader</option>
-              <option value="Supervisor">Supervisor</option>
-            </select>
-            <select id="admin-assign-shift" class="form-input">
-              <option value="Day">Day Shift</option>
-              <option value="Mid">Mid Shift</option>
-              <option value="Night">Night Shift</option>
-            </select>
-            <button class="add-btn" style="background:#10b981; color:#060b13; width:auto;" onclick="addNewEmployeeToRoster()">Save Employee</button>
-          </div>
-          <label style="margin-top: 15px;">Review Active Directory Roster Mapping:</label>
-          <select id="admin-roster-view-store" class="form-input" onchange="renderAdminEmployeeDirectory()" style="max-width: 300px; margin-bottom: 5px;"></select>
-          <div id="admin-employees-list" style="max-height: 150px; overflow-y: auto; background: #0f172a; padding: 5px; border-radius: 6px; border: 1px solid #1e293b;"></div>
-        </div>
-      </div>
+      <button class="logout-btn" onclick="logout()">Disconnect</button>
     </div>
 
-    <div id="teamleader-pin-box" class="panel-box" style="max-width: 420px; margin: 15px auto 25px auto; text-align: center; background: #0e1726; border-color: #ff9900;">
+    <div id="teamleader-pin-box" class="panel-box" style="max-width: 420px; margin: 40px auto; text-align: center; background: #0e1726; border-color: #ff9900;">
       <div style="font-size: 28px; margin-bottom: 5px;">🔑</div>
       <h3 style="color: #ff9900; margin-bottom: 4px; border: none; padding: 0;">Shift Verification Gateway</h3>
       <p style="color: #94a3b8; font-size: 12px; margin: 0 0 15px 0;">Enter local terminal validation key to unlock the staging sheet environment.</p>
-      
       <div style="text-align: left; margin-bottom: 12px;">
         <label>Branch Target Node</label>
         <select id="pin-login-store-select" class="form-input" onchange="syncSelectedStoreToTerminal()"></select>
@@ -195,132 +192,136 @@
         <label>Passcode Token Verification PIN</label>
         <input type="password" id="pin-login-value-input" maxlength="4" placeholder="••••" style="width: 100%; padding: 10px; background: #132237; border: 1px solid #1e293b; border-radius: 6px; color: #fff; text-align: center; font-size: 18px; letter-spacing: 6px; box-sizing: border-box;">
       </div>
-      <button class="add-btn" style="background: #ff9900;" onclick="validateStoreTerminalAccessKey()">Unlock Node Sheets Workspace →</button>
-      <p id="pin-validation-fail-msg" style="color: #ef4444; font-size: 12px; margin-top: 10px; display: none; font-weight: bold;">❌ Pin validation mismatch. Roster access blocked.</p>
+      <button class="add-btn" style="background: #ff9900;" onclick="validateStoreTerminalAccessKey()">Unlock Node Workspace →</button>
+      <p id="pin-validation-fail-msg" style="color: #ef4444; font-size: 12px; margin-top: 10px; display: none; font-weight: bold;">❌ PIN verification mismatch.</p>
     </div>
 
-    <div id="store-view" class="store-section panel-box">
-      <h3 id="workspace-title-label">Active Roster Selection Workspace</h3>
-      
-      <div style="display:flex; gap: 10px; align-items:center; flex-wrap: wrap; margin-bottom: 15px;">
-        <label style="margin:0;">Select Active Operation Category Block:</label>
-        <select id="bulk-shift-filter" class="form-input" style="max-width: 150px;" onchange="updateLiveAnalyticsDashboard()">
-          <option value="All">All Shifts</option>
-          <option value="Day">Day Shift</option>
-          <option value="Mid">Mid Shift</option>
-          <option value="Night">Night Shift</option>
-        </select>
-        <button class="bulk-btn" style="margin:0;" onclick="bulkPopulateEntireStoreRoster()">⚡ Pre-populate Filtered Rows as Present</button>
+
+    <div id="attendance-page" class="page-view active-page">
+      <div id="store-view" class="panel-box" style="display:none;">
+        <h3>📝 Active Roster Selection & Staging Area</h3>
         
-        <span id="unmarked-alert-badge" class="badge" style="display:none; font-size:12px; padding:6px 12px; border-radius:6px;"></span>
-      </div>
-
-      <div class="grid-6">
-        <div>
-          <label>Target Tracking Date</label>
-          <input type="date" id="form-date" class="form-input">
-        </div>
-        <div>
-          <label>Location context</label>
-          <select id="form-store-code" onchange="filterEmployeeDropdownByStore()"></select>
-        </div>
-        <div>
-          <label>Select Employee Name</label>
-          <select id="form-employee-select" onchange="autoConfigureShiftFieldsBySelection()"></select>
-        </div>
-        <div>
-          <label>Assigned Shift Timing</label>
-          <select id="form-shift-select">
-            <option value="Day">Day</option>
-            <option value="Mid">Mid</option>
-            <option value="Night">Night</option>
-          </select>
-        </div>
-        <div>
-          <label>Attendance Status</label>
-          <select id="form-status-select">
-            <option value="Present">Present</option>
-            <option value="Absent">Absent</option>
-            <option value="Week-Off">Week-Off</option>
-            <option value="Half Day">Half Day</option>
-          </select>
-        </div>
-        <div>
-          <label>Remarks Exceptions / Notes</label>
-          <input type="text" id="form-remarks-input" class="form-input" placeholder="Optional descriptions...">
-        </div>
-        <div>
-          <button class="add-btn" onclick="stageEmployeeRow()">+ Stage Row</button>
-        </div>
-      </div>
-
-      <h4 style="color: #fff; font-size: 14px; margin: 25px 0 10px 0;">Staged Site Team Sheet (<span id="temp-count" style="color:#ff9900;">0</span> Workers Staged)</h4>
-      
-      <div class="analytics-bar">
-        <div id="card-sched-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">STAGED CAPACITY</div><div id="calc-sched" class="num" style="color:#38bdf8;">0</div></div>
-        <div id="card-pres-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">PRESENT</div><div id="calc-pres" class="num" style="color:#10b981;">0</div></div>
-        <div id="card-abs-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">ABSENT</div><div id="calc-abs" class="num" style="color:#ef4444;">0</div></div>
-        <div id="card-half-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">HALF DAY</div><div id="calc-half" class="num" style="color:#fbbf24;">0</div></div>
-        <div id="card-off-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">WEEK-OFF</div><div id="calc-off" class="num" style="color:#94a3b8;">0</div></div>
-      </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr><th>Date</th><th>Store Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status</th><th>Exceptions Notes</th><th>Staged By</th><th>Options</th></tr>
-          </thead>
-          <tbody id="temp-roster-body"></tbody>
-        </table>
-      </div>
-      <button id="final-submit-btn" class="submit-block-btn" onclick="transmitStagedRosterToCloud()" disabled>Transmit Staged Configuration Grid to Database</button>
-    </div>
-
-    <div class="panel-box" style="background:#0b111e;">
-      <h3>📊 Centralized Activity Logs Query Engine</h3>
-      <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; align-items: flex-end;">
-        <div style="flex: 1; min-width: 140px;">
-          <label>Filter Store Location</label>
-          <select id="filter-store-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()"></select>
-        </div>
-        <div style="flex: 1; min-width: 120px;">
-          <label>Filter Shift Profile</label>
-          <select id="filter-shift-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()">
+        <div style="display:flex; gap: 10px; align-items:center; flex-wrap: wrap; margin-bottom: 25px; background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #1e293b;">
+          <label style="margin:0;">Pre-populate Operations Block:</label>
+          <select id="bulk-shift-filter" class="form-input" style="max-width: 150px;" onchange="updateLiveAnalyticsDashboard()">
             <option value="All">All Shifts</option>
-            <option value="Day">Day</option>
-            <option value="Mid">Mid</option>
-            <option value="Night">Night</option>
+            <option value="Day">Day Shift</option>
+            <option value="Mid">Mid Shift</option>
+            <option value="Night">Night Shift</option>
           </select>
+          <button class="bulk-btn" onclick="bulkPopulateEntireStoreRoster()">⚡ Pre-populate Filtered Personnel</button>
+          <span id="unmarked-alert-badge" class="badge" style="display:none; font-size:12px; padding:6px 12px; border-radius:6px; margin-left:auto;"></span>
         </div>
+
+        <div class="grid-6">
+          <div>
+            <label>Target Tracking Date</label>
+            <input type="date" id="form-date" class="form-input">
+          </div>
+          <div>
+            <label>Location Context</label>
+            <select id="form-store-code" class="form-input" onchange="filterEmployeeDropdownByStore()"></select>
+          </div>
+          <div>
+            <label>Select Employee Name</label>
+            <select id="form-employee-select" class="form-input" onchange="autoConfigureShiftFieldsBySelection()"></select>
+          </div>
+          <div>
+            <label>Assigned Shift Timing</label>
+            <select id="form-shift-select" class="form-input">
+              <option value="Day">Day</option>
+              <option value="Mid">Mid</option>
+              <option value="Night">Night</option>
+            </select>
+          </div>
+          <div>
+            <label>Attendance Status</label>
+            <select id="form-status-select" class="form-input">
+              <option value="Present">Present</option>
+              <option value="Absent">Absent</option>
+              <option value="Week-Off">Week-Off</option>
+              <option value="Half Day">Half Day</option>
+            </select>
+          </div>
+          <div>
+            <label>Remarks Exceptions / Notes</label>
+            <input type="text" id="form-remarks-input" class="form-input" placeholder="Optional descriptions...">
+          </div>
+          <div>
+            <button class="add-btn" onclick="stageEmployeeRow()">+ Stage Row</button>
+          </div>
+        </div>
+
+        <h4 style="color: #fff; font-size: 14px; margin: 25px 0 10px 0;">Staged Site Team Sheet (<span id="temp-count" style="color:#ff9900;">0</span> Workers Staged)</h4>
         
-        <div style="flex: 1; min-width: 140px;">
-          <label>Query Range Start Date</label>
-          <input type="date" id="filter-start-date" class="form-input" onchange="loadHistoricalLedgerStream()">
-        </div>
-        <div style="flex: 1; min-width: 140px;">
-          <label>Query Range End Date</label>
-          <input type="date" id="filter-end-date" class="form-input" onchange="loadHistoricalLedgerStream()">
+        <div class="analytics-bar">
+          <div id="card-sched-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">STAGED CAPACITY</div><div id="calc-sched" class="num" style="color:#38bdf8;">0</div></div>
+          <div id="card-pres-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">PRESENT</div><div id="calc-pres" class="num" style="color:#10b981;">0</div></div>
+          <div id="card-abs-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">ABSENT</div><div id="calc-abs" class="num" style="color:#ef4444;">0</div></div>
+          <div id="card-half-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">HALF DAY</div><div id="calc-half" class="num" style="color:#fbbf24;">0</div></div>
+          <div id="card-off-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">WEEK-OFF</div><div id="calc-off" class="num" style="color:#94a3b8;">0</div></div>
         </div>
 
-        <div>
-          <button class="action-btn-small" style="padding: 10px 15px; background: #475569;" onclick="clearActivitySearchFilters()">Reset Queries</button>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Date</th><th>Store Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status</th><th>Exceptions Notes</th><th>Staged By</th><th>Options</th></tr>
+            </thead>
+            <tbody id="temp-roster-body"></tbody>
+          </table>
         </div>
-        <div style="margin-left: auto; display: flex; gap: 8px;">
-          <button class="export-btn" onclick="exportDataLedger('range_extract')">📊 Export Selected Range CSV</button>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr><th>Selected Date</th><th>Store Code</th><th>Employee Full Name</th><th>Job Role</th><th>Shift Timing</th><th>Condition Code</th><th>Remarks Notes</th><th>Logged By Security Node</th><th>Administrative Action Operations</th></tr>
-          </thead>
-          <tbody id="attendance-table-body"></tbody>
-        </table>
+        <button id="final-submit-btn" class="submit-block-btn" onclick="transmitStagedRosterToCloud()" disabled>Transmit Staged Configuration Grid to Database</button>
       </div>
     </div>
 
-    <div class="grid-admin" style="margin-top: 20px;">
-      <div class="panel-box">
+
+    <div id="history-page" class="page-view">
+      <div class="panel-box" style="background:#0b111e;">
+        <h3>📊 Centralized Activity Logs Query Engine</h3>
+        <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; align-items: flex-end;">
+          <div style="flex: 1; min-width: 140px;">
+            <label>Filter Store Location</label>
+            <select id="filter-store-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()"></select>
+          </div>
+          <div style="flex: 1; min-width: 120px;">
+            <label>Filter Shift Profile</label>
+            <select id="filter-shift-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()">
+              <option value="All">All Shifts</option>
+              <option value="Day">Day</option>
+              <option value="Mid">Mid</option>
+              <option value="Night">Night</option>
+            </select>
+          </div>
+          <div style="flex: 1; min-width: 140px;">
+            <label>Query Range Start Date</label>
+            <input type="date" id="filter-start-date" class="form-input" onchange="loadHistoricalLedgerStream()">
+          </div>
+          <div style="flex: 1; min-width: 140px;">
+            <label>Query Range End Date</label>
+            <input type="date" id="filter-end-date" class="form-input" onchange="loadHistoricalLedgerStream()">
+          </div>
+          <div>
+            <button class="action-btn-small" style="padding: 10px 15px; background: #475569;" onclick="clearActivitySearchFilters()">Reset Queries</button>
+          </div>
+          <div style="margin-left: auto;">
+            <button id="history-export-btn" class="export-btn" onclick="exportDataLedger('range_extract')" style="display:none;">📊 Export Selected Range CSV</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Selected Date</th><th>Store Code</th><th>Employee Full Name</th><th>Job Role</th><th>Shift Timing</th><th>Condition Code</th><th>Remarks Notes</th><th>Logged By Security Node</th><th>Administrative Operations</th></tr>
+            </thead>
+            <tbody id="attendance-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="reports-page" class="page-view">
+      <div class="panel-box" style="max-width: 800px; margin: 0 auto;">
         <h3>📢 Submit Operational System Report</h3>
         <div style="display: grid; gap: 12px;">
           <div>
@@ -341,671 +342,40 @@
           </div>
           <div>
             <label>Incident Details & Problem Description</label>
-            <textarea id="report-description" class="form-input" rows="4" placeholder="Explain the issue explicitly here..." style="width:100%; font-family:inherit; color:white; background:#1c2d42; border:1px solid #2e415a; border-radius:6px; box-sizing:border-box; padding:10px; resize:vertical;"></textarea>
+            <textarea id="report-description" class="form-input" rows="5" placeholder="Explain the issue explicitly here..."></textarea>
           </div>
           <button class="add-btn" onclick="submitSystemIncidentReportTicket()">Transmit System Ticket To Admin Panel</button>
         </div>
       </div>
-
-      <div id="admin-tickets-panel" class="panel-box" style="display:none; background: #161013; border-color: #b91c1c;">
-        <h3 style="color:#f87171;">🚨 Received Escalations & System Incident Log (Admins Only)</h3>
-        <div style="max-height: 380px; overflow-y: auto;" id="admin-tickets-stream-container"></div>
-      </div>
     </div>
 
-  </div>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
-    authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
-    projectId: "attendance-management-sy-7a8dc",
-    storageBucket: "attendance-management-sy-7a8dc.firebasestorage.app",
-    messagingSenderId: "251165221601",
-    appId: "1:251165221601:web:2d58e00b38656e9452cda0"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
-
-  let currentUserEmail = "";
-  let isAdmin = false;
-  let temporaryRosterList = [];
-  let activeStoresList = [];
-  let fullEmployeeDirectory = [];
-  let dynamicCloudPINStorageMap = {};
-
-  const todayDateStr = new Date().toISOString().split('T')[0];
-  document.getElementById('form-date').value = todayDateStr;
-
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      currentUserEmail = user.email;
-      evaluateUserAccessPermissions(user.email);
-    } else {
-      displayLoginWindow();
-    }
-  });
-
-  function login() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    if (!email || !password) { alert("Credentials missing."); return; }
-    auth.signInWithEmailAndPassword(email, password).catch(err => alert("Access Refused: " + err.message));
-  }
-
-  function logout() { auth.signOut(); }
-  
-  function displayLoginWindow() {
-    document.getElementById("login-view").style.display = "block";
-    document.getElementById("dashboard-view").style.display = "none";
-  }
-
-  function evaluateUserAccessPermissions(email) {
-    document.getElementById("login-view").style.display = "none";
-    document.getElementById("dashboard-view").style.display = "block";
-    
-    const prefixName = email.split('@')[0].toUpperCase();
-    document.getElementById("user-role").innerHTML = `OPERATOR: <span style="color:#ff9900; font-weight:bold;">${prefixName}</span>`;
-
-    const dateField = document.getElementById("form-date");
-
-    if(email === "anzarmuhammed.a@gmail.com" || email === "admin@attendance.com" || email === "anzar.mhd@gmail.com") {
-      isAdmin = true;
-      document.getElementById("admin-view").style.display = "block";
-      document.getElementById("admin-tickets-panel").style.display = "block";
-      document.getElementById("teamleader-pin-box").style.display = "none"; 
-      document.getElementById("store-view").style.display = "block";
-      dateField.removeAttribute("min");
-      dateField.removeAttribute("max");
-    } else {
-      isAdmin = false;
-      document.getElementById("admin-view").style.display = "none";
-      document.getElementById("admin-tickets-panel").style.display = "none";
-      document.getElementById("teamleader-pin-box").style.display = "block"; 
-      document.getElementById("store-view").style.display = "none";
-      
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      dateField.setAttribute("min", yesterday.toISOString().split('T')[0]);
-      dateField.setAttribute("max", todayDateStr);
-    }
-
-    temporaryRosterList = [];
-    renderTemporaryStagedTable();
-    syncLiveSystemDataMatrix();
-    syncIncidentReportTrackerStream();
-  }
-
-  function syncSelectedStoreToTerminal() {
-    const selected = document.getElementById("pin-login-store-select").value;
-    document.getElementById("form-store-code").value = selected;
-    filterEmployeeDropdownByStore();
-  }
-
-  function validateStoreTerminalAccessKey() {
-    const selectedStore = document.getElementById("pin-login-store-select").value;
-    const inputPin = document.getElementById("pin-login-value-input").value;
-    const errorAlert = document.getElementById("pin-validation-fail-msg");
-    const correctPin = dynamicCloudPINStorageMap[selectedStore] || "1234";
-
-    if (inputPin === correctPin) {
-      errorAlert.style.display = "none";
-      document.getElementById("pin-login-value-input").value = "";
-      alert(`Terminal Authenticated Successfully for: ${selectedStore}`);
-      document.getElementById("teamleader-pin-box").style.display = "none";
-      document.getElementById("store-view").style.display = "block";
-    } else {
-      errorAlert.style.display = "block";
-    }
-  }
-
-  function buildDynamicAdminPinConfigDOM() {
-    const container = document.getElementById("dynamic-admin-pin-container");
-    if (!container) return;
-    container.innerHTML = "";
-
-    activeStoresList.forEach(store => {
-      const activePinVal = dynamicCloudPINStorageMap[store] || "1234";
-      container.innerHTML += `<div>
-        <label style="color:#e9d5ff; font-size:11px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${store} PIN</label>
-        <input type="text" id="dyn-pin-${btoa(store).replace(/=/g,'')}" value="${activePinVal}" maxlength="4" style="padding:6px; background:#130f26; border:1px solid #5b21b6; color:#fff; border-radius:4px; width:100%; box-sizing:border-box; font-weight:bold; letter-spacing:1px;">
-      </div>`;
-    });
-  }
-
-  function saveConfiguredPinsToCloudStore() {
-    if(!isAdmin) return;
-    
-    activeStoresList.forEach(store => {
-      const inputId = `dyn-pin-${btoa(store).replace(/=/g,'')}`;
-      const element = document.getElementById(inputId);
-      if(element) {
-        dynamicCloudPINStorageMap[store] = element.value.trim() || "1234";
-      }
-    });
-
-    db.collection("system_configs").doc("pin_authorization_matrix").set(dynamicCloudPINStorageMap)
-      .then(() => { alert("🚀 All custom operational site access tokens saved globally!"); })
-      .catch(err => { alert("Error committing token maps: " + err.message); });
-  }
-
-  function syncLiveSystemDataMatrix() {
-    db.collection("system_configs").doc("stores_matrix").onSnapshot((doc) => {
-      if (doc.exists && doc.data().stores) { activeStoresList = doc.data().stores; }
-      
-      db.collection("system_configs").doc("pin_authorization_matrix").onSnapshot((pinDoc) => {
-        if(pinDoc.exists) { dynamicCloudPINStorageMap = pinDoc.data(); }
-        if(isAdmin) { buildDynamicAdminPinConfigDOM(); }
-        populateStoresDropdownsUI();
-      });
-    });
-
-    db.collection("employee_directory").onSnapshot((snapshot) => {
-      fullEmployeeDirectory = [];
-      snapshot.forEach(doc => { fullEmployeeDirectory.push({ id: doc.id, ...doc.data() }); });
-      filterEmployeeDropdownByStore();
-      if (isAdmin) { renderAdminEmployeeDirectory(); calculateNetworkHealthGrid(); }
-    });
-  }
-
-  function populateStoresDropdownsUI() {
-    const formStoreSelect = document.getElementById("form-store-code");
-    const adminAssignStore = document.getElementById("admin-assign-store");
-    const adminRosterViewStore = document.getElementById("admin-roster-view-store");
-    const adminFilterDropdown = document.getElementById("filter-store-dropdown");
-    const pinLoginStoreSelect = document.getElementById("pin-login-store-select");
-
-    const buildOptions = (targetEl, includeAll = false) => {
-      if(!targetEl) return;
-      targetEl.innerHTML = includeAll ? `<option value="All">All Registered Locations</option>` : "";
-      activeStoresList.forEach(store => { targetEl.innerHTML += `<option value="${store}">${store}</option>`; });
-    };
-
-    buildOptions(formStoreSelect);
-    buildOptions(adminAssignStore);
-    buildOptions(adminRosterViewStore);
-    buildOptions(adminFilterDropdown, true);
-    buildOptions(pinLoginStoreSelect);
-
-    syncSelectedStoreToTerminal();
-    filterEmployeeDropdownByStore();
-    loadHistoricalLedgerStream();
-  }
-
-  function filterEmployeeDropdownByStore() {
-    const targetStore = document.getElementById("form-store-code").value;
-    const empSelect = document.getElementById("form-employee-select");
-    if(!empSelect) return;
-    empSelect.innerHTML = "";
-    
-    const filteredStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === targetStore);
-    if(filteredStaff.length === 0) {
-      empSelect.innerHTML = `<option value="">-- No registered staff --</option>`;
-      return;
-    }
-    filteredStaff.forEach(emp => {
-      empSelect.innerHTML += `<option value="${emp.name}" data-role="${emp.role}" data-shift="${emp.shift || 'Day'}">${emp.name} (${emp.role})</option>`;
-    });
-    autoConfigureShiftFieldsBySelection();
-    if (!isAdmin) { loadHistoricalLedgerStream(); }
-  }
-
-  function autoConfigureShiftFieldsBySelection() {
-    const empSelect = document.getElementById("form-employee-select");
-    if(!empSelect || empSelect.selectedIndex < 0) return;
-    const selectedOption = empSelect.options[empSelect.selectedIndex];
-    const defaultShift = selectedOption.getAttribute("data-shift") || "Day";
-    document.getElementById("form-shift-select").value = defaultShift;
-  }
-
-  function bulkPopulateEntireStoreRoster() {
-    const date = document.getElementById("form-date").value;
-    const storeCode = document.getElementById("form-store-code").value;
-    const bulkShiftFilter = document.getElementById("bulk-shift-filter").value;
-    
-    if (!date) { alert("Set transaction tracking target date."); return; }
-
-    let targetStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === storeCode);
-    if (bulkShiftFilter !== "All") {
-      targetStaff = targetStaff.filter(emp => (emp.shift || 'Day') === bulkShiftFilter);
-    }
-
-    if (targetStaff.length === 0) { alert("No personnel entries match selection guidelines."); return; }
-
-    targetStaff.forEach(emp => {
-      const isDuplicate = temporaryRosterList.some(item => item.name === emp.name && item.date === date && item.storeCode === storeCode && item.shift === (emp.shift || "Day"));
-      if (!isDuplicate) {
-        temporaryRosterList.push({
-          date: date, storeCode: storeCode, name: emp.name, role: emp.role, shift: emp.shift || "Day", statusCondition: "Present", remarks: "Auto-Populated Strength", updater: currentUserEmail
-        });
-      }
-    });
-    renderTemporaryStagedTable();
-  }
-
-  /* UPGRADE: COLOR-CHANGING LOGIC CARDS & REMAINING UNMARKED WORKERS DETECTOR */
-  function updateLiveAnalyticsDashboard() {
-    const storeCode = document.getElementById("form-store-code").value;
-    const activeFilter = document.getElementById("bulk-shift-filter").value;
-
-    // 1. Calculate active total targets for this store/shift window
-    let totalExpectedEmployees = fullEmployeeDirectory.filter(emp => emp.storeCode === storeCode);
-    if (activeFilter !== "All") {
-      totalExpectedEmployees = totalExpectedEmployees.filter(emp => (emp.shift || 'Day') === activeFilter);
-    }
-    const totalExpectedCount = totalExpectedEmployees.length;
-
-    // 2. Map totals
-    const stagedCount = temporaryRosterList.length;
-    const presentCount = temporaryRosterList.filter(e => e.statusCondition === "Present").length;
-    const absentCount = temporaryRosterList.filter(e => e.statusCondition === "Absent").length;
-    const halfCount = temporaryRosterList.filter(e => e.statusCondition === "Half Day").length;
-    const offCount = temporaryRosterList.filter(e => e.statusCondition === "Week-Off").length;
-
-    document.getElementById("calc-sched").innerText = `${stagedCount} / ${totalExpectedCount}`;
-    document.getElementById("calc-pres").innerText = presentCount;
-    document.getElementById("calc-abs").innerText = absentCount;
-    document.getElementById("calc-half").innerText = halfCount;
-    document.getElementById("calc-off").innerText = offCount;
-
-    // 3. Dynamic Color Warning Calculations
-    const presBox = document.getElementById("card-pres-box");
-    presBox.className = "analytics-card"; // Reset
-    if (stagedCount > 0) {
-      const presenceRate = presentCount / stagedCount;
-      if (presenceRate < 0.70) presBox.classList.add("capacity-danger");
-      else if (presenceRate < 0.85) presBox.classList.add("capacity-warn");
-      else presBox.classList.add("capacity-optimal");
-    }
-
-    // 4. Update Missing Unmarked Workers Warning Badge
-    const unmarkedBadge = document.getElementById("unmarked-alert-badge");
-    const unmarkedCount = totalExpectedCount - stagedCount;
-
-    if (unmarkedCount > 0 && stagedCount > 0) {
-      unmarkedBadge.style.display = "inline-block";
-      unmarkedBadge.className = "badge status-Pending";
-      unmarkedBadge.innerText = `⚠️ ${unmarkedCount} Personnel Rows Unmarked for this view`;
-    } else if (unmarkedCount === 0 && totalExpectedCount > 0) {
-      unmarkedBadge.style.display = "inline-block";
-      unmarkedBadge.className = "badge status-Resolved";
-      unmarkedBadge.innerText = `✅ Shift Staging Capacity Verified (100%)`;
-    } else {
-      unmarkedBadge.style.display = "none";
-    }
-  }
-
-  function calculateNetworkHealthGrid() {
-    if (!isAdmin) return;
-    const healthBody = document.getElementById("admin-health-grid-body");
-    if(!healthBody) return;
-    healthBody.innerHTML = "";
-
-    db.collection("attendance_ledger").where("selectedDate", "==", todayDateStr).get().then((snapshot) => {
-      let submissionLogs = [];
-      snapshot.forEach(doc => submissionLogs.push(doc.data()));
-
-      activeStoresList.forEach(store => {
-        const branchSubmissions = submissionLogs.filter(log => log.storeCode === store);
-        const activeRosterTotal = fullEmployeeDirectory.filter(emp => emp.storeCode === store).length;
-
-        let statusBadge = `<span class="badge status-Absent">Pending Entry</span>`;
-        let coveragePct = "0%";
-        let lastSyncTracker = "--";
-
-        if (branchSubmissions.length > 0) {
-          statusBadge = `<span class="badge status-Present">✅ Saved</span>`;
-          const presentCount = branchSubmissions.filter(s => s.statusCondition === "Present").length;
-          coveragePct = activeRosterTotal > 0 ? Math.round((presentCount / activeRosterTotal) * 100) + "% Strength" : "100%";
-          const guardName = branchSubmissions[0].operatorEmail.split('@')[0];
-          lastSyncTracker = `${branchSubmissions[0].transmissionTime} (By: ${guardName})`;
-        } else {
-          coveragePct = activeRosterTotal > 0 ? `0 / ${activeRosterTotal} Active Rows` : "0 Onboarded";
-        }
-
-        healthBody.innerHTML += `<tr>
-          <td><b style="color:#ff9900;">${store}</b></td>
-          <td>${statusBadge}</td>
-          <td><strong>${coveragePct}</strong></td>
-          <td style="color:#64748b; font-family:monospace; font-size:11px;">${lastSyncTracker}</td>
-        </tr>`;
-      });
-    });
-  }
-
-  function stageEmployeeRow() {
-    const date = document.getElementById("form-date").value;
-    const storeCode = document.getElementById("form-store-code").value;
-    const empSelect = document.getElementById("form-employee-select");
-    const name = empSelect.value;
-    const remarks = document.getElementById("form-remarks-input").value.trim();
-    
-    if(!name) { alert("Selection parameter missing."); return; }
-    
-    const selectedOption = empSelect.options[empSelect.selectedIndex];
-    const role = selectedOption.getAttribute("data-role") || "Associate";
-    const shift = document.getElementById("form-shift-select").value;
-    const status = document.getElementById("form-status-select").value;
-
-    const isDuplicate = temporaryRosterList.some(item => item.name === name && item.date === date && item.storeCode === storeCode && item.shift === shift);
-    if(isDuplicate) { alert(`Personnel record duplicate found for this date entry configuration sequence.`); return; }
-
-    temporaryRosterList.push({ date, storeCode, name, role, shift, statusCondition: status, remarks: remarks || "--", updater: currentUserEmail });
-    document.getElementById("form-remarks-input").value = ""; 
-    renderTemporaryStagedTable();
-  }
-
-  function removeStagedRow(index) {
-    temporaryRosterList.splice(index, 1);
-    renderTemporaryStagedTable();
-  }
-
-  function renderTemporaryStagedTable() {
-    const tbody = document.getElementById("temp-roster-body");
-    const submitBtn = document.getElementById("final-submit-btn");
-    if(!tbody) return;
-    document.getElementById("temp-count").innerText = temporaryRosterList.length;
-
-    if (temporaryRosterList.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #64748b; padding: 20px;">Staging workspace is completely empty.</td></tr>`;
-      submitBtn.disabled = true;
-      updateLiveAnalyticsDashboard();
-      return;
-    }
-
-    submitBtn.disabled = false;
-    tbody.innerHTML = "";
-    temporaryRosterList.forEach((emp, index) => {
-      const guardName = emp.updater.split('@')[0];
-      tbody.innerHTML += `<tr style="background: #132237;">
-        <td>${emp.date}</td>
-        <td><b style="color:#ff9900;">${emp.storeCode}</b></td>
-        <td><strong>${emp.name}</strong></td>
-        <td><span class="role-label">${emp.role}</span></td>
-        <td><b style="color:#fcd34d;">${emp.shift}</b></td>
-        <td><span class="badge status-${emp.statusCondition}">${emp.statusCondition}</span></td>
-        <td style="color:#94a3b8; font-style:italic;">${emp.remarks}</td>
-        <td><span class="user-badge">${guardName}</span></td>
-        <td><button class="action-btn-small" style="margin:0;" onclick="removeStagedRow(${index})">Remove</button></td>
-      </tr>`;
-    });
-    updateLiveAnalyticsDashboard();
-  }
-
-  function transmitStagedRosterToCloud() {
-    if (temporaryRosterList.length === 0) return;
-    
-    const timestamp = new Date();
-    const serverTimeStr = timestamp.toLocaleTimeString();
-    let batch = db.batch();
-    
-    temporaryRosterList.forEach(emp => {
-      let docRef = db.collection("attendance_ledger").doc();
-      batch.set(docRef, {
-        operatorEmail: emp.updater,
-        selectedDate: emp.date,
-        storeCode: emp.storeCode,
-        employeeName: emp.name,
-        employeeRole: emp.role,
-        shiftWindow: emp.shift,
-        statusCondition: emp.statusCondition,
-        remarks: emp.remarks,
-        transmissionTime: serverTimeStr,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    });
-
-    batch.commit().then(() => {
-      alert("System sync pipeline processing structural batch commit complete!");
-      temporaryRosterList = [];
-      renderTemporaryStagedTable();
-      loadHistoricalLedgerStream();
-      
-      if(!isAdmin) {
-        document.getElementById("teamleader-pin-box").style.display = "block";
-        document.getElementById("store-view").style.display = "none";
-      } else {
-        calculateNetworkHealthGrid();
-      }
-    }).catch(err => alert("Transmission fault error: " + err.message));
-  }
-
-  /* UPGRADE: DATE-RANGE FILTER STREAM QUERY PIPELINE */
-  function loadHistoricalLedgerStream() {
-    const tbody = document.getElementById("attendance-table-body");
-    if(!tbody) return;
-    
-    let storeFilter = "All";
-    if(document.getElementById("filter-store-dropdown")) {
-      storeFilter = document.getElementById("filter-store-dropdown").value;
-    } else if (!isAdmin) {
-      storeFilter = document.getElementById("form-store-code").value;
-    }
-
-    const shiftFilter = document.getElementById("filter-shift-dropdown") ? document.getElementById("filter-shift-dropdown").value : "All";
-    
-    // Read range input boxes
-    const startDateVal = document.getElementById("filter-start-date").value;
-    const endDateVal = document.getElementById("filter-end-date").value;
-
-    let query = db.collection("attendance_ledger");
-
-    if (storeFilter !== "All" && storeFilter !== "") { query = query.where("storeCode", "==", storeFilter); }
-    if (shiftFilter !== "All") { query = query.where("shiftWindow", "==", shiftFilter); }
-    
-    // Handle query stream boundary limits
-    if (startDateVal !== "") { query = query.where("selectedDate", ">=", startDateVal); }
-    if (endDateVal !== "") { query = query.where("selectedDate", "<=", endDateVal); }
-
-    query.get().then((querySnapshot) => {
-      tbody.innerHTML = "";
-      if (querySnapshot.empty) { tbody.innerHTML = "<tr><td colspan='9' style='color:#64748b; text-align:center;'>No structural logging histories match selection constraints.</td></tr>"; return; }
-      
-      let sortingBufferArray = [];
-      querySnapshot.forEach(doc => { sortingBufferArray.push({ id: doc.id, ...doc.data() }); });
-      
-      sortingBufferArray.sort((x, y) => {
-        return (y.selectedDate || "").localeCompare(x.selectedDate || "") || (y.transmissionTime || "").localeCompare(x.transmissionTime || "");
-      });
-
-      sortingBufferArray.forEach((data) => {
-        const guardName = (data.operatorEmail || 'system').split('@')[0];
-        let operationsCellMarkup = `<span style="color:#64748b; font-size:11px;">Verification Locked</span>`;
-        if(isAdmin) {
-          operationsCellMarkup = `
-            <button class="action-btn-small" style="background:#0284c7;" onclick="executeAdministrativeRecordUpdateInline('${data.id}', 'Present')">P</button>
-            <button class="action-btn-small" style="background:#b91c1c;" onclick="executeAdministrativeRecordUpdateInline('${data.id}', 'Absent')">A</button>
-            <button class="action-btn-small" style="background:#4b5563;" onclick="executeAdministrativeRecordUpdateInline('${data.id}', 'Week-Off')">O</button>
-            <button class="action-btn-small" style="background:#d97706;" onclick="executeAdministrativeRecordUpdateInline('${data.id}', 'Half Day')">H</button>
-          `;
-        }
-
-        tbody.innerHTML += `<tr>
-          <td style="color:#fff; font-weight:600;">${data.selectedDate || 'N/A'}</td>
-          <td style="color:#ff9900; font-family:monospace;">${data.storeCode || 'N/A'}</td>
-          <td><strong>${data.employeeName || 'N/A'}</strong></td>
-          <td><span class="role-label">${data.employeeRole || 'Warehouse Associate'}</span></td>
-          <td><b style="color:#fcd34d;">${data.shiftWindow || 'N/A'}</b></td>
-          <td><span class="badge status-${data.statusCondition || 'Present'}">${data.statusCondition || 'Present'}</span></td>
-          <td style="color:#94a3b8; font-style:italic;">${data.remarks || '--'}</td>
-          <td><span class="user-badge">${guardName}</span> <span style="color:#64748b; font-size:11px;">at ${data.transmissionTime || ''}</span></td>
-          <td>${operationsCellMarkup}</td>
-        </tr>`;
-      });
-    }).catch(err => { tbody.innerHTML = `<tr><td colspan='9' style='color: #ef4444; text-align:center;'>Database extraction error event.</td></tr>`; });
-  }
-
-  function clearActivitySearchFilters() {
-    if(document.getElementById("filter-store-dropdown")) document.getElementById("filter-store-dropdown").value = "All";
-    if(document.getElementById("filter-shift-dropdown")) document.getElementById("filter-shift-dropdown").value = "All";
-    if(document.getElementById("filter-start-date")) document.getElementById("filter-start-date").value = "";
-    if(document.getElementById("filter-end-date")) document.getElementById("filter-end-date").value = "";
-    loadHistoricalLedgerStream();
-  }
-
-  function executeAdministrativeRecordUpdateInline(targetDocId, targetNewStatusStr) {
-    if(!isAdmin) return;
-    db.collection("attendance_ledger").doc(targetDocId).update({
-      statusCondition: targetNewStatusStr,
-      remarks: `Admin corrected entry to: ${targetNewStatusStr}`
-    }).then(() => { loadHistoricalLedgerStream(); });
-  }
-
-  function submitSystemIncidentReportTicket() {
-    const reporter = document.getElementById("report-user-name").value.trim();
-    const role = document.getElementById("report-user-role").value;
-    const updateTitle = document.getElementById("report-update-title").value.trim();
-    const desc = document.getElementById("report-description").value.trim();
-
-    if(!reporter || !updateTitle || !desc) {
-      alert("Please fill in all ticket parameters before transmission sequence.");
-      return;
-    }
-
-    db.collection("system_incident_tickets").add({
-      reporterName: reporter,
-      reporterRole: role,
-      requestedUpdateSummary: updateTitle,
-      incidentDetails: desc,
-      ticketStatus: "Pending",
-      loggedByAccount: currentUserEmail,
-      timestampEpoch: Date.now(),
-      dateString: new Date().toLocaleDateString()
-    }).then(() => {
-      alert("🚨 Corporate system escalation report sent safely to Admin Control Center.");
-      document.getElementById("report-user-name").value = "";
-      document.getElementById("report-update-title").value = "";
-      document.getElementById("report-description").value = "";
-    }).catch(err => alert("Ticket transmission pipeline error: " + err.message));
-  }
-
-  function syncIncidentReportTrackerStream() {
-    if(!isAdmin) return;
-    db.collection("system_incident_tickets").orderBy("timestampEpoch", "desc").onSnapshot((snapshot) => {
-      const container = document.getElementById("admin-tickets-stream-container");
-      if(!container) return;
-      container.innerHTML = "";
-
-      if(snapshot.empty) {
-        container.innerHTML = `<div style="color:#64748b; font-size:12px; padding:15px; text-align:center;">No open alerts or update requests logged.</div>`;
-        return;
-      }
-
-      snapshot.forEach(doc => {
-        const ticket = doc.data();
-        const nextStatusToggle = ticket.ticketStatus === "Pending" ? "Resolved" : "Pending";
-        const statusBtnColor = ticket.ticketStatus === "Pending" ? "#10b981" : "#f59e0b";
-
-        container.innerHTML += `
-          <div style="background:#24141a; border:1px solid #7f1d1d; padding:12px; margin-bottom:10px; border-radius:6px; font-size:13px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-              <span style="font-weight:bold; color:#f87171;">⚠️ ${ticket.requestedUpdateSummary}</span>
-              <span class="badge status-${ticket.ticketStatus}">${ticket.ticketStatus}</span>
+    <div id="admin-page" class="page-view">
+      <div id="admin-view" class="admin-section panel-box" style="background: #151221; border-color: #4c1d95;">
+        <h3 style="color: #c084fc;">⚡ Enterprise Infrastructure Settings Control Panel</h3>
+        
+        <div style="background: #1e1730; border: 1px dashed #a78bfa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <h4 style="color: #e9d5ff; margin: 0 0 10px 0; font-size: 14px;">🔒 Site Authorization Gateway Matrix (Dynamic PIN Assignment Tokens)</h4>
+          <div id="dynamic-admin-pin-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;"></div>
+          <button class="add-btn" style="background: #c084fc; color: #151221; width: auto; padding: 8px 20px;" onclick="saveConfiguredPinsToCloudStore()">Commit Custom PIN Updates</button>
+        </div>
+
+        <label style="color: #a78bfa; margin-bottom: 8px;">Regional Store Sync Health Metrics Grid:</label>
+        <div class="table-container">
+          <table style="min-width: 700px;">
+            <thead>
+              <tr><th>Location Identifier</th><th>Reporting Progress</th><th>Fulfillment Floor Strength</th><th>Last Synchronization Point Log</th></tr>
+            </thead>
+            <tbody id="admin-health-grid-body"></tbody>
+          </table>
+        </div>
+
+        <div class="grid-admin">
+          <div>
+            <label>Register New Branch Location Option</label>
+            <div class="admin-input-group">
+              <input type="text" id="new-store-input" class="form-input" placeholder="e.g., QAA9 - Al Ain">
+              <button class="add-btn" style="background:#c084fc; color:#151221; width:auto;" onclick="addNewStoreOption()">+</button>
             </div>
-            <p style="margin:0 0 8px 0; color:#e2e8f0; font-size:12px; line-height:1.4;">${ticket.incidentDetails}</p>
-            <div style="display:flex; justify-content:space-between; align-items:center; color:#94a3b8; font-size:11px; background:#1a0d12; padding:6px; border-radius:4px;">
-              <span>By: <b>${ticket.reporterName}</b> (${ticket.reporterRole}) on ${ticket.dateString}</span>
-              <button class="action-btn-small" style="background:${statusBtnColor}; color:#000; font-weight:bold; margin:0; padding:2px 6px;" onclick="toggleIncidentTicketStatus('${doc.id}', '${nextStatusToggle}')">Mark ${nextStatusToggle}</button>
-            </div>
+            <div id="admin-stores-list" style="max-height: 140px; overflow-y: auto; margin-top: 10px;"></div>
           </div>
-        `;
-      });
-    });
-  }
-
-  function toggleIncidentTicketStatus(ticketId, targetNextStateStr) {
-    if(!isAdmin) return;
-    db.collection("system_incident_tickets").doc(ticketId).update({ ticketStatus: targetNextStateStr });
-  }
-
-  function addNewStoreOption() {
-    if (!isAdmin) return;
-    const input = document.getElementById("new-store-input");
-    const val = input.value.trim();
-    if (!val) return;
-    db.collection("system_configs").doc("stores_matrix").update({ stores: firebase.firestore.FieldValue.arrayUnion(val) }).then(() => { input.value = ""; });
-  }
-
-  function deleteStoreOption(storeName) {
-    if (!isAdmin) return;
-    if (!confirm(`Wipe "${storeName}" location options block entirely from active structures?`)) return;
-    db.collection("system_configs").doc("stores_matrix").update({ stores: firebase.firestore.FieldValue.arrayRemove(storeName) });
-  }
-
-  function addNewEmployeeToRoster() {
-    if (!isAdmin) return;
-    const storeCode = document.getElementById("admin-assign-store").value;
-    const nameInput = document.getElementById("admin-new-emp-name");
-    const name = nameInput.value.trim();
-    const role = document.getElementById("admin-assign-role").value;
-    const shift = document.getElementById("admin-assign-shift").value;
-    if (!name) return;
-
-    db.collection("employee_directory").add({ storeCode, name, role, shift, addedAt: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { nameInput.value = ""; });
-  }
-
-  function removeEmployeeFromRoster(docId) {
-    if (!isAdmin) return;
-    if (!confirm("Wipe this employee profile row from system records?")) return;
-    db.collection("employee_directory").doc(docId).delete();
-  }
-
-  function renderAdminEmployeeDirectory() {
-    const selectedStore = document.getElementById("admin-roster-view-store").value;
-    const empContainer = document.getElementById("admin-employees-list");
-    const storeContainer = document.getElementById("admin-stores-list");
-
-    storeContainer.innerHTML = "";
-    activeStoresList.forEach(store => {
-      storeContainer.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; background:#1c2d42; padding:5px 10px; margin-bottom:4px; border-radius:4px; font-size:12px;">
-        <span>${store}</span><span class="action-btn-small" style="margin:0; padding:2px 6px; background:#b91c1c;" onclick="deleteStoreOption('${store}')">Delete</span>
-      </div>`;
-    });
-
-    empContainer.innerHTML = "";
-    const storeStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === selectedStore);
-    if (storeStaff.length === 0) { empContainer.innerHTML = `<div style="color:#64748b; font-size:12px; padding:10px;">No registered roster logs found here.</div>`; return; }
-    storeStaff.forEach(emp => {
-      empContainer.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e293b; padding:6px 4px; font-size:13px;">
-        <div><strong>${emp.name}</strong> <span class="role-label">${emp.role}</span> <span style="font-family:monospace; color:#fcd34d; font-size:11px; margin-left:5px;">[${emp.shift || 'Day'}]</span></div>
-        <button class="action-btn-small" style="margin:0; padding:2px 6px; background:#b91c1c;" onclick="removeEmployeeFromRoster('${emp.id}')">Delete</button>
-      </div>`;
-    });
-  }
-
-  /* UPGRADE: INTELLIGENT RANGE EXTRACTION EXPORTER */
-  function exportDataLedger(timeframeType) {
-    if (!isAdmin) return;
-    
-    let storeFilter = document.getElementById("filter-store-dropdown").value;
-    const shiftFilter = document.getElementById("filter-shift-dropdown").value;
-    const startDateVal = document.getElementById("filter-start-date").value;
-    const endDateVal = document.getElementById("filter-end-date").value;
-
-    let query = db.collection("attendance_ledger");
-    if (storeFilter !== "All" && storeFilter !== "") { query = query.where("storeCode", "==", storeFilter); }
-    if (shiftFilter !== "All") { query = query.where("shiftWindow", "==", shiftFilter); }
-    if (startDateVal !== "") { query = query.where("selectedDate", ">=", startDateVal); }
-    if (endDateVal !== "") { query = query.where("selectedDate", "<=", endDateVal); }
-
-    query.get().then((querySnapshot) => {
-      if(querySnapshot.empty) { alert("No logs found within the selected calendar range filters to export."); return; }
-      
-      let csv = "Date,Store,Employee,Role,Shift,Status,Remarks,Logged By,Time\n";
-      querySnapshot.forEach((doc) => {
-        const d = doc.data();
-        csv += `${d.selectedDate || ''},${d.storeCode || ''},${(d.employeeName || '').replace(/,/g, " ")},${d.employeeRole || ''},${d.shiftWindow || ''},${d.statusCondition || ''},${(d.remarks || '--').replace(/,/g, " ")},${d.operatorEmail || ''},${d.transmissionTime || ''}\n`;
-      });
-      
-      let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      let link = document.createElement("a");
-      link.setAttribute("href", URL.createObjectURL(blob));
-      link.setAttribute("download", `DARKSTORE_EXTRACT_RANGE_${startDateVal || 'START'}_TO_${endDateVal || 'END'}.csv`);
-      document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    });
-  }
-</script>
-</body>
-</html>
