@@ -85,16 +85,22 @@
     .status-Week-Off { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
     .status-Half-Day { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
     
-    .status-Pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .status-Pending { background: rgba(239, 68, 68, 0.15); color: #f87171; }
     .status-Resolved { background: rgba(16, 185, 129, 0.15); color: #34d399; }
 
     .role-label { color: #38bdf8; font-size: 11px; text-transform: uppercase; font-weight: bold; background: rgba(56, 189, 248, 0.1); padding: 2px 6px; border-radius: 4px;}
     .user-badge { color: #a78bfa; font-size: 11px; font-family: monospace; background: rgba(167, 139, 250, 0.1); padding: 2px 6px; border-radius: 4px;}
 
+    /* ENHANCED LIVE ANALYTICS COMPONENT STYLING */
     .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
-    .analytics-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 8px; text-align: center; }
+    .analytics-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 8px; text-align: center; transition: all 0.3s ease; }
     .analytics-card .num { font-size: 20px; font-weight: bold; margin-top: 4px; }
     
+    /* ATTENDANCE CAPACITY INDICATOR RULES */
+    .capacity-danger { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.05) !important; color: #f87171 !important; }
+    .capacity-warn { border-color: #f59e0b !important; background: rgba(245, 158, 11, 0.05) !important; color: #fbbf24 !important; }
+    .capacity-optimal { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.05) !important; color: #34d399 !important; }
+
     .submit-block-btn { background: #10b981; color: #060b13; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: bold; margin-top: 15px; }
     .submit-block-btn:disabled { background: #1e293b; color: #64748b; cursor: not-allowed; }
     
@@ -198,13 +204,15 @@
       
       <div style="display:flex; gap: 10px; align-items:center; flex-wrap: wrap; margin-bottom: 15px;">
         <label style="margin:0;">Select Active Operation Category Block:</label>
-        <select id="bulk-shift-filter" class="form-input" style="max-width: 150px;">
+        <select id="bulk-shift-filter" class="form-input" style="max-width: 150px;" onchange="updateLiveAnalyticsDashboard()">
           <option value="All">All Shifts</option>
           <option value="Day">Day Shift</option>
           <option value="Mid">Mid Shift</option>
           <option value="Night">Night Shift</option>
         </select>
         <button class="bulk-btn" style="margin:0;" onclick="bulkPopulateEntireStoreRoster()">⚡ Pre-populate Filtered Rows as Present</button>
+        
+        <span id="unmarked-alert-badge" class="badge" style="display:none; font-size:12px; padding:6px 12px; border-radius:6px;"></span>
       </div>
 
       <div class="grid-6">
@@ -247,12 +255,13 @@
       </div>
 
       <h4 style="color: #fff; font-size: 14px; margin: 25px 0 10px 0;">Staged Site Team Sheet (<span id="temp-count" style="color:#ff9900;">0</span> Workers Staged)</h4>
+      
       <div class="analytics-bar">
-        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">SCHEDULED</div><div id="calc-sched" class="num" style="color:#38bdf8;">0</div></div>
-        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">PRESENT</div><div id="calc-pres" class="num" style="color:#34d399;">0</div></div>
-        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">ABSENT</div><div id="calc-abs" class="num" style="color:#f87171;">0</div></div>
-        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">HALF DAY</div><div id="calc-half" class="num" style="color:#fbbf24;">0</div></div>
-        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">WEEK-OFF</div><div id="calc-off" class="num" style="color:#94a3b8;">0</div></div>
+        <div id="card-sched-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">STAGED CAPACITY</div><div id="calc-sched" class="num" style="color:#38bdf8;">0</div></div>
+        <div id="card-pres-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">PRESENT</div><div id="calc-pres" class="num" style="color:#10b981;">0</div></div>
+        <div id="card-abs-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">ABSENT</div><div id="calc-abs" class="num" style="color:#ef4444;">0</div></div>
+        <div id="card-half-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">HALF DAY</div><div id="calc-half" class="num" style="color:#fbbf24;">0</div></div>
+        <div id="card-off-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">WEEK-OFF</div><div id="calc-off" class="num" style="color:#94a3b8;">0</div></div>
       </div>
 
       <div class="table-container">
@@ -269,11 +278,11 @@
     <div class="panel-box" style="background:#0b111e;">
       <h3>📊 Centralized Activity Logs Query Engine</h3>
       <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; align-items: flex-end;">
-        <div style="flex: 1; min-width: 150px;">
+        <div style="flex: 1; min-width: 140px;">
           <label>Filter Store Location</label>
           <select id="filter-store-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()"></select>
         </div>
-        <div style="flex: 1; min-width: 150px;">
+        <div style="flex: 1; min-width: 120px;">
           <label>Filter Shift Profile</label>
           <select id="filter-shift-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()">
             <option value="All">All Shifts</option>
@@ -282,16 +291,21 @@
             <option value="Night">Night</option>
           </select>
         </div>
-        <div style="flex: 1; min-width: 150px;">
-          <label>Filter Specific Date Selection</label>
-          <input type="date" id="filter-date-input" class="form-input" onchange="loadHistoricalLedgerStream()">
+        
+        <div style="flex: 1; min-width: 140px;">
+          <label>Query Range Start Date</label>
+          <input type="date" id="filter-start-date" class="form-input" onchange="loadHistoricalLedgerStream()">
         </div>
+        <div style="flex: 1; min-width: 140px;">
+          <label>Query Range End Date</label>
+          <input type="date" id="filter-end-date" class="form-input" onchange="loadHistoricalLedgerStream()">
+        </div>
+
         <div>
           <button class="action-btn-small" style="padding: 10px 15px; background: #475569;" onclick="clearActivitySearchFilters()">Reset Queries</button>
         </div>
         <div style="margin-left: auto; display: flex; gap: 8px;">
-          <button class="export-btn" onclick="exportDataLedger('weekly')">📅 Weekly CSV</button>
-          <button class="export-btn" style="background: #10b981;" onclick="exportDataLedger('monthly')">📊 Monthly CSV</button>
+          <button class="export-btn" onclick="exportDataLedger('range_extract')">📊 Export Selected Range CSV</button>
         </div>
       </div>
 
@@ -561,7 +575,6 @@
     if (targetStaff.length === 0) { alert("No personnel entries match selection guidelines."); return; }
 
     targetStaff.forEach(emp => {
-      /* PATCHED BUG: Added store and shift contextual evaluations to duplicate prevent logic */
       const isDuplicate = temporaryRosterList.some(item => item.name === emp.name && item.date === date && item.storeCode === storeCode && item.shift === (emp.shift || "Day"));
       if (!isDuplicate) {
         temporaryRosterList.push({
@@ -572,12 +585,56 @@
     renderTemporaryStagedTable();
   }
 
+  /* UPGRADE: COLOR-CHANGING LOGIC CARDS & REMAINING UNMARKED WORKERS DETECTOR */
   function updateLiveAnalyticsDashboard() {
-    document.getElementById("calc-sched").innerText = temporaryRosterList.length;
-    document.getElementById("calc-pres").innerText = temporaryRosterList.filter(e => e.statusCondition === "Present").length;
-    document.getElementById("calc-abs").innerText = temporaryRosterList.filter(e => e.statusCondition === "Absent").length;
-    document.getElementById("calc-half").innerText = temporaryRosterList.filter(e => e.statusCondition === "Half Day").length;
-    document.getElementById("calc-off").innerText = temporaryRosterList.filter(e => e.statusCondition === "Week-Off").length;
+    const storeCode = document.getElementById("form-store-code").value;
+    const activeFilter = document.getElementById("bulk-shift-filter").value;
+
+    // 1. Calculate active total targets for this store/shift window
+    let totalExpectedEmployees = fullEmployeeDirectory.filter(emp => emp.storeCode === storeCode);
+    if (activeFilter !== "All") {
+      totalExpectedEmployees = totalExpectedEmployees.filter(emp => (emp.shift || 'Day') === activeFilter);
+    }
+    const totalExpectedCount = totalExpectedEmployees.length;
+
+    // 2. Map totals
+    const stagedCount = temporaryRosterList.length;
+    const presentCount = temporaryRosterList.filter(e => e.statusCondition === "Present").length;
+    const absentCount = temporaryRosterList.filter(e => e.statusCondition === "Absent").length;
+    const halfCount = temporaryRosterList.filter(e => e.statusCondition === "Half Day").length;
+    const offCount = temporaryRosterList.filter(e => e.statusCondition === "Week-Off").length;
+
+    document.getElementById("calc-sched").innerText = `${stagedCount} / ${totalExpectedCount}`;
+    document.getElementById("calc-pres").innerText = presentCount;
+    document.getElementById("calc-abs").innerText = absentCount;
+    document.getElementById("calc-half").innerText = halfCount;
+    document.getElementById("calc-off").innerText = offCount;
+
+    // 3. Dynamic Color Warning Calculations
+    const presBox = document.getElementById("card-pres-box");
+    presBox.className = "analytics-card"; // Reset
+    if (stagedCount > 0) {
+      const presenceRate = presentCount / stagedCount;
+      if (presenceRate < 0.70) presBox.classList.add("capacity-danger");
+      else if (presenceRate < 0.85) presBox.classList.add("capacity-warn");
+      else presBox.classList.add("capacity-optimal");
+    }
+
+    // 4. Update Missing Unmarked Workers Warning Badge
+    const unmarkedBadge = document.getElementById("unmarked-alert-badge");
+    const unmarkedCount = totalExpectedCount - stagedCount;
+
+    if (unmarkedCount > 0 && stagedCount > 0) {
+      unmarkedBadge.style.display = "inline-block";
+      unmarkedBadge.className = "badge status-Pending";
+      unmarkedBadge.innerText = `⚠️ ${unmarkedCount} Personnel Rows Unmarked for this view`;
+    } else if (unmarkedCount === 0 && totalExpectedCount > 0) {
+      unmarkedBadge.style.display = "inline-block";
+      unmarkedBadge.className = "badge status-Resolved";
+      unmarkedBadge.innerText = `✅ Shift Staging Capacity Verified (100%)`;
+    } else {
+      unmarkedBadge.style.display = "none";
+    }
   }
 
   function calculateNetworkHealthGrid() {
@@ -632,7 +689,6 @@
     const shift = document.getElementById("form-shift-select").value;
     const status = document.getElementById("form-status-select").value;
 
-    /* PATCHED BUG: Added shift/store variables to avoid blocking employees working split operations */
     const isDuplicate = temporaryRosterList.some(item => item.name === name && item.date === date && item.storeCode === storeCode && item.shift === shift);
     if(isDuplicate) { alert(`Personnel record duplicate found for this date entry configuration sequence.`); return; }
 
@@ -694,7 +750,7 @@
         employeeName: emp.name,
         employeeRole: emp.role,
         shiftWindow: emp.shift,
-        statusCondition: emp.statusCondition, /* PATCHED FIELD TYPO VALUE ALIGNMENT */
+        statusCondition: emp.statusCondition,
         remarks: emp.remarks,
         transmissionTime: serverTimeStr,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -716,6 +772,7 @@
     }).catch(err => alert("Transmission fault error: " + err.message));
   }
 
+  /* UPGRADE: DATE-RANGE FILTER STREAM QUERY PIPELINE */
   function loadHistoricalLedgerStream() {
     const tbody = document.getElementById("attendance-table-body");
     if(!tbody) return;
@@ -728,13 +785,19 @@
     }
 
     const shiftFilter = document.getElementById("filter-shift-dropdown") ? document.getElementById("filter-shift-dropdown").value : "All";
-    const dateFilter = document.getElementById("filter-date-input") ? document.getElementById("filter-date-input").value : "";
+    
+    // Read range input boxes
+    const startDateVal = document.getElementById("filter-start-date").value;
+    const endDateVal = document.getElementById("filter-end-date").value;
 
     let query = db.collection("attendance_ledger");
 
     if (storeFilter !== "All" && storeFilter !== "") { query = query.where("storeCode", "==", storeFilter); }
     if (shiftFilter !== "All") { query = query.where("shiftWindow", "==", shiftFilter); }
-    if (dateFilter !== "") { query = query.where("selectedDate", "==", dateFilter); }
+    
+    // Handle query stream boundary limits
+    if (startDateVal !== "") { query = query.where("selectedDate", ">=", startDateVal); }
+    if (endDateVal !== "") { query = query.where("selectedDate", "<=", endDateVal); }
 
     query.get().then((querySnapshot) => {
       tbody.innerHTML = "";
@@ -777,7 +840,8 @@
   function clearActivitySearchFilters() {
     if(document.getElementById("filter-store-dropdown")) document.getElementById("filter-store-dropdown").value = "All";
     if(document.getElementById("filter-shift-dropdown")) document.getElementById("filter-shift-dropdown").value = "All";
-    if(document.getElementById("filter-date-input")) document.getElementById("filter-date-input").value = "";
+    if(document.getElementById("filter-start-date")) document.getElementById("filter-start-date").value = "";
+    if(document.getElementById("filter-end-date")) document.getElementById("filter-end-date").value = "";
     loadHistoricalLedgerStream();
   }
 
@@ -911,19 +975,34 @@
     });
   }
 
+  /* UPGRADE: INTELLIGENT RANGE EXTRACTION EXPORTER */
   function exportDataLedger(timeframeType) {
     if (!isAdmin) return;
-    db.collection("attendance_ledger").orderBy("selectedDate", "asc").get().then((querySnapshot) => {
-      if(querySnapshot.empty) return;
+    
+    let storeFilter = document.getElementById("filter-store-dropdown").value;
+    const shiftFilter = document.getElementById("filter-shift-dropdown").value;
+    const startDateVal = document.getElementById("filter-start-date").value;
+    const endDateVal = document.getElementById("filter-end-date").value;
+
+    let query = db.collection("attendance_ledger");
+    if (storeFilter !== "All" && storeFilter !== "") { query = query.where("storeCode", "==", storeFilter); }
+    if (shiftFilter !== "All") { query = query.where("shiftWindow", "==", shiftFilter); }
+    if (startDateVal !== "") { query = query.where("selectedDate", ">=", startDateVal); }
+    if (endDateVal !== "") { query = query.where("selectedDate", "<=", endDateVal); }
+
+    query.get().then((querySnapshot) => {
+      if(querySnapshot.empty) { alert("No logs found within the selected calendar range filters to export."); return; }
+      
       let csv = "Date,Store,Employee,Role,Shift,Status,Remarks,Logged By,Time\n";
       querySnapshot.forEach((doc) => {
         const d = doc.data();
         csv += `${d.selectedDate || ''},${d.storeCode || ''},${(d.employeeName || '').replace(/,/g, " ")},${d.employeeRole || ''},${d.shiftWindow || ''},${d.statusCondition || ''},${(d.remarks || '--').replace(/,/g, " ")},${d.operatorEmail || ''},${d.transmissionTime || ''}\n`;
       });
+      
       let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       let link = document.createElement("a");
       link.setAttribute("href", URL.createObjectURL(blob));
-      link.setAttribute("download", `DARKSTORE_SYSTEM_${timeframeType.toUpperCase()}_LOGS.csv`);
+      link.setAttribute("download", `DARKSTORE_EXTRACT_RANGE_${startDateVal || 'START'}_TO_${endDateVal || 'END'}.csv`);
       document.body.appendChild(link); link.click(); document.body.removeChild(link);
     });
   }
