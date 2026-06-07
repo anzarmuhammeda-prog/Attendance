@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DARKSTORE ATT - Professional Master Control Terminal</title>
+  <title>AMAZON DARKSTORE LOGISTICS - MASTER COMMAND TERMINAL</title>
   
+  <!-- Firebase Architecture Legacy SDK Core Modules -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -35,14 +36,15 @@
       display: block;
       box-sizing: border-box;
     }
-    .login-box h2 { margin: 0 0 25px 0; color: #00d2ff; font-size: 26px; letter-spacing: 1px; }
+    .login-box h2 { margin: 0 0 5px 0; color: #ff9900; font-size: 26px; letter-spacing: 1px; }
+    .login-box p { margin: 0 0 25px 0; color: #64748b; font-size: 12px; }
     .login-box input { 
       width: 100%; padding: 14px; margin: 12px 0; background: #132237;
       border: 1px solid #1e293b; border-radius: 8px; font-size: 14px; color: #fff;
       box-sizing: border-box;
     }
     button.login-btn { 
-      padding: 14px; width: 100%; background: #00b4d8; color: #060b13; border: none; 
+      padding: 14px; width: 100%; background: #ff9900; color: #060b13; border: none; 
       border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 15px;
     }
 
@@ -54,30 +56,29 @@
     }
     .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 20px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
     .header h2 { margin: 0; font-size: 22px; color: #fff; }
-    .header h2 span { color: #00d2ff; font-size: 16px; margin-left: 10px; }
+    .header h2 span { color: #ff9900; font-size: 16px; margin-left: 10px; }
     .logout-btn { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
     
     .panel-box { background: #111c2e; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
-    .panel-box h3 { margin-top: 0; color: #00d2ff; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;}
+    .panel-box h3 { margin-top: 0; color: #ff9900; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;}
     
-    /* Responsive input layouts for mobile screens */
-    .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: end; margin-bottom: 15px; }
-    .grid-admin { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; align-items: end; margin-bottom: 15px; }
+    .grid-admin { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
     .admin-input-group { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-    .admin-input-group input, .admin-input-group select { flex: 1; min-width: 120px; }
+    .admin-input-group input, .admin-input-group select { flex: 1; min-width: 110px; }
 
     label { font-weight: 600; color: #94a3b8; margin-bottom: 6px; display: block; font-size: 12px; }
     select, input.form-input { width: 100%; padding: 10px; background: #1c2d42; border: 1px solid #2e415a; border-radius: 6px; box-sizing: border-box; font-size: 13px; color: white; }
     
-    .add-btn { width: 100%; background: #00b4d8; color: #060b13; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+    .add-btn { width: 100%; background: #ff9900; color: #060b13; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
     .bulk-btn { background: #6366f1; color: white; border: none; padding: 10px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; }
     .bulk-btn:hover { background: #4f46e5; }
-    .export-btn { background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; transition: background 0.2s; }
+    .export-btn { background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
     
     .table-container { width: 100%; overflow-x: auto; margin-bottom: 25px; border-radius: 8px; border: 1px solid #1e293b; }
-    table { width: 100%; border-collapse: collapse; background: #0f172a; min-width: 850px; }
+    table { width: 100%; border-collapse: collapse; background: #0f172a; min-width: 900px; }
     th, td { padding: 12px; text-align: left; font-size: 13px; border-bottom: 1px solid #1e293b; }
-    th { background-color: #1e293b; color: #00d2ff; font-weight: 600; }
+    th { background-color: #1e293b; color: #ff9900; font-weight: 600; }
     
     .badge { padding: 4px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; display: inline-block; }
     .status-Present { background: rgba(16, 185, 129, 0.15); color: #34d399; }
@@ -85,70 +86,63 @@
     .status-Week-Off { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
     .status-Half-Day { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
     
+    .status-Pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .status-Resolved { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
     .role-label { color: #38bdf8; font-size: 11px; text-transform: uppercase; font-weight: bold; background: rgba(56, 189, 248, 0.1); padding: 2px 6px; border-radius: 4px;}
     .user-badge { color: #a78bfa; font-size: 11px; font-family: monospace; background: rgba(167, 139, 250, 0.1); padding: 2px 6px; border-radius: 4px;}
 
-    .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
     .analytics-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 8px; text-align: center; }
     .analytics-card .num { font-size: 20px; font-weight: bold; margin-top: 4px; }
     
     .submit-block-btn { background: #10b981; color: #060b13; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: bold; margin-top: 15px; }
     .submit-block-btn:disabled { background: #1e293b; color: #64748b; cursor: not-allowed; }
-    .admin-section, .store-section { display: none; }
     
-    /* Small UI adjustment utility class */
-    .action-btn-small { background: #334155; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+    .admin-section, .store-section { display: none; }
+    .action-btn-small { background: #334155; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-right: 4px;}
+    .action-btn-small:hover { background: #475569; }
   </style>
 </head>
 <body>
 
+  <!-- SIGN IN ROW UI -->
   <div id="login-view" class="login-box">
-    <h2>DARKSTORE ATT</h2>
-    <input type="email" id="email" placeholder="Security Guard Email Address">
-    <input type="password" id="password" placeholder="Terminal Encryption Password">
-    <button class="login-btn" onclick="login()">Verify Console Access →</button>
+    <h2>AMAZON LOGISTICS</h2>
+    <p>Darkstore Network Access Node</p>
+    <input type="email" id="email" placeholder="Corporate Operator Email">
+    <input type="password" id="password" placeholder="System Encryption Key">
+    <button class="login-btn" onclick="login()">Authenticate Interface →</button>
   </div>
 
+  <!-- DASHBOARD CONTAINER PANEL -->
   <div id="dashboard-view" class="dashboard-container">
     <div class="header">
-      <h2>DARKSTORE <span>// Security Tracking Portal</span></h2>
+      <h2>DARKSTORE CONTROLS <span>// Corporate Operations Portal</span></h2>
       <div style="display: flex; align-items: center; gap: 20px;">
-        <span id="user-role" style="color: #94a3b8; font-family: monospace;">Syncing...</span>
-        <button class="logout-btn" onclick="logout()">Lock</button>
+        <span id="user-role" style="color: #94a3b8; font-family: monospace;">Validating Secure Session...</span>
+        <button class="logout-btn" onclick="logout()">Disconnect Terminal</button>
       </div>
     </div>
 
-    <div id="admin-view" class="admin-section panel-box" style="background: #151026; border-color: #5b21b6;">
-      <h3 style="color: #a78bfa;">⚡ System Network Configuration Matrix</h3>
+    <!-- DYNAMIC SYSTEM MANAGEMENT MODULE (ADMINS ONLY) -->
+    <div id="admin-view" class="admin-section panel-box" style="background: #151221; border-color: #4c1d95;">
+      <h3 style="color: #c084fc;">⚡ Enterprise Infrastructure Settings Control Panel</h3>
       
-      <div id="admin-pin-panel" style="background: #251b3d; border: 1px dashed #a78bfa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <h4 style="color: #c084fc; margin: 0 0 10px 0; font-size: 14px;">🔒 Master Location Authorization Keys (PINs)</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 12px;">
-          <div>
-            <label style="color: #e2e8f0;">MBZ City PIN</label>
-            <input type="text" id="pin-cfg-mbz" maxlength="4" style="padding: 6px; background: #130f26; border: 1px solid #5b21b6; color: #fff; border-radius: 4px; width: 100%; box-sizing: border-box;">
-          </div>
-          <div>
-            <label style="color: #e2e8f0;">Khalifa City PIN</label>
-            <input type="text" id="pin-cfg-khalifa" maxlength="4" style="padding: 6px; background: #130f26; border: 1px solid #5b21b6; color: #fff; border-radius: 4px; width: 100%; box-sizing: border-box;">
-          </div>
-          <div>
-            <label style="color: #e2e8f0;">Al Raha PIN</label>
-            <input type="text" id="pin-cfg-raha" maxlength="4" style="padding: 6px; background: #130f26; border: 1px solid #5b21b6; color: #fff; border-radius: 4px; width: 100%; box-sizing: border-box;">
-          </div>
-          <div>
-            <label style="color: #e2e8f0;">Yas Island PIN</label>
-            <input type="text" id="pin-cfg-yas" maxlength="4" style="padding: 6px; background: #130f26; border: 1px solid #5b21b6; color: #fff; border-radius: 4px; width: 100%; box-sizing: border-box;">
-          </div>
+      <!-- UPDATED COMPONENT: TRUE DYNAMIC PIN & ACCESS GATEKEEPER MAP MATRIX -->
+      <div style="background: #1e1730; border: 1px dashed #a78bfa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="color: #e9d5ff; margin: 0 0 10px 0; font-size: 14px;">🔒 Site Authorization Gateway Matrix (Dynamic PIN Assignment Tokens)</h4>
+        <div id="dynamic-admin-pin-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;">
+          <!-- Generated on the fly by Javascript initialization -->
         </div>
-        <button class="add-btn" style="background: #a78bfa; width: auto; padding: 6px 15px;" onclick="saveSystemPinUpdates()">Save Modified Gatekeeper PINs</button>
+        <button class="add-btn" style="background: #c084fc; color: #151221; width: auto; padding: 8px 20px;" onclick="saveConfiguredPinsToCloudStore()">Commit Custom PIN Updates</button>
       </div>
 
-      <label style="color: #c084fc; margin-bottom: 8px;">Live Regional Node Operations Tracker Grid:</label>
+      <label style="color: #a78bfa; margin-bottom: 8px;">Regional Store Sync Health Metrics Grid:</label>
       <div class="table-container">
         <table style="min-width: 700px;">
           <thead>
-            <tr><th>Operational Code</th><th>Today's Reporting Status</th><th>Shift Floor Coverage Strength</th><th>Last Active Session Synchronization Tracker</th></tr>
+            <tr><th>Location Identifier</th><th>Reporting Progress</th><th>Fulfillment Floor Strength</th><th>Last Synchronization Point Log</th></tr>
           </thead>
           <tbody id="admin-health-grid-body"></tbody>
         </table>
@@ -156,83 +150,91 @@
 
       <div class="grid-admin">
         <div>
-          <label>Add New Operations Store Unit</label>
+          <label>Register New Branch Location Option</label>
           <div class="admin-input-group">
-            <input type="text" id="new-store-input" class="form-input" placeholder="e.g., DXB01 - Al Quoz">
-            <button class="add-btn" style="background:#a78bfa; width:auto;" onclick="addNewStoreOption()">+</button>
+            <input type="text" id="new-store-input" class="form-input" placeholder="e.g., QAA9 - Al Ain">
+            <button class="add-btn" style="background:#c084fc; color:#151221; width:auto;" onclick="addNewStoreOption()">+</button>
           </div>
           <div id="admin-stores-list" style="max-height: 140px; overflow-y: auto; margin-top: 10px;"></div>
         </div>
 
         <div>
-          <label style="color: #c084fc;">Add Employee to Specific Store Roster</label>
+          <label style="color: #c084fc;">Onboard Personnel & Assign Shift Roster</label>
           <div class="admin-input-group">
             <select id="admin-assign-store" class="form-input"></select>
-            <input type="text" id="admin-new-emp-name" class="form-input" placeholder="Employee Full Name">
+            <input type="text" id="admin-new-emp-name" class="form-input" placeholder="Worker Full Name">
             <select id="admin-assign-role" class="form-input">
               <option value="Warehouse Associate">Warehouse Associate</option>
               <option value="Housekeeping">Housekeeping</option>
               <option value="Team Leader">Team Leader</option>
               <option value="Supervisor">Supervisor</option>
             </select>
-            <button class="add-btn" style="background:#10b981; color:#060b13; width:auto;" onclick="addNewEmployeeToRoster()">Add Member</button>
+            <select id="admin-assign-shift" class="form-input">
+              <option value="Day">Day Shift</option>
+              <option value="Mid">Mid Shift</option>
+              <option value="Night">Night Shift</option>
+            </select>
+            <button class="add-btn" style="background:#10b981; color:#060b13; width:auto;" onclick="addNewEmployeeToRoster()">Save Employee</button>
           </div>
-          <label style="margin-top: 15px;">Review & Manage Store Rosters:</label>
+          <label style="margin-top: 15px;">Review Active Directory Roster Mapping:</label>
           <select id="admin-roster-view-store" class="form-input" onchange="renderAdminEmployeeDirectory()" style="max-width: 300px; margin-bottom: 5px;"></select>
-          <div id="admin-employees-list" style="max-height: 110px; overflow-y: auto; background: #0f172a; padding: 5px; border-radius: 6px; border: 1px solid #1e293b;"></div>
-        </div>
-      </div>
-      
-      <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #4c1d95; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-        <select id="filter-store-dropdown" onchange="loadHistoricalLedgerStream()" style="max-width: 250px;"></select>
-        <div style="display: flex; gap: 10px;">
-          <button class="export-btn" onclick="exportDataLedger('weekly')">📅 Download Weekly CSV</button>
-          <button class="export-btn" style="background: #10b981;" onclick="exportDataLedger('monthly')">📊 Download Monthly CSV</button>
+          <div id="admin-employees-list" style="max-height: 150px; overflow-y: auto; background: #0f172a; padding: 5px; border-radius: 6px; border: 1px solid #1e293b;"></div>
         </div>
       </div>
     </div>
 
-    <div id="teamleader-pin-box" class="panel-box" style="max-width: 420px; margin: 15px auto 25px auto; text-align: center; background: #0e1726; border-color: #00b4d8;">
-      <div style="font-size: 28px; margin-bottom: 5px;">🔒</div>
-      <h3 style="color: #00b4d8; margin-bottom: 4px; border: none; padding: 0;">TL Verification Gateway</h3>
-      <p style="color: #94a3b8; font-size: 12px; margin: 0 0 15px 0;">Enter local verification code to switch terminal access on.</p>
+    <!-- GATEKEEPER AREA LOCK COMPONENT (TEAM LEADERS VERIFICATION PROMPT) -->
+    <div id="teamleader-pin-box" class="panel-box" style="max-width: 420px; margin: 15px auto 25px auto; text-align: center; background: #0e1726; border-color: #ff9900;">
+      <div style="font-size: 28px; margin-bottom: 5px;">🔑</div>
+      <h3 style="color: #ff9900; margin-bottom: 4px; border: none; padding: 0;">Shift Verification Gateway</h3>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0 0 15px 0;">Enter local terminal validation key to unlock the staging sheet environment.</p>
       
       <div style="text-align: left; margin-bottom: 12px;">
-        <label>Selected Location</label>
+        <label>Branch Target Node</label>
         <select id="pin-login-store-select" class="form-input" onchange="syncSelectedStoreToTerminal()"></select>
       </div>
       <div style="text-align: left; margin-bottom: 18px;">
-        <label>Secure Store PIN</label>
+        <label>Passcode Token Verification PIN</label>
         <input type="password" id="pin-login-value-input" maxlength="4" placeholder="••••" style="width: 100%; padding: 10px; background: #132237; border: 1px solid #1e293b; border-radius: 6px; color: #fff; text-align: center; font-size: 18px; letter-spacing: 6px; box-sizing: border-box;">
       </div>
-      <button class="add-btn" style="background: #00b4d8; font-size: 14px;" onclick="validateStoreTerminalAccessKey()">Unlock Field Workspace →</button>
-      <p id="pin-validation-fail-msg" style="color: #ef4444; font-size: 12px; margin-top: 10px; display: none; font-weight: bold;">❌ Pin verification failed. Roster locked.</p>
+      <button class="add-btn" style="background: #ff9900;" onclick="validateStoreTerminalAccessKey()">Unlock Node Sheets Workspace →</button>
+      <p id="pin-validation-fail-msg" style="color: #ef4444; font-size: 12px; margin-top: 10px; display: none; font-weight: bold;">❌ Pin validation mismatch. Roster access blocked.</p>
     </div>
 
+    <!-- DAILY TRANSACTION WORKSPACE -->
     <div id="store-view" class="store-section panel-box">
-      <h3 id="workspace-title-label">Shift Team Attendance Builder</h3>
-      <button class="bulk-btn" onclick="bulkPopulateEntireStoreRoster()">⚡ Pre-populate All Active Roster Rows as Present</button>
+      <h3 id="workspace-title-label">Active Roster Selection Workspace</h3>
+      
+      <div style="display:flex; gap: 10px; align-items:center; flex-wrap: wrap; margin-bottom: 15px;">
+        <label style="margin:0;">Select Active Operation Category Block:</label>
+        <select id="bulk-shift-filter" class="form-input" style="max-width: 150px;">
+          <option value="All">All Shifts</option>
+          <option value="Day">Day Shift</option>
+          <option value="Mid">Mid Shift</option>
+          <option value="Night">Night Shift</option>
+        </select>
+        <button class="bulk-btn" style="margin:0;" onclick="bulkPopulateEntireStoreRoster()">⚡ Pre-populate Filtered Rows as Present</button>
+      </div>
 
       <div class="grid-6">
         <div>
-          <label>Target Operational Date</label>
+          <label>Target Tracking Date</label>
           <input type="date" id="form-date" class="form-input">
         </div>
         <div>
-          <label>Assigned Terminal Code</label>
+          <label>Location context</label>
           <select id="form-store-code" onchange="filterEmployeeDropdownByStore()"></select>
         </div>
         <div>
-          <label>Select Staff Member</label>
-          <select id="form-employee-select"></select>
+          <label>Select Employee Name</label>
+          <select id="form-employee-select" onchange="autoConfigureShiftFieldsBySelection()"></select>
         </div>
         <div>
-          <label>Shift Horizon Window</label>
+          <label>Assigned Shift Timing</label>
           <select id="form-shift-select">
-            <option value="Morning Shift">Morning Shift</option>
-            <option value="Evening Shift">Evening Shift</option>
-            <option value="Night Shift">Night Shift</option>
-            <option value="Full Day">Full Day</option>
+            <option value="Day">Day</option>
+            <option value="Mid">Mid</option>
+            <option value="Night">Night</option>
           </select>
         </div>
         <div>
@@ -245,15 +247,15 @@
           </select>
         </div>
         <div>
-          <label>Exceptions / Remarks</label>
-          <input type="text" id="form-remarks-input" class="form-input" placeholder="Optional notes...">
+          <label>Remarks Exceptions / Notes</label>
+          <input type="text" id="form-remarks-input" class="form-input" placeholder="Optional descriptions...">
         </div>
         <div>
           <button class="add-btn" onclick="stageEmployeeRow()">+ Stage Row</button>
         </div>
       </div>
 
-      <h4 style="color: #fff; font-size: 14px; margin: 25px 0 10px 0;">Staged Site Team Sheet (<span id="temp-count" style="color:#00d2ff;">0</span> Workers Pre-Loaded)</h4>
+      <h4 style="color: #fff; font-size: 14px; margin: 25px 0 10px 0;">Staged Site Team Sheet (<span id="temp-count" style="color:#ff9900;">0</span> Workers Staged)</h4>
       <div class="analytics-bar">
         <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">SCHEDULED</div><div id="calc-sched" class="num" style="color:#38bdf8;">0</div></div>
         <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">PRESENT</div><div id="calc-pres" class="num" style="color:#34d399;">0</div></div>
@@ -265,26 +267,97 @@
       <div class="table-container">
         <table>
           <thead>
-            <tr><th>Operational Date</th><th>Store Context</th><th>Employee Full Name</th><th>Job Role</th><th>Shift Window</th><th>Condition</th><th>Exceptions</th><th>Logged By</th><th>Options</th></tr>
+            <tr><th>Date</th><th>Store Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status</th><th>Exceptions Notes</th><th>Staged By</th><th>Options</th></tr>
           </thead>
           <tbody id="temp-roster-body"></tbody>
         </table>
       </div>
-      <button id="final-submit-btn" class="submit-block-btn" onclick="transmitStagedRosterToCloud()" disabled>Transmit Complete Store Sheet to Cloud Database</button>
+      <button id="final-submit-btn" class="submit-block-btn" onclick="transmitStagedRosterToCloud()" disabled>Transmit Staged Configuration Grid to Database</button>
     </div>
 
-    <h3 id="ledger-title-label" style="color: #fff; font-size: 16px;">Live Transmitted Logs Ledger</h3>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr><th>Selected Date</th><th>Store Code</th><th>Employee Full Name</th><th>Job Role</th><th>Shift Window</th><th>Condition Code</th><th>Remarks Notes</th><th>Logged By Security Node</th></tr>
-        </thead>
-        <tbody id="attendance-table-body"></tbody>
-      </table>
+    <!-- ADVANCED FILTER LOGS ENGINE CONTROLS -->
+    <div class="panel-box" style="background:#0b111e;">
+      <h3>📊 Centralized Activity Logs Query Engine</h3>
+      <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 1; min-width: 150px;">
+          <label>Filter Store Location</label>
+          <select id="filter-store-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()"></select>
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label>Filter Shift Profile</label>
+          <select id="filter-shift-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()">
+            <option value="All">All Shifts</option>
+            <option value="Day">Day</option>
+            <option value="Mid">Mid</option>
+            <option value="Night">Night</option>
+          </select>
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label>Filter Specific Date Selection</label>
+          <input type="date" id="filter-date-input" class="form-input" onchange="loadHistoricalLedgerStream()">
+        </div>
+        <div>
+          <button class="action-btn-small" style="padding: 10px 15px; background: #475569;" onclick="clearActivitySearchFilters()">Reset Queries</button>
+        </div>
+        <div style="margin-left: auto; display: flex; gap: 8px;">
+          <button class="export-btn" onclick="exportDataLedger('weekly')">📅 Weekly CSV</button>
+          <button class="export-btn" style="background: #10b981;" onclick="exportDataLedger('monthly')">📊 Monthly CSV</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Selected Date</th><th>Store Code</th><th>Employee Full Name</th><th>Job Role</th><th>Shift Timing</th><th>Condition Code</th><th>Remarks Notes</th><th>Logged By Security Node</th><th>Administrative Action Operations</th></tr>
+          </thead>
+          <tbody id="attendance-table-body"></tbody>
+        </table>
+      </div>
     </div>
+
+    <!-- INCIDENT ESCALATION & SYSTEM REPORT MODULE -->
+    <div class="grid-admin" style="margin-top: 20px;">
+      <!-- REPORT SUBMISSION FORM -->
+      <div class="panel-box">
+        <h3>📢 Submit Operational System Report</h3>
+        <div style="display: grid; gap: 12px;">
+          <div>
+            <label>Submitter Name</label>
+            <input type="text" id="report-user-name" class="form-input" placeholder="Enter your full name">
+          </div>
+          <div>
+            <label>Your Job Role Profile</label>
+            <select id="report-user-role" class="form-input">
+              <option value="Team Leader">Team Leader</option>
+              <option value="Supervisor">Supervisor</option>
+              <option value="Security Guard">Security Guard</option>
+            </select>
+          </div>
+          <div>
+            <label>Required Configuration Update / Focus Area</label>
+            <input type="text" id="report-update-title" class="form-input" placeholder="e.g., Update Roster Shift timings, Change PIN code">
+          </div>
+          <div>
+            <label>Incident Details & Problem Description</label>
+            <textarea id="report-description" class="form-input" rows="4" placeholder="Explain the dynamic adjustment or issue explicitly here..." style="width:100%; font-family:inherit; color:white; background:#1c2d42; border:1px solid #2e415a; border-radius:6px; box-sizing:border-box; padding:10px; resize:vertical;"></textarea>
+          </div>
+          <button class="add-btn" onclick="submitSystemIncidentReportTicket()">Transmit System Ticket To Admin Panel</button>
+        </div>
+      </div>
+
+      <!-- ADMIN TICKETS DASHBOARD VIEW -->
+      <div id="admin-tickets-panel" class="panel-box" style="display:none; background: #161013; border-color: #b91c1c;">
+        <h3 style="color:#f87171;">🚨 Received Escalations & System Incident Log (Admins Only)</h3>
+        <div style="max-height: 380px; overflow-y: auto;" id="admin-tickets-stream-container">
+          <!-- Populated from Javascript -->
+        </div>
+      </div>
+    </div>
+
   </div>
 
 <script>
+  // Core Operational Configuration Parameters Cloud Matrix
   const firebaseConfig = {
     apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
     authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
@@ -301,17 +374,9 @@
   let currentUserEmail = "";
   let isAdmin = false;
   let temporaryRosterList = [];
-  let activeStoresList = ["QAA1 - MBZ CITY", "QAA6 - Khalifa City", "QDG5 - Business Bay 2", "QDC6 - Qusais 2", "QAA7 - Al Raha", "QDD3 - Yas Island"];
+  let activeStoresList = [];
   let fullEmployeeDirectory = [];
-
-  // Local storage mapping system for customized terminal authorization pins
-  const fallbackStorePins = {
-    "QAA1 - MBZ CITY": "1001",
-    "QAA6 - Khalifa City": "1002",
-    "QAA7 - Al Raha": "1003",
-    "QDD3 - Yas Island": "1004"
-  };
-  let activeSystemPINMatrix = JSON.parse(localStorage.getItem('darkstore_terminal_pins')) || fallbackStorePins;
+  let dynamicCloudPINStorageMap = {};
 
   const todayDateStr = new Date().toISOString().split('T')[0];
   document.getElementById('form-date').value = todayDateStr;
@@ -328,8 +393,8 @@
   function login() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    if (!email || !password) { alert("Missing credentials."); return; }
-    auth.signInWithEmailAndPassword(email, password).catch(err => alert("Access Denied: " + err.message));
+    if (!email || !password) { alert("Credentials missing."); return; }
+    auth.signInWithEmailAndPassword(email, password).catch(err => alert("Access Refused: " + err.message));
   }
 
   function logout() { auth.signOut(); }
@@ -344,24 +409,23 @@
     document.getElementById("dashboard-view").style.display = "block";
     
     const prefixName = email.split('@')[0].toUpperCase();
-    document.getElementById("user-role").innerHTML = `GUARD: <span style="color:#00d2ff; font-weight:bold;">${prefixName}</span>`;
+    document.getElementById("user-role").innerHTML = `OPERATOR: <span style="color:#ff9900; font-weight:bold;">${prefixName}</span>`;
 
     const dateField = document.getElementById("form-date");
 
     if(email === "anzarmuhammed.a@gmail.com" || email === "admin@attendance.com" || email === "anzar.mhd@gmail.com") {
       isAdmin = true;
       document.getElementById("admin-view").style.display = "block";
-      document.getElementById("teamleader-pin-box").style.display = "none"; // Admin bypasses PIN gate completely
+      document.getElementById("admin-tickets-panel").style.display = "block";
+      document.getElementById("teamleader-pin-box").style.display = "none"; 
       document.getElementById("store-view").style.display = "block";
       dateField.removeAttribute("min");
       dateField.removeAttribute("max");
-      
-      // Load PIN configs inside admin values directly
-      syncAdminPinConfigFields();
     } else {
       isAdmin = false;
       document.getElementById("admin-view").style.display = "none";
-      document.getElementById("teamleader-pin-box").style.display = "block"; // Force layout lock until PIN matches
+      document.getElementById("admin-tickets-panel").style.display = "none";
+      document.getElementById("teamleader-pin-box").style.display = "block"; 
       document.getElementById("store-view").style.display = "none";
       
       const yesterday = new Date();
@@ -373,9 +437,9 @@
     temporaryRosterList = [];
     renderTemporaryStagedTable();
     syncLiveSystemDataMatrix();
+    syncIncidentReportTrackerStream();
   }
 
-  // Pin validation operations
   function syncSelectedStoreToTerminal() {
     const selected = document.getElementById("pin-login-store-select").value;
     document.getElementById("form-store-code").value = selected;
@@ -387,13 +451,12 @@
     const inputPin = document.getElementById("pin-login-value-input").value;
     const errorAlert = document.getElementById("pin-validation-fail-msg");
 
-    // Match mapping token rules
-    const correctPin = activeSystemPINMatrix[selectedStore] || "1234";
+    const correctPin = dynamicCloudPINStorageMap[selectedStore] || "1234";
 
     if (inputPin === correctPin) {
       errorAlert.style.display = "none";
       document.getElementById("pin-login-value-input").value = "";
-      alert(`Access Granted for ${selectedStore}`);
+      alert(`Terminal Authenticated Successfully for: ${selectedStore}`);
       
       document.getElementById("teamleader-pin-box").style.display = "none";
       document.getElementById("store-view").style.display = "block";
@@ -402,27 +465,46 @@
     }
   }
 
-  function syncAdminPinConfigFields() {
-    document.getElementById("pin-cfg-mbz").value = activeSystemPINMatrix["QAA1 - MBZ CITY"] || "1001";
-    document.getElementById("pin-cfg-khalifa").value = activeSystemPINMatrix["QAA6 - Khalifa City"] || "1002";
-    document.getElementById("pin-cfg-raha").value = activeSystemPINMatrix["QAA7 - Al Raha"] || "1003";
-    document.getElementById("pin-cfg-yas").value = activeSystemPINMatrix["QDD3 - Yas Island"] || "1004";
+  // UPDATED METHOD: DYNAMIC GENERATION OF PIN MANAGER DOM ROW NODES
+  function buildDynamicAdminPinConfigDOM() {
+    const container = document.getElementById("dynamic-admin-pin-container");
+    if (!container) return;
+    container.innerHTML = "";
+
+    activeStoresList.forEach(store => {
+      const activePinVal = dynamicCloudPINStorageMap[store] || "1234";
+      container.innerHTML += `<div>
+        <label style="color:#e9d5ff; font-size:11px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${store} PIN</label>
+        <input type="text" id="dyn-pin-${btoa(store).replace(/=/g,'')}" value="${activePinVal}" maxlength="4" style="padding:6px; background:#130f26; border:1px solid #5b21b6; color:#fff; border-radius:4px; width:100%; box-sizing:border-box; font-weight:bold; letter-spacing:1px;">
+      </div>`;
+    });
   }
 
-  function saveSystemPinUpdates() {
-    activeSystemPINMatrix["QAA1 - MBZ CITY"] = document.getElementById("pin-cfg-mbz").value;
-    activeSystemPINMatrix["QAA6 - Khalifa City"] = document.getElementById("pin-cfg-khalifa").value;
-    activeSystemPINMatrix["QAA7 - Al Raha"] = document.getElementById("pin-cfg-raha").value;
-    activeSystemPINMatrix["QDD3 - Yas Island"] = document.getElementById("pin-cfg-yas").value;
+  function saveConfiguredPinsToCloudStore() {
+    if(!isAdmin) return;
+    
+    activeStoresList.forEach(store => {
+      const inputId = `dyn-pin-${btoa(store).replace(/=/g,'')}`;
+      const element = document.getElementById(inputId);
+      if(element) {
+        dynamicCloudPINStorageMap[store] = element.value.trim() || "1234";
+      }
+    });
 
-    localStorage.setItem('darkstore_terminal_pins', JSON.stringify(activeSystemPINMatrix));
-    alert("🚀 System PIN parameters structural deployment completed successfully!");
+    db.collection("system_configs").doc("pin_authorization_matrix").set(dynamicCloudPINStorageMap)
+      .then(() => { alert("🚀 All custom operational site access tokens saved globally!"); })
+      .catch(err => { alert("Error committing token maps: " + err.message); });
   }
 
   function syncLiveSystemDataMatrix() {
     db.collection("system_configs").doc("stores_matrix").onSnapshot((doc) => {
       if (doc.exists && doc.data().stores) { activeStoresList = doc.data().stores; }
-      populateStoresDropdownsUI();
+      
+      db.collection("system_configs").doc("pin_authorization_matrix").onSnapshot((pinDoc) => {
+        if(pinDoc.exists) { dynamicCloudPINStorageMap = pinDoc.data(); }
+        if(isAdmin) { buildDynamicAdminPinConfigDOM(); }
+        populateStoresDropdownsUI();
+      });
     });
 
     db.collection("employee_directory").onSnapshot((snapshot) => {
@@ -441,7 +523,8 @@
     const pinLoginStoreSelect = document.getElementById("pin-login-store-select");
 
     const buildOptions = (targetEl, includeAll = false) => {
-      targetEl.innerHTML = includeAll ? `<option value="All">All Operations Combined</option>` : "";
+      if(!targetEl) return;
+      targetEl.innerHTML = includeAll ? `<option value="All">All Registered Locations</option>` : "";
       activeStoresList.forEach(store => { targetEl.innerHTML += `<option value="${store}">${store}</option>`; });
     };
 
@@ -464,29 +547,44 @@
     
     const filteredStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === targetStore);
     if(filteredStaff.length === 0) {
-      empSelect.innerHTML = `<option value="">-- No roster staff saved --</option>`;
+      empSelect.innerHTML = `<option value="">-- No registered staff --</option>`;
       return;
     }
     filteredStaff.forEach(emp => {
-      empSelect.innerHTML += `<option value="${emp.name}" data-role="${emp.role}">${emp.name} (${emp.role})</option>`;
+      empSelect.innerHTML += `<option value="${emp.name}" data-role="${emp.role}" data-shift="${emp.shift || 'Day'}">${emp.name} (${emp.role})</option>`;
     });
+    autoConfigureShiftFieldsBySelection();
     if (!isAdmin) { loadHistoricalLedgerStream(); }
+  }
+
+  // Automatically adjusts the UI layout view inputs to match the worker's saved default shift profile
+  function autoConfigureShiftFieldsBySelection() {
+    const empSelect = document.getElementById("form-employee-select");
+    if(!empSelect || empSelect.selectedIndex < 0) return;
+    const selectedOption = empSelect.options[empSelect.selectedIndex];
+    const defaultShift = selectedOption.getAttribute("data-shift") || "Day";
+    document.getElementById("form-shift-select").value = defaultShift;
   }
 
   function bulkPopulateEntireStoreRoster() {
     const date = document.getElementById("form-date").value;
     const storeCode = document.getElementById("form-store-code").value;
-    const shift = document.getElementById("form-shift-select").value;
-    if (!date) { alert("Please set target date."); return; }
+    const bulkShiftFilter = document.getElementById("bulk-shift-filter").value;
+    
+    if (!date) { alert("Set transaction tracking target date."); return; }
 
-    const targetStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === storeCode);
-    if (targetStaff.length === 0) { alert("No staff registered at this location."); return; }
+    let targetStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === storeCode);
+    if (bulkShiftFilter !== "All") {
+      targetStaff = targetStaff.filter(emp => (emp.shift || 'Day') === bulkShiftFilter);
+    }
+
+    if (targetStaff.length === 0) { alert("No personnel entries match selection guidelines."); return; }
 
     targetStaff.forEach(emp => {
       const isDuplicate = temporaryRosterList.some(item => item.name === emp.name && item.date === date);
       if (!isDuplicate) {
         temporaryRosterList.push({
-          date: date, storeCode: storeCode, name: emp.name, role: emp.role, shift: shift, status: "Present", remarks: "Auto-Populated", updater: currentUserEmail
+          date: date, storeCode: storeCode, name: emp.name, role: emp.role, shift: emp.shift || "Day", status: "Present", remarks: "Auto-Populated Strength", updater: currentUserEmail
         });
       }
     });
@@ -504,6 +602,7 @@
   function calculateNetworkHealthGrid() {
     if (!isAdmin) return;
     const healthBody = document.getElementById("admin-health-grid-body");
+    if(!healthBody) return;
     healthBody.innerHTML = "";
 
     db.collection("attendance_ledger").where("selectedDate", "==", todayDateStr).get().then((snapshot) => {
@@ -519,17 +618,17 @@
         let lastSyncTracker = "--";
 
         if (branchSubmissions.length > 0) {
-          statusBadge = `<span class="badge status-Present">✅ Complete</span>`;
+          statusBadge = `<span class="badge status-Present">✅ Saved</span>`;
           const presentCount = branchSubmissions.filter(s => s.statusCondition === "Present").length;
           coveragePct = activeRosterTotal > 0 ? Math.round((presentCount / activeRosterTotal) * 100) + "% Strength" : "100%";
           const guardName = branchSubmissions[0].operatorEmail.split('@')[0];
           lastSyncTracker = `${branchSubmissions[0].transmissionTime} (By: ${guardName})`;
         } else {
-          coveragePct = activeRosterTotal > 0 ? `0 / ${activeRosterTotal} Scheduled` : "0 Registered";
+          coveragePct = activeRosterTotal > 0 ? `0 / ${activeRosterTotal} Active Rows` : "0 Onboarded";
         }
 
         healthBody.innerHTML += `<tr>
-          <td><b style="color:#a78bfa;">${store}</b></td>
+          <td><b style="color:#ff9900;">${store}</b></td>
           <td>${statusBadge}</td>
           <td><strong>${coveragePct}</strong></td>
           <td style="color:#64748b; font-family:monospace; font-size:11px;">${lastSyncTracker}</td>
@@ -545,7 +644,7 @@
     const name = empSelect.value;
     const remarks = document.getElementById("form-remarks-input").value.trim();
     
-    if(!name) { alert("Selection input field is empty."); return; }
+    if(!name) { alert("Selection parameter missing."); return; }
     
     const selectedOption = empSelect.options[empSelect.selectedIndex];
     const role = selectedOption.getAttribute("data-role") || "Associate";
@@ -553,7 +652,7 @@
     const status = document.getElementById("form-status-select").value;
 
     const isDuplicate = temporaryRosterList.some(item => item.name === name && item.date === date);
-    if(isDuplicate) { alert(`Employee "${name}" already staged for this day.`); return; }
+    if(isDuplicate) { alert(`Personnel record duplicate found for this date entry confirmation sequence.`); return; }
 
     temporaryRosterList.push({ date, storeCode, name, role, shift, status, remarks: remarks || "--", updater: currentUserEmail });
     document.getElementById("form-remarks-input").value = ""; 
@@ -568,10 +667,11 @@
   function renderTemporaryStagedTable() {
     const tbody = document.getElementById("temp-roster-body");
     const submitBtn = document.getElementById("final-submit-btn");
+    if(!tbody) return;
     document.getElementById("temp-count").innerText = temporaryRosterList.length;
 
     if (temporaryRosterList.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #64748b; padding: 20px;">Staging clear.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #64748b; padding: 20px;">Staging workspace is completely empty.</td></tr>`;
       submitBtn.disabled = true;
       updateLiveAnalyticsDashboard();
       return;
@@ -583,10 +683,10 @@
       const guardName = emp.updater.split('@')[0];
       tbody.innerHTML += `<tr style="background: #132237;">
         <td>${emp.date}</td>
-        <td><b style="color:#00d2ff;">${emp.storeCode}</b></td>
+        <td><b style="color:#ff9900;">${emp.storeCode}</b></td>
         <td><strong>${emp.name}</strong></td>
         <td><span class="role-label">${emp.role}</span></td>
-        <td>${emp.shift}</td>
+        <td><b style="color:#fcd34d;">${emp.shift}</b></td>
         <td><span class="badge status-${emp.status}">${emp.status}</span></td>
         <td style="color:#94a3b8; font-style:italic;">${emp.remarks}</td>
         <td><span class="user-badge">${guardName}</span></td>
@@ -620,63 +720,168 @@
     });
 
     batch.commit().then(() => {
-      alert("Transmitted successfully!");
+      alert("System sync pipeline processing structural batch commit complete!");
       temporaryRosterList = [];
       renderTemporaryStagedTable();
       loadHistoricalLedgerStream();
       
-      // If a non-admin team leader submitted, reset view state to re-lock the screen
       if(!isAdmin) {
         document.getElementById("teamleader-pin-box").style.display = "block";
         document.getElementById("store-view").style.display = "none";
       } else {
         calculateNetworkHealthGrid();
       }
-    }).catch(err => alert("Error processing batch write: " + err.message));
+    }).catch(err => alert("Transmission fault error: " + err.message));
   }
 
+  // UPDATED METHOD: CENTRAL ENGINE WITH MULTI-LAYER SEARCH LOGIC FILTER PIPELINES
   function loadHistoricalLedgerStream() {
     const tbody = document.getElementById("attendance-table-body");
     if(!tbody) return;
-    tbody.innerHTML = "<tr><td colspan='8' style='color:#00d2ff; text-align:center;'>Syncing...</td></tr>";
+    tbody.innerHTML = "<tr><td colspan='9' style='color:#ff9900; text-align:center;'>Accessing historical archives...</td></tr>";
     
-    let query = db.collection("attendance_ledger").orderBy("createdAt", "desc");
-
-    if (isAdmin) {
-      const storeFilter = document.getElementById("filter-store-dropdown").value;
-      if (storeFilter !== "All") { query = query.where("storeCode", "==", storeFilter); }
-      query = query.limit(100);
-    } else {
-      const localStoreTargetCode = document.getElementById("form-store-code").value;
-      if(!localStoreTargetCode) {
-        tbody.innerHTML = "<tr><td colspan='8' style='color:#64748b; text-align:center;'>Awaiting active node configuration...</td></tr>";
-        return;
-      }
-      query = query.where("storeCode", "==", localStoreTargetCode).limit(50);
+    let storeFilter = "All";
+    if(document.getElementById("filter-store-dropdown")) {
+      storeFilter = document.getElementById("filter-store-dropdown").value;
+    } else if (!isAdmin) {
+      storeFilter = document.getElementById("form-store-code").value;
     }
+
+    const shiftFilter = document.getElementById("filter-shift-dropdown") ? document.getElementById("filter-shift-dropdown").value : "All";
+    const dateFilter = document.getElementById("filter-date-input") ? document.getElementById("filter-date-input").value : "";
+
+    let query = db.collection("attendance_ledger");
+
+    if (storeFilter !== "All" && storeFilter !== "") { query = query.where("storeCode", "==", storeFilter); }
+    if (shiftFilter !== "All") { query = query.where("shiftWindow", "==", shiftFilter); }
+    if (dateFilter !== "") { query = query.where("selectedDate", "==", dateFilter); }
 
     query.get().then((querySnapshot) => {
       tbody.innerHTML = "";
-      if (querySnapshot.empty) { tbody.innerHTML = "<tr><td colspan='8' style='color:#64748b; text-align:center;'>No records found.</td></tr>"; return; }
+      if (querySnapshot.empty) { tbody.innerHTML = "<tr><td colspan='9' style='color:#64748b; text-align:center;'>No structural logging histories match selection constraints.</td></tr>"; return; }
       
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
+      let sortingBufferArray = [];
+      querySnapshot.forEach(doc => { sortingBufferArray.push({ id: doc.id, ...doc.data() }); });
+      
+      // Secondary absolute local timestamp chronology evaluation structure sort
+      sortingBufferArray.sort((x, y) => {
+        return (y.selectedDate || "").localeCompare(x.selectedDate || "") || (y.transmissionTime || "").localeCompare(x.transmissionTime || "");
+      });
+
+      sortingBufferArray.forEach((data) => {
         const guardName = (data.operatorEmail || 'system').split('@')[0];
+        
+        // CORRECTION TWEAK UTILITY TOOLBAR (ADMIN ACCESS PRIVILEGE MODE ONLY)
+        let operationsCellMarkup = `<span style="color:#64748b; font-size:11px;">Verification Locked</span>`;
+        if(isAdmin) {
+          operationsCellMarkup = `
+            <button class="action-btn-small" style="background:#0284c7;" onclick="executeAdministrativeRecordUpdateInline('${data.id}', 'Present')">P</button>
+            <button class="action-btn-small" style="background:#b91c1c;" onclick="executeAdministrativeRecordUpdateInline('${data.id}', 'Absent')">A</button>
+            <button class="action-btn-small" style="background:#4b5563;" onclick="executeAdministrativeRecordUpdateInline('${data.id}', 'Week-Off')">O</button>
+            <button class="action-btn-small" style="background:#d97706;" onclick="executeAdministrativeRecordUpdateInline('${data.id}', 'Half Day')">H</button>
+          `;
+        }
+
         tbody.innerHTML += `<tr>
           <td style="color:#fff; font-weight:600;">${data.selectedDate || 'N/A'}</td>
-          <td style="color:#00d2ff; font-family:monospace;">${data.storeCode || 'N/A'}</td>
+          <td style="color:#ff9900; font-family:monospace;">${data.storeCode || 'N/A'}</td>
           <td><strong>${data.employeeName || 'N/A'}</strong></td>
           <td><span class="role-label">${data.employeeRole || 'Warehouse Associate'}</span></td>
-          <td>${data.shiftWindow || 'N/A'}</td>
+          <td><b style="color:#fcd34d;">${data.shiftWindow || 'N/A'}</b></td>
           <td><span class="badge status-${data.statusCondition}">${data.statusCondition}</span></td>
           <td style="color:#94a3b8; font-style:italic;">${data.remarks || '--'}</td>
           <td><span class="user-badge">${guardName}</span> <span style="color:#64748b; font-size:11px;">at ${data.transmissionTime || ''}</span></td>
+          <td>${operationsCellMarkup}</td>
         </tr>`;
       });
-    }).catch(err => { tbody.innerHTML = `<tr><td colspan='8' style='color: #ef4444; text-align:center;'>Sync Failure.</td></tr>`; });
+    }).catch(err => { tbody.innerHTML = `<tr><td colspan='9' style='color: #ef4444; text-align:center;'>Database extraction error event.</td></tr>`; });
   }
 
-  /* ================= ADMIN MANAGEMENT SETTINGS ================= */
+  function clearActivitySearchFilters() {
+    if(document.getElementById("filter-store-dropdown")) document.getElementById("filter-store-dropdown").value = "All";
+    if(document.getElementById("filter-shift-dropdown")) document.getElementById("filter-shift-dropdown").value = "All";
+    if(document.getElementById("filter-date-input")) document.getElementById("filter-date-input").value = "";
+    loadHistoricalLedgerStream();
+  }
+
+  // SYSTEM CORRECTION FUNCTION: Instantly edits mistyped statuses in Firebase
+  function executeAdministrativeRecordUpdateInline(targetDocId, targetNewStatusStr) {
+    if(!isAdmin) return;
+    db.collection("attendance_ledger").doc(targetDocId).update({
+      statusCondition: targetNewStatusStr,
+      remarks: `Admin corrected entry to: ${targetNewStatusStr}`
+    }).then(() => { loadHistoricalLedgerStream(); });
+  }
+
+  /* ================= INCIDENT REPORTING MATRIX ENGINE ================= */
+  function submitSystemIncidentReportTicket() {
+    const reporter = document.getElementById("report-user-name").value.trim();
+    const role = document.getElementById("report-user-role").value;
+    const updateTitle = document.getElementById("report-update-title").value.trim();
+    const desc = document.getElementById("report-description").value.trim();
+
+    if(!reporter || !updateTitle || !desc) {
+      alert("Please fill in all ticket parameters before transmission sequence.");
+      return;
+    }
+
+    db.collection("system_incident_tickets").add({
+      reporterName: reporter,
+      reporterRole: role,
+      requestedUpdateSummary: updateTitle,
+      incidentDetails: desc,
+      ticketStatus: "Pending",
+      loggedByAccount: currentUserEmail,
+      timestampEpoch: Date.now(),
+      dateString: new Date().toLocaleDateString()
+    }).then(() => {
+      alert("🚨 Corporate system escalation report sent safely to Admin Control Center.");
+      document.getElementById("report-user-name").value = "";
+      document.getElementById("report-update-title").value = "";
+      document.getElementById("report-description").value = "";
+    }).catch(err => alert("Ticket transmission pipeline error: " + err.message));
+  }
+
+  function syncIncidentReportTrackerStream() {
+    if(!isAdmin) return;
+    db.collection("system_incident_tickets").orderBy("timestampEpoch", "desc").onSnapshot((snapshot) => {
+      const container = document.getElementById("admin-tickets-stream-container");
+      if(!container) return;
+      container.innerHTML = "";
+
+      if(snapshot.empty) {
+        container.innerHTML = `<div style="color:#64748b; font-size:12px; padding:15px; text-align:center;">No open alerts or update requests logged.</div>`;
+        return;
+      }
+
+      snapshot.forEach(doc => {
+        const ticket = doc.data();
+        const nextStatusToggle = ticket.ticketStatus === "Pending" ? "Resolved" : "Pending";
+        const statusBtnColor = ticket.ticketStatus === "Pending" ? "#10b981" : "#f59e0b";
+
+        container.innerHTML += `
+          <div style="background:#24141a; border:1px solid #7f1d1d; padding:12px; margin-bottom:10px; border-radius:6px; font-size:13px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="font-weight:bold; color:#f87171;">⚠️ ${ticket.requestedUpdateSummary}</span>
+              <span class="badge status-${ticket.ticketStatus}">${ticket.ticketStatus}</span>
+            </div>
+            <p style="margin:0 0 8px 0; color:#e2e8f0; font-size:12px; line-height:1.4;">${ticket.incidentDetails}</p>
+            <div style="display:flex; justify-content:space-between; align-items:center; color:#94a3b8; font-size:11px; background:#1a0d12; padding:6px; border-radius:4px;">
+              <span>By: <b>${ticket.reporterName}</b> (${ticket.reporterRole}) on ${ticket.dateString}</span>
+              <button class="action-btn-small" style="background:${statusBtnColor}; color:#000; font-weight:bold; margin:0; padding:2px 6px;" onclick="toggleIncidentTicketStatus('${doc.id}', '${nextStatusToggle}')">Mark ${nextStatusToggle}</button>
+            </div>
+          </div>
+        `;
+      });
+    });
+  }
+
+  function toggleIncidentTicketStatus(ticketId, targetNextStateStr) {
+    if(!isAdmin) return;
+    db.collection("system_incident_tickets").doc(ticketId).update({ ticketStatus: targetNextStateStr });
+  }
+
+  /* ================= PLATFORM ADMINISTRATION DIRECTORY HANDLING ================= */
   function addNewStoreOption() {
     if (!isAdmin) return;
     const input = document.getElementById("new-store-input");
@@ -685,9 +890,10 @@
     db.collection("system_configs").doc("stores_matrix").update({ stores: firebase.firestore.FieldValue.arrayUnion(val) }).then(() => { input.value = ""; });
   }
 
+  // Safely wipes a store while tracking the deletion in our network configuration
   function deleteStoreOption(storeName) {
     if (!isAdmin) return;
-    if (!confirm(`Wipe "${storeName}"?`)) return;
+    if (!confirm(`Wipe "${storeName}" location options block entirely from active structures?`)) return;
     db.collection("system_configs").doc("stores_matrix").update({ stores: firebase.firestore.FieldValue.arrayRemove(storeName) });
   }
 
@@ -697,14 +903,15 @@
     const nameInput = document.getElementById("admin-new-emp-name");
     const name = nameInput.value.trim();
     const role = document.getElementById("admin-assign-role").value;
+    const shift = document.getElementById("admin-assign-shift").value;
     if (!name) return;
 
-    db.collection("employee_directory").add({ storeCode, name, role, addedAt: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { nameInput.value = ""; });
+    db.collection("employee_directory").add({ storeCode, name, role, shift, addedAt: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { nameInput.value = ""; });
   }
 
   function removeEmployeeFromRoster(docId) {
     if (!isAdmin) return;
-    if (!confirm("Remove staff entry?")) return;
+    if (!confirm("Wipe this employee profile row from system records?")) return;
     db.collection("employee_directory").doc(docId).delete();
   }
 
@@ -716,17 +923,17 @@
     storeContainer.innerHTML = "";
     activeStoresList.forEach(store => {
       storeContainer.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; background:#1c2d42; padding:5px 10px; margin-bottom:4px; border-radius:4px; font-size:12px;">
-        <span>${store}</span><span class="action-btn-small" style="margin:0; padding:2px 6px;" onclick="deleteStoreOption('${store}')">Delete</span>
+        <span>${store}</span><span class="action-btn-small" style="margin:0; padding:2px 6px; background:#b91c1c;" onclick="deleteStoreOption('${store}')">Delete</span>
       </div>`;
     });
 
     empContainer.innerHTML = "";
     const storeStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === selectedStore);
-    if (storeStaff.length === 0) { empContainer.innerHTML = `<div style="color:#64748b; font-size:12px; padding:10px;">Empty.</div>`; return; }
+    if (storeStaff.length === 0) { empContainer.innerHTML = `<div style="color:#64748b; font-size:12px; padding:10px;">No registered roster logs found here.</div>`; return; }
     storeStaff.forEach(emp => {
       empContainer.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e293b; padding:6px 4px; font-size:13px;">
-        <div><strong>${emp.name}</strong> <span class="role-label">${emp.role}</span></div>
-        <button class="action-btn-small" style="margin:0; padding:2px 6px;" onclick="removeEmployeeFromRoster('${emp.id}')">Delete</button>
+        <div><strong>${emp.name}</strong> <span class="role-label">${emp.role}</span> <span style="font-family:monospace; color:#fcd34d; font-size:11px; margin-left:5px;">[${emp.shift || 'Day'}]</span></div>
+        <button class="action-btn-small" style="margin:0; padding:2px 6px; background:#b91c1c;" onclick="removeEmployeeFromRoster('${emp.id}')">Delete</button>
       </div>`;
     });
   }
@@ -743,7 +950,7 @@
       let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       let link = document.createElement("a");
       link.setAttribute("href", URL.createObjectURL(blob));
-      link.setAttribute("download", `DARKSTORE_${timeframeType.toUpperCase()}_REPORT.csv`);
+      link.setAttribute("download", `DARKSTORE_SYSTEM_${timeframeType.toUpperCase()}_LOGS.csv`);
       document.body.appendChild(link); link.click(); document.body.removeChild(link);
     });
   }
