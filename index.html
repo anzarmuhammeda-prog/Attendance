@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AMAZON DARKSTORE LOGISTICS - MASTER COMMAND TERMINAL</title>
   
-  <!-- Firebase Architecture Legacy SDK Core Modules -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -106,7 +105,6 @@
 </head>
 <body>
 
-  <!-- SIGN IN ROW UI -->
   <div id="login-view" class="login-box">
     <h2>AMAZON LOGISTICS</h2>
     <p>Darkstore Network Access Node</p>
@@ -115,7 +113,6 @@
     <button class="login-btn" onclick="login()">Authenticate Interface →</button>
   </div>
 
-  <!-- DASHBOARD CONTAINER PANEL -->
   <div id="dashboard-view" class="dashboard-container">
     <div class="header">
       <h2>DARKSTORE CONTROLS <span>// Corporate Operations Portal</span></h2>
@@ -125,16 +122,12 @@
       </div>
     </div>
 
-    <!-- DYNAMIC SYSTEM MANAGEMENT MODULE (ADMINS ONLY) -->
     <div id="admin-view" class="admin-section panel-box" style="background: #151221; border-color: #4c1d95;">
       <h3 style="color: #c084fc;">⚡ Enterprise Infrastructure Settings Control Panel</h3>
       
-      <!-- UPDATED COMPONENT: TRUE DYNAMIC PIN & ACCESS GATEKEEPER MAP MATRIX -->
       <div style="background: #1e1730; border: 1px dashed #a78bfa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
         <h4 style="color: #e9d5ff; margin: 0 0 10px 0; font-size: 14px;">🔒 Site Authorization Gateway Matrix (Dynamic PIN Assignment Tokens)</h4>
-        <div id="dynamic-admin-pin-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;">
-          <!-- Generated on the fly by Javascript initialization -->
-        </div>
+        <div id="dynamic-admin-pin-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;"></div>
         <button class="add-btn" style="background: #c084fc; color: #151221; width: auto; padding: 8px 20px;" onclick="saveConfiguredPinsToCloudStore()">Commit Custom PIN Updates</button>
       </div>
 
@@ -183,7 +176,6 @@
       </div>
     </div>
 
-    <!-- GATEKEEPER AREA LOCK COMPONENT (TEAM LEADERS VERIFICATION PROMPT) -->
     <div id="teamleader-pin-box" class="panel-box" style="max-width: 420px; margin: 15px auto 25px auto; text-align: center; background: #0e1726; border-color: #ff9900;">
       <div style="font-size: 28px; margin-bottom: 5px;">🔑</div>
       <h3 style="color: #ff9900; margin-bottom: 4px; border: none; padding: 0;">Shift Verification Gateway</h3>
@@ -201,7 +193,6 @@
       <p id="pin-validation-fail-msg" style="color: #ef4444; font-size: 12px; margin-top: 10px; display: none; font-weight: bold;">❌ Pin validation mismatch. Roster access blocked.</p>
     </div>
 
-    <!-- DAILY TRANSACTION WORKSPACE -->
     <div id="store-view" class="store-section panel-box">
       <h3 id="workspace-title-label">Active Roster Selection Workspace</h3>
       
@@ -275,7 +266,6 @@
       <button id="final-submit-btn" class="submit-block-btn" onclick="transmitStagedRosterToCloud()" disabled>Transmit Staged Configuration Grid to Database</button>
     </div>
 
-    <!-- ADVANCED FILTER LOGS ENGINE CONTROLS -->
     <div class="panel-box" style="background:#0b111e;">
       <h3>📊 Centralized Activity Logs Query Engine</h3>
       <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; align-items: flex-end;">
@@ -315,9 +305,7 @@
       </div>
     </div>
 
-    <!-- INCIDENT ESCALATION & SYSTEM REPORT MODULE -->
     <div class="grid-admin" style="margin-top: 20px;">
-      <!-- REPORT SUBMISSION FORM -->
       <div class="panel-box">
         <h3>📢 Submit Operational System Report</h3>
         <div style="display: grid; gap: 12px;">
@@ -339,25 +327,21 @@
           </div>
           <div>
             <label>Incident Details & Problem Description</label>
-            <textarea id="report-description" class="form-input" rows="4" placeholder="Explain the dynamic adjustment or issue explicitly here..." style="width:100%; font-family:inherit; color:white; background:#1c2d42; border:1px solid #2e415a; border-radius:6px; box-sizing:border-box; padding:10px; resize:vertical;"></textarea>
+            <textarea id="report-description" class="form-input" rows="4" placeholder="Explain the issue explicitly here..." style="width:100%; font-family:inherit; color:white; background:#1c2d42; border:1px solid #2e415a; border-radius:6px; box-sizing:border-box; padding:10px; resize:vertical;"></textarea>
           </div>
           <button class="add-btn" onclick="submitSystemIncidentReportTicket()">Transmit System Ticket To Admin Panel</button>
         </div>
       </div>
 
-      <!-- ADMIN TICKETS DASHBOARD VIEW -->
       <div id="admin-tickets-panel" class="panel-box" style="display:none; background: #161013; border-color: #b91c1c;">
         <h3 style="color:#f87171;">🚨 Received Escalations & System Incident Log (Admins Only)</h3>
-        <div style="max-height: 380px; overflow-y: auto;" id="admin-tickets-stream-container">
-          <!-- Populated from Javascript -->
-        </div>
+        <div style="max-height: 380px; overflow-y: auto;" id="admin-tickets-stream-container"></div>
       </div>
     </div>
 
   </div>
 
 <script>
-  // Core Operational Configuration Parameters Cloud Matrix
   const firebaseConfig = {
     apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
     authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
@@ -450,14 +434,12 @@
     const selectedStore = document.getElementById("pin-login-store-select").value;
     const inputPin = document.getElementById("pin-login-value-input").value;
     const errorAlert = document.getElementById("pin-validation-fail-msg");
-
     const correctPin = dynamicCloudPINStorageMap[selectedStore] || "1234";
 
     if (inputPin === correctPin) {
       errorAlert.style.display = "none";
       document.getElementById("pin-login-value-input").value = "";
       alert(`Terminal Authenticated Successfully for: ${selectedStore}`);
-      
       document.getElementById("teamleader-pin-box").style.display = "none";
       document.getElementById("store-view").style.display = "block";
     } else {
@@ -465,7 +447,6 @@
     }
   }
 
-  // UPDATED METHOD: DYNAMIC GENERATION OF PIN MANAGER DOM ROW NODES
   function buildDynamicAdminPinConfigDOM() {
     const container = document.getElementById("dynamic-admin-pin-container");
     if (!container) return;
@@ -557,7 +538,6 @@
     if (!isAdmin) { loadHistoricalLedgerStream(); }
   }
 
-  // Automatically adjusts the UI layout view inputs to match the worker's saved default shift profile
   function autoConfigureShiftFieldsBySelection() {
     const empSelect = document.getElementById("form-employee-select");
     if(!empSelect || empSelect.selectedIndex < 0) return;
@@ -581,10 +561,11 @@
     if (targetStaff.length === 0) { alert("No personnel entries match selection guidelines."); return; }
 
     targetStaff.forEach(emp => {
-      const isDuplicate = temporaryRosterList.some(item => item.name === emp.name && item.date === date);
+      /* PATCHED BUG: Added store and shift contextual evaluations to duplicate prevent logic */
+      const isDuplicate = temporaryRosterList.some(item => item.name === emp.name && item.date === date && item.storeCode === storeCode && item.shift === (emp.shift || "Day"));
       if (!isDuplicate) {
         temporaryRosterList.push({
-          date: date, storeCode: storeCode, name: emp.name, role: emp.role, shift: emp.shift || "Day", status: "Present", remarks: "Auto-Populated Strength", updater: currentUserEmail
+          date: date, storeCode: storeCode, name: emp.name, role: emp.role, shift: emp.shift || "Day", statusCondition: "Present", remarks: "Auto-Populated Strength", updater: currentUserEmail
         });
       }
     });
@@ -593,10 +574,10 @@
 
   function updateLiveAnalyticsDashboard() {
     document.getElementById("calc-sched").innerText = temporaryRosterList.length;
-    document.getElementById("calc-pres").innerText = temporaryRosterList.filter(e => e.status === "Present").length;
-    document.getElementById("calc-abs").innerText = temporaryRosterList.filter(e => e.status === "Absent").length;
-    document.getElementById("calc-half").innerText = temporaryRosterList.filter(e => e.status === "Half Day").length;
-    document.getElementById("calc-off").innerText = temporaryRosterList.filter(e => e.status === "Week-Off").length;
+    document.getElementById("calc-pres").innerText = temporaryRosterList.filter(e => e.statusCondition === "Present").length;
+    document.getElementById("calc-abs").innerText = temporaryRosterList.filter(e => e.statusCondition === "Absent").length;
+    document.getElementById("calc-half").innerText = temporaryRosterList.filter(e => e.statusCondition === "Half Day").length;
+    document.getElementById("calc-off").innerText = temporaryRosterList.filter(e => e.statusCondition === "Week-Off").length;
   }
 
   function calculateNetworkHealthGrid() {
@@ -651,10 +632,11 @@
     const shift = document.getElementById("form-shift-select").value;
     const status = document.getElementById("form-status-select").value;
 
-    const isDuplicate = temporaryRosterList.some(item => item.name === name && item.date === date);
-    if(isDuplicate) { alert(`Personnel record duplicate found for this date entry confirmation sequence.`); return; }
+    /* PATCHED BUG: Added shift/store variables to avoid blocking employees working split operations */
+    const isDuplicate = temporaryRosterList.some(item => item.name === name && item.date === date && item.storeCode === storeCode && item.shift === shift);
+    if(isDuplicate) { alert(`Personnel record duplicate found for this date entry configuration sequence.`); return; }
 
-    temporaryRosterList.push({ date, storeCode, name, role, shift, status, remarks: remarks || "--", updater: currentUserEmail });
+    temporaryRosterList.push({ date, storeCode, name, role, shift, statusCondition: status, remarks: remarks || "--", updater: currentUserEmail });
     document.getElementById("form-remarks-input").value = ""; 
     renderTemporaryStagedTable();
   }
@@ -687,7 +669,7 @@
         <td><strong>${emp.name}</strong></td>
         <td><span class="role-label">${emp.role}</span></td>
         <td><b style="color:#fcd34d;">${emp.shift}</b></td>
-        <td><span class="badge status-${emp.status}">${emp.status}</span></td>
+        <td><span class="badge status-${emp.statusCondition}">${emp.statusCondition}</span></td>
         <td style="color:#94a3b8; font-style:italic;">${emp.remarks}</td>
         <td><span class="user-badge">${guardName}</span></td>
         <td><button class="action-btn-small" style="margin:0;" onclick="removeStagedRow(${index})">Remove</button></td>
@@ -712,7 +694,7 @@
         employeeName: emp.name,
         employeeRole: emp.role,
         shiftWindow: emp.shift,
-        statusCondition: emp.status,
+        statusCondition: emp.statusCondition, /* PATCHED FIELD TYPO VALUE ALIGNMENT */
         remarks: emp.remarks,
         transmissionTime: serverTimeStr,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -734,11 +716,9 @@
     }).catch(err => alert("Transmission fault error: " + err.message));
   }
 
-  // UPDATED METHOD: CENTRAL ENGINE WITH MULTI-LAYER SEARCH LOGIC FILTER PIPELINES
   function loadHistoricalLedgerStream() {
     const tbody = document.getElementById("attendance-table-body");
     if(!tbody) return;
-    tbody.innerHTML = "<tr><td colspan='9' style='color:#ff9900; text-align:center;'>Accessing historical archives...</td></tr>";
     
     let storeFilter = "All";
     if(document.getElementById("filter-store-dropdown")) {
@@ -763,15 +743,12 @@
       let sortingBufferArray = [];
       querySnapshot.forEach(doc => { sortingBufferArray.push({ id: doc.id, ...doc.data() }); });
       
-      // Secondary absolute local timestamp chronology evaluation structure sort
       sortingBufferArray.sort((x, y) => {
         return (y.selectedDate || "").localeCompare(x.selectedDate || "") || (y.transmissionTime || "").localeCompare(x.transmissionTime || "");
       });
 
       sortingBufferArray.forEach((data) => {
         const guardName = (data.operatorEmail || 'system').split('@')[0];
-        
-        // CORRECTION TWEAK UTILITY TOOLBAR (ADMIN ACCESS PRIVILEGE MODE ONLY)
         let operationsCellMarkup = `<span style="color:#64748b; font-size:11px;">Verification Locked</span>`;
         if(isAdmin) {
           operationsCellMarkup = `
@@ -788,7 +765,7 @@
           <td><strong>${data.employeeName || 'N/A'}</strong></td>
           <td><span class="role-label">${data.employeeRole || 'Warehouse Associate'}</span></td>
           <td><b style="color:#fcd34d;">${data.shiftWindow || 'N/A'}</b></td>
-          <td><span class="badge status-${data.statusCondition}">${data.statusCondition}</span></td>
+          <td><span class="badge status-${data.statusCondition || 'Present'}">${data.statusCondition || 'Present'}</span></td>
           <td style="color:#94a3b8; font-style:italic;">${data.remarks || '--'}</td>
           <td><span class="user-badge">${guardName}</span> <span style="color:#64748b; font-size:11px;">at ${data.transmissionTime || ''}</span></td>
           <td>${operationsCellMarkup}</td>
@@ -804,7 +781,6 @@
     loadHistoricalLedgerStream();
   }
 
-  // SYSTEM CORRECTION FUNCTION: Instantly edits mistyped statuses in Firebase
   function executeAdministrativeRecordUpdateInline(targetDocId, targetNewStatusStr) {
     if(!isAdmin) return;
     db.collection("attendance_ledger").doc(targetDocId).update({
@@ -813,7 +789,6 @@
     }).then(() => { loadHistoricalLedgerStream(); });
   }
 
-  /* ================= INCIDENT REPORTING MATRIX ENGINE ================= */
   function submitSystemIncidentReportTicket() {
     const reporter = document.getElementById("report-user-name").value.trim();
     const role = document.getElementById("report-user-role").value;
@@ -881,7 +856,6 @@
     db.collection("system_incident_tickets").doc(ticketId).update({ ticketStatus: targetNextStateStr });
   }
 
-  /* ================= PLATFORM ADMINISTRATION DIRECTORY HANDLING ================= */
   function addNewStoreOption() {
     if (!isAdmin) return;
     const input = document.getElementById("new-store-input");
@@ -890,7 +864,6 @@
     db.collection("system_configs").doc("stores_matrix").update({ stores: firebase.firestore.FieldValue.arrayUnion(val) }).then(() => { input.value = ""; });
   }
 
-  // Safely wipes a store while tracking the deletion in our network configuration
   function deleteStoreOption(storeName) {
     if (!isAdmin) return;
     if (!confirm(`Wipe "${storeName}" location options block entirely from active structures?`)) return;
