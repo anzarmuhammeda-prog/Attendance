@@ -3,23 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AMAZON DARKSTORE LOGISTICS - MULTI-PAGE PORTAL</title>
+  <title>DARKSTORE ATTENDANCE SYSTEM</title>
   
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <style>
+    :root {
+      --bg-main: #060b13;
+      --bg-panel: #0b1424;
+      --bg-input: #132237;
+      --accent-cyan: #00d2ff;
+      --accent-orange: #ff9900;
+      --text-muted: #64748b;
+      --text-light: #e2e8f0;
+    }
+
     body { 
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-      background-color: #060b13; 
-      color: #e2e8f0; 
+      font-family: 'Segoe UI', Roboto, sans-serif; 
+      background-color: var(--bg-main); 
+      color: var(--text-light); 
       margin: 0; 
       padding: 0; 
       min-height: 100vh; 
     }
-    
-    /* LOGIN VIEW (ISOLATED FULL PAGE) */
+
+    /* --- LOGIN ENCRYPTION GATEWAY GATE --- */
     .login-screen {
       display: flex;
       justify-content: center;
@@ -28,129 +38,121 @@
       background: radial-gradient(circle at center, #0f1c30 0%, #060b13 100%);
     }
     .login-box { 
-      background: #0b1424; 
+      background: var(--bg-panel); 
       padding: 40px 30px; 
       width: 100%;
-      max-width: 380px; 
+      max-width: 400px; 
       border-radius: 16px; 
       box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.6); 
       border: 1px solid #1e293b;
       text-align: center; 
       box-sizing: border-box;
     }
-    .login-box h2 { margin: 0 0 5px 0; color: #ff9900; font-size: 26px; letter-spacing: 1px; }
-    .login-box p { margin: 0 0 25px 0; color: #64748b; font-size: 12px; }
+    .login-box h2 { margin: 0 0 5px 0; color: var(--accent-orange); font-size: 28px; letter-spacing: 1px; }
+    .login-box p { margin: 0 0 30px 0; color: var(--text-muted); font-size: 13px; }
     .login-box input { 
-      width: 100%; padding: 14px; margin: 12px 0; background: #132237;
+      width: 100%; padding: 14px; margin: 12px 0; background: var(--bg-input);
       border: 1px solid #1e293b; border-radius: 8px; font-size: 14px; color: #fff;
-      box-sizing: border-box;
+      box-sizing: border-box; outline: none; transition: border 0.2s;
     }
+    .login-box input:focus { border-color: var(--accent-orange); }
     button.login-btn { 
-      padding: 14px; width: 100%; background: #ff9900; color: #060b13; border: none; 
+      padding: 14px; width: 100%; background: var(--accent-orange); color: #060b13; border: none; 
       border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 15px;
+      transition: opacity 0.2s;
     }
+    button.login-btn:hover { opacity: 0.9; }
 
-    /* MAIN APP WORKSPACE NAVIGATION LAYOUT */
-    .dashboard-container { 
-      display: none; 
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    /* --- APPLICATION HEADER & NAVIGATION TERMINAL --- */
+    .app-container { display: none; flex-direction: column; min-height: 100vh; }
     
-    /* SYSTEM NAVIGATION HEADER BAR */
     .app-header { 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      background: #0b1424;
+      background: var(--bg-panel);
       border-bottom: 1px solid #1e293b; 
-      padding: 15px 25px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      padding: 15px 30px;
+      position: sticky; top: 0; z-index: 100;
     }
-    .app-header h2 { margin: 0; font-size: 20px; color: #fff; display: flex; align-items: center; gap: 10px;}
-    .app-header h2 span { color: #ff9900; font-size: 13px; font-family: monospace; }
-    
-    .nav-tabs { display: flex; gap: 8px; }
-    .nav-tab-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: #94a3b8;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-      transition: all 0.2s ease;
-    }
-    .nav-tab-btn:hover { color: #fff; background: #132237; }
-    .nav-tab-btn.active { 
-      background: #ff9900; 
-      color: #060b13; 
-      border-color: #ff9900;
-    }
-    .nav-tab-btn.admin-tab { border: 1px dashed #c084fc; color: #c084fc; }
-    .nav-tab-btn.admin-tab.active { background: #c084fc; color: #151221; border-color: #c084fc;}
+    .brand-logo { font-size: 18px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .brand-logo span { color: var(--accent-cyan); }
+    .brand-logo .live-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #10b981; }
 
-    .logout-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;}
-    
-    /* PAGE VIEW CONTAINERS */
-    .page-view {
-      display: none; /* Controlled via JS switching */
-      padding: 25px;
-      max-width: 1400px;
-      width: 100%;
-      margin: 0 auto;
-      box-sizing: border-box;
+    .nav-menu { display: flex; background: rgba(2, 6, 12, 0.7); padding: 4px; border-radius: 20px; border: 1px solid #1e293b; gap: 4px; }
+    .nav-link {
+      background: transparent; border: none; color: #94a3b8; padding: 8px 18px; border-radius: 16px;
+      cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s;
     }
+    .nav-link.active { background: var(--accent-cyan); color: #060b13; }
+    .nav-link.report-tab-style.active { background: #ef4444; color: white; }
+    .nav-link.admin-tab-style { border: 1px dashed #c084fc; color: #c084fc; margin-left: 5px; }
+    .nav-link.admin-tab-style.active { background: #c084fc; color: #151221; }
+
+    .header-actions { display: flex; align-items: center; gap: 15px; }
+    .user-profile-tag { font-size: 12px; font-family: monospace; color: var(--text-muted); }
+    .logout-action-btn { background: #1e293b; color: #f87171; border: 1px solid #334155; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 11px; }
+    .logout-action-btn:hover { background: #f87171; color: #fff; }
+
+    /* --- PAGE INTERFACE MANAGERS --- */
+    .page-view { display: none; padding: 30px; max-width: 1400px; width: 100%; margin: 0 auto; box-sizing: border-box; }
     .page-view.active-page { display: block; }
 
-    .panel-box { background: #111c2e; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
-    .panel-box h3 { margin-top: 0; color: #ff9900; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;}
-    
-    .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; align-items: end; margin-bottom: 15px; }
-    .grid-admin { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .admin-input-group { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-    .admin-input-group input, .admin-input-group select { flex: 1; min-width: 110px; }
+    /* --- DASHBOARD ELEMENTS & WIDGET CARDS --- */
+    .date-header-block { margin-bottom: 25px; }
+    .date-header-block h1 { margin: 0; font-size: 28px; font-weight: 600; }
+    .date-header-block p { margin: 4px 0 0 0; color: var(--text-muted); font-size: 14px; }
 
-    label { font-weight: 600; color: #94a3b8; margin-bottom: 6px; display: block; font-size: 12px; }
-    select, input.form-input { width: 100%; padding: 10px; background: #1c2d42; border: 1px solid #2e415a; border-radius: 6px; box-sizing: border-box; font-size: 13px; color: white; }
-    
-    .add-btn { width: 100%; background: #ff9900; color: #060b13; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
-    .bulk-btn { background: #6366f1; color: white; border: none; padding: 10px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
-    .bulk-btn:hover { background: #4f46e5; }
-    .export-btn { background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
-    
-    .table-container { width: 100%; overflow-x: auto; margin-bottom: 25px; border-radius: 8px; border: 1px solid #1e293b; }
-    table { width: 100%; border-collapse: collapse; background: #0f172a; min-width: 900px; }
-    th, td { padding: 12px; text-align: left; font-size: 13px; border-bottom: 1px solid #1e293b; }
-    th { background-color: #1e293b; color: #ff9900; font-weight: 600; }
-    
-    .badge { padding: 4px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; display: inline-block; }
-    .status-Present { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-    .status-Absent { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-    .status-Week-Off { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
-    .status-Half-Day { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-    .status-Pending { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-    .status-Resolved { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
+    .analytics-card { background: var(--bg-panel); border: 1px solid #1e293b; padding: 20px; border-radius: 12px; position: relative; }
+    .analytics-card .title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
+    .analytics-card .num { font-size: 32px; font-weight: bold; margin-top: 6px; color: #fff; }
+    .analytics-card .subtext { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
-    .role-label { color: #38bdf8; font-size: 11px; text-transform: uppercase; font-weight: bold; background: rgba(56, 189, 248, 0.1); padding: 2px 6px; border-radius: 4px;}
-    .user-badge { color: #a78bfa; font-size: 11px; font-family: monospace; background: rgba(167, 139, 250, 0.1); padding: 2px 6px; border-radius: 4px;}
-
-    .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
-    .analytics-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 8px; text-align: center; }
-    .analytics-card .num { font-size: 20px; font-weight: bold; margin-top: 4px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; }
+    .panel-box { background: var(--bg-panel); border: 1px solid #1e293b; padding: 24px; border-radius: 14px; margin-bottom: 25px; }
+    .panel-box h3 { margin: 0 0 20px 0; color: #fff; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
     
-    .capacity-danger { border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.05) !important; color: #f87171 !important; }
-    .capacity-warn { border-color: #f59e0b !important; background: rgba(245, 158, 11, 0.05) !important; color: #fbbf24 !important; }
-    .capacity-optimal { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.05) !important; color: #34d399 !important; }
-
-    .submit-block-btn { background: #10b981; color: #060b13; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: bold; margin-top: 15px; }
-    .submit-block-btn:disabled { background: #1e293b; color: #64748b; cursor: not-allowed; }
+    .store-row-item { background: #090f1a; border: 1px solid #162238; border-radius: 8px; padding: 15px; margin-bottom: 12px; }
+    .store-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .store-row-title { font-weight: bold; font-size: 15px; }
     
-    .action-btn-small { background: #334155; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-right: 4px;}
-    .action-btn-small:hover { background: #475569; }
+    .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-block; }
+    .badge-submitted { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge-partial { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .badge-pending { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+    .shift-tag-container { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .shift-inline-pill { background: #132237; border: 1px solid #1e293b; padding: 4px 8px; border-radius: 4px; font-size: 11px; color: #94a3b8; }
+    .shift-inline-pill b { color: #34d399; }
+
+    /* --- TL PIN KEYPAD GATEWAY MATRIX --- */
+    .verification-card { background: var(--bg-panel); border: 1px solid #1e293b; padding: 40px; border-radius: 16px; max-width: 450px; margin: 60px auto; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .lock-icon-shield { width: 60px; height: 60px; background: rgba(0, 210, 255, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; font-size: 24px; color: var(--accent-cyan); }
+    .pin-input-row { display: flex; justify-content: center; gap: 12px; margin: 25px 0; }
+    .pin-box-node { width: 50px; height: 50px; background: var(--bg-input); border: 1px solid #2e415a; border-radius: 8px; color: #fff; text-align: center; font-size: 22px; font-weight: bold; }
+
+    /* --- FORMS & SELECTION CONTROLS --- */
+    label { font-weight: 600; color: #94a3b8; margin-bottom: 6px; display: block; font-size: 12px; text-transform: uppercase; }
+    select, input.form-input, textarea.form-input { width: 100%; padding: 11px; background: var(--bg-input); border: 1px solid #2e415a; border-radius: 8px; box-sizing: border-box; font-size: 13px; color: white; outline: none; }
+    select:focus, input.form-input:focus { border-color: var(--accent-cyan); }
+    
+    .grid-forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .action-submit-row-btn { width: 100%; background: var(--accent-cyan); color: #060b13; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; transition: transform 0.1s; }
+    .action-submit-row-btn:active { transform: scale(0.98); }
+
+    /* --- DATA TABLE FRAMEWORK --- */
+    .table-container { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid #1e293b; }
+    table { width: 100%; border-collapse: collapse; background: #0a0f1d; min-width: 800px; }
+    th, td { padding: 12px 16px; text-align: left; font-size: 13px; border-bottom: 1px solid #1e293b; }
+    th { background-color: #111c30; color: var(--accent-cyan); font-weight: 600; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+
+    .role-lbl { color: #38bdf8; font-size: 11px; font-weight: bold; background: rgba(56, 189, 248, 0.1); padding: 2px 6px; border-radius: 4px; }
+    .status-Present { background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 2px 6px; border-radius: 4px; font-weight: bold;}
+    .status-Absent { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: bold;}
+    .status-Week-Off { background: rgba(148, 163, 184, 0.15); color: #94a3b8; padding: 2px 6px; border-radius: 4px; font-weight: bold;}
+    .status-Half-Day { background: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 2px 6px; border-radius: 4px; font-weight: bold;}
   </style>
 </head>
 <body>
@@ -165,77 +167,99 @@
     </div>
   </div>
 
-  <div id="dashboard-view" class="dashboard-container">
+  <div id="dashboard-view" class="app-container">
     
     <div class="app-header">
-      <h2>AMAZON CONTROLS <span id="user-role">// Operator Frame</span></h2>
+      <div class="brand-logo">DARKSTORE<span>ATT</span><div class="live-dot"></div></div>
       
-      <div class="nav-tabs">
-        <button id="tab-attendance" class="nav-tab-btn active" onclick="switchPage('attendance-page')">📝 Attendance Marking</button>
-        <button id="tab-history" class="nav-tab-btn" onclick="switchPage('history-page')">📊 History Logs Engine</button>
-        <button id="tab-reports" class="nav-tab-btn" onclick="switchPage('reports-page')">📢 System Incident Reports</button>
-        <button id="tab-admin" class="nav-tab-btn admin-tab" style="display:none;" onclick="switchPage('admin-page')">⚡ Admin Infrastructure</button>
+      <div class="nav-menu">
+        <button id="tab-dash" class="nav-link active" onclick="switchRoute('dashboard-page')">Dashboard</button>
+        <button id="tab-submit" class="nav-link" onclick="switchRoute('submit-page')">Submit Attendance</button>
+        <button id="tab-history" class="nav-link" onclick="switchRoute('history-page')">History Logs</button>
+        <button id="tab-report" class="nav-link report-tab-style" onclick="switchRoute('report-page')">⚠️ Report Issue</button>
+        <button id="tab-admin" class="nav-link admin-tab-style" style="display:none;" onclick="switchRoute('admin-page')">⚡ Admin Settings</button>
       </div>
 
-      <button class="logout-btn" onclick="logout()">Disconnect</button>
+      <div class="header-actions">
+        <div class="user-profile-tag" id="user-display-node">// Unassigned Account</div>
+        <button class="logout-action-btn" onclick="logout()">Disconnect</button>
+      </div>
     </div>
 
-    <div id="teamleader-pin-box" class="panel-box" style="max-width: 420px; margin: 40px auto; text-align: center; background: #0e1726; border-color: #ff9900;">
-      <div style="font-size: 28px; margin-bottom: 5px;">🔑</div>
-      <h3 style="color: #ff9900; margin-bottom: 4px; border: none; padding: 0;">Shift Verification Gateway</h3>
-      <p style="color: #94a3b8; font-size: 12px; margin: 0 0 15px 0;">Enter local terminal validation key to unlock the staging sheet environment.</p>
-      <div style="text-align: left; margin-bottom: 12px;">
-        <label>Branch Target Node</label>
-        <select id="pin-login-store-select" class="form-input" onchange="syncSelectedStoreToTerminal()"></select>
+    <div id="dashboard-page" class="page-view active-page">
+      <div class="date-header-block">
+        <h1 id="dash-live-date-title">Operational Network Stream</h1>
+        <p>Live logistics metric tracking workspace context.</p>
       </div>
-      <div style="text-align: left; margin-bottom: 18px;">
-        <label>Passcode Token Verification PIN</label>
-        <input type="password" id="pin-login-value-input" maxlength="4" placeholder="••••" style="width: 100%; padding: 10px; background: #132237; border: 1px solid #1e293b; border-radius: 6px; color: #fff; text-align: center; font-size: 18px; letter-spacing: 6px; box-sizing: border-box;">
+
+      <div class="analytics-bar">
+        <div class="analytics-card"><div class="title">Total Staff Strength</div><div class="num" id="stat-total">0</div><div class="subtext">Across all active channels</div></div>
+        <div class="analytics-card" style="border-left: 3px solid #10b981;"><div class="title">Present Personnel</div><div class="num" id="stat-present" style="color:#10b981;">0</div><div class="subtext" id="stat-rate">0% Attendance Rate</div></div>
+        <div class="analytics-card" style="border-left: 3px solid #ef4444;"><div class="title">Absent Rows</div><div class="num" id="stat-absent" style="color:#ef4444;">0</div><div class="subtext">Requires floor support replacement</div></div>
+        <div class="analytics-card"><div class="title">Scheduled Week-Offs</div><div class="num" id="stat-off">0</div><div class="subtext">Standard rotating roster allocations</div></div>
       </div>
-      <button class="add-btn" style="background: #ff9900;" onclick="validateStoreTerminalAccessKey()">Unlock Node Workspace →</button>
-      <p id="pin-validation-fail-msg" style="color: #ef4444; font-size: 12px; margin-top: 10px; display: none; font-weight: bold;">❌ PIN verification mismatch.</p>
-    </div>
 
-
-    <div id="attendance-page" class="page-view active-page">
-      <div id="store-view" class="panel-box" style="display:none;">
-        <h3>📝 Active Roster Selection & Staging Area</h3>
-        
-        <div style="display:flex; gap: 10px; align-items:center; flex-wrap: wrap; margin-bottom: 25px; background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #1e293b;">
-          <label style="margin:0;">Pre-populate Operations Block:</label>
-          <select id="bulk-shift-filter" class="form-input" style="max-width: 150px;" onchange="updateLiveAnalyticsDashboard()">
-            <option value="All">All Shifts</option>
-            <option value="Day">Day Shift</option>
-            <option value="Mid">Mid Shift</option>
-            <option value="Night">Night Shift</option>
-          </select>
-          <button class="bulk-btn" onclick="bulkPopulateEntireStoreRoster()">⚡ Pre-populate Filtered Personnel</button>
-          <span id="unmarked-alert-badge" class="badge" style="display:none; font-size:12px; padding:6px 12px; border-radius:6px; margin-left:auto;"></span>
+      <div class="grid-2">
+        <div class="panel-box">
+          <h3>Regional Hub Submission Status Tracker</h3>
+          <div id="dashboard-stores-status-list">
+            </div>
         </div>
+        
+        <div class="panel-box">
+          <h3>Active Operational Bulletins</h3>
+          <div style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            <p style="border-left: 2px solid var(--accent-cyan); padding-left:10px; color:#fff;"><b>Notice:</b> Ensure all attendance markings are logged within 45 minutes of shift startup sequence to prevent automation delays.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <div class="grid-6">
+    <div id="submit-page" class="page-view">
+      
+      <div id="tl-gatekeeper-lock-box" class="verification-card">
+        <div class="lock-icon-shield">🔒</div>
+        <h2 style="margin:0 0 5px 0; font-size:22px;">TL Verification Required</h2>
+        <p style="color: var(--text-muted); font-size:13px; margin:0 0 25px 0;">Select your localized hub and input the gateway pass token.</p>
+        
+        <div style="text-align:left; margin-bottom:15px;">
+          <label>Target Facility Hub</label>
+          <select id="gate-store-select" class="form-input" onchange="syncGateSelectionToForm()"></select>
+        </div>
+        <div style="text-align:left; margin-bottom:25px;">
+          <label>Gatekeeper Code Matrix (4-Digit PIN)</label>
+          <input type="password" id="gate-pin-input" maxlength="4" placeholder="••••" style="width:100%; padding:12px; background:var(--bg-input); border:1px solid #2e415a; border-radius:8px; color:#fff; text-align:center; font-size:20px; letter-spacing:8px;">
+        </div>
+        <button class="action-submit-row-btn" onclick="verifyLocalHubAccessGate()">Unlock Operational Sheet →</button>
+        <p id="gate-fail-message" style="color:#ef4444; font-size:12px; margin-top:12px; display:none; font-weight:bold;">❌ Invalid token identification coordinate.</p>
+      </div>
+
+      <div id="live-roster-workspace" class="panel-box" style="display:none;">
+        <h3>📝 Active Roster Staging Staging Configuration Workspace</h3>
+        
+        <div class="grid-forms">
           <div>
-            <label>Target Tracking Date</label>
+            <label>Reporting Target Date</label>
             <input type="date" id="form-date" class="form-input">
           </div>
           <div>
-            <label>Location Context</label>
-            <select id="form-store-code" class="form-input" onchange="filterEmployeeDropdownByStore()"></select>
+            <label>Hub Location Code</label>
+            <select id="form-store-code" class="form-input" disabled></select>
           </div>
           <div>
-            <label>Select Employee Name</label>
-            <select id="form-employee-select" class="form-input" onchange="autoConfigureShiftFieldsBySelection()"></select>
+            <label>Personnel Selection Directory</label>
+            <select id="form-employee-select" class="form-input" onchange="autoConfigureShiftFields()"></select>
           </div>
           <div>
-            <label>Assigned Shift Timing</label>
+            <label>Assigned Window Shift</label>
             <select id="form-shift-select" class="form-input">
-              <option value="Day">Day</option>
-              <option value="Mid">Mid</option>
-              <option value="Night">Night</option>
+              <option value="Day">Day Shift</option>
+              <option value="Mid">Mid Shift</option>
+              <option value="Night">Night Shift</option>
             </select>
           </div>
           <div>
-            <label>Attendance Status</label>
+            <label>Attendance Mapping Metric</label>
             <select id="form-status-select" class="form-input">
               <option value="Present">Present</option>
               <option value="Absent">Absent</option>
@@ -243,139 +267,135 @@
               <option value="Half Day">Half Day</option>
             </select>
           </div>
-          <div>
-            <label>Remarks Exceptions / Notes</label>
-            <input type="text" id="form-remarks-input" class="form-input" placeholder="Optional descriptions...">
-          </div>
-          <div>
-            <button class="add-btn" onclick="stageEmployeeRow()">+ Stage Row</button>
-          </div>
         </div>
 
-        <h4 style="color: #fff; font-size: 14px; margin: 25px 0 10px 0;">Staged Site Team Sheet (<span id="temp-count" style="color:#ff9900;">0</span> Workers Staged)</h4>
-        
-        <div class="analytics-bar">
-          <div id="card-sched-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">STAGED CAPACITY</div><div id="calc-sched" class="num" style="color:#38bdf8;">0</div></div>
-          <div id="card-pres-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">PRESENT</div><div id="calc-pres" class="num" style="color:#10b981;">0</div></div>
-          <div id="card-abs-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">ABSENT</div><div id="calc-abs" class="num" style="color:#ef4444;">0</div></div>
-          <div id="card-half-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">HALF DAY</div><div id="calc-half" class="num" style="color:#fbbf24;">0</div></div>
-          <div id="card-off-box" class="analytics-card"><div style="color:#94a3b8; font-size:11px;">WEEK-OFF</div><div id="calc-off" class="num" style="color:#94a3b8;">0</div></div>
+        <div style="margin-bottom: 25px;">
+          <label>Exception Description Notes / Remarks</label>
+          <input type="text" id="form-remarks" class="form-input" placeholder="e.g., Delayed transit, approved medical documentation note...">
         </div>
 
-        <div class="table-container">
+        <div style="display:flex; gap:10px; margin-bottom:25px;">
+          <button class="action-submit-row-btn" style="background:#1e293b; color:#fff; max-width:200px;" onclick="bulkLoadStoreRosterDirect()">⚡ Auto-Populate Entire Store</button>
+          <button class="action-submit-row-btn" onclick="addEmployeeRowToStagingWorkspace()">+ Stage Personnel Row Entry</button>
+        </div>
+
+        <h4 style="color:#fff; margin:20px 0 10px 0; font-size:14px;">Temporary Staged Grid Queue (<span id="staged-count-lbl" style="color:var(--accent-cyan);">0</span> records)</h4>
+        <div class="table-container" style="margin-bottom:20px;">
           <table>
             <thead>
-              <tr><th>Date</th><th>Store Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status</th><th>Exceptions Notes</th><th>Staged By</th><th>Options</th></tr>
+              <tr><th>Date</th><th>Hub Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status</th><th>Remarks</th><th>Options</th></tr>
             </thead>
-            <tbody id="temp-roster-body"></tbody>
+            <tbody id="staged-table-body">
+              <tr><td colspan="8" style="color:var(--text-muted); text-align:center; padding:20px;">Staging ledger queue is clean. Ready for data mapping inputs.</td></tr>
+            </tbody>
           </table>
         </div>
-        <button id="final-submit-btn" class="submit-block-btn" onclick="transmitStagedRosterToCloud()" disabled>Transmit Staged Configuration Grid to Database</button>
+        <button id="transmit-cloud-btn" class="action-submit-row-btn" style="background:#10b981; font-size:15px; padding:14px;" onclick="commitStagedQueueToCloudDatabase()" disabled>Transmit Roster Grid Matrix to Network Cloud Storage</button>
       </div>
-    </div>
 
+    </div>
 
     <div id="history-page" class="page-view">
-      <div class="panel-box" style="background:#0b111e;">
-        <h3>📊 Centralized Activity Logs Query Engine</h3>
-        <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; align-items: flex-end;">
-          <div style="flex: 1; min-width: 140px;">
-            <label>Filter Store Location</label>
-            <select id="filter-store-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()"></select>
-          </div>
-          <div style="flex: 1; min-width: 120px;">
-            <label>Filter Shift Profile</label>
-            <select id="filter-shift-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()">
-              <option value="All">All Shifts</option>
-              <option value="Day">Day</option>
-              <option value="Mid">Mid</option>
-              <option value="Night">Night</option>
-            </select>
-          </div>
-          <div style="flex: 1; min-width: 140px;">
-            <label>Query Range Start Date</label>
-            <input type="date" id="filter-start-date" class="form-input" onchange="loadHistoricalLedgerStream()">
-          </div>
-          <div style="flex: 1; min-width: 140px;">
-            <label>Query Range End Date</label>
-            <input type="date" id="filter-end-date" class="form-input" onchange="loadHistoricalLedgerStream()">
+      <div class="panel-box">
+        <h3>📊 Centralized Operations Activity Ledger Engine</h3>
+        
+        <div class="grid-forms" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); align-items:end;">
+          <div>
+            <label>Target Hub Node Filter</label>
+            <select id="filter-store" class="form-input" onchange="queryHistoricalLedgerStream()"></select>
           </div>
           <div>
-            <button class="action-btn-small" style="padding: 10px 15px; background: #475569;" onclick="clearActivitySearchFilters()">Reset Queries</button>
+            <label>Query Range Start</label>
+            <input type="date" id="filter-start" class="form-input" onchange="queryHistoricalLedgerStream()">
           </div>
-          <div style="margin-left: auto;">
-            <button id="history-export-btn" class="export-btn" onclick="exportDataLedger('range_extract')" style="display:none;">📊 Export Selected Range CSV</button>
+          <div>
+            <label>Query Range End</label>
+            <input type="date" id="filter-end" class="form-input" onchange="queryHistoricalLedgerStream()">
+          </div>
+          <div>
+            <button class="action-submit-row-btn" style="background:#334155; color:#fff;" onclick="resetQueryFilters()">Clear Filters</button>
+          </div>
+          <div>
+            <button id="admin-export-btn" class="action-submit-row-btn" style="background:var(--accent-orange); display:none;" onclick="exportCSVReportStream()">Export Range Data CSV</button>
           </div>
         </div>
 
-        <div class="table-container">
+        <div class="table-container" style="margin-top:20px;">
           <table>
             <thead>
-              <tr><th>Selected Date</th><th>Store Code</th><th>Employee Full Name</th><th>Job Role</th><th>Shift Timing</th><th>Condition Code</th><th>Remarks Notes</th><th>Logged By Security Node</th><th>Administrative Operations</th></tr>
+              <tr><th>Execution Date</th><th>Hub Code</th><th>Employee Name</th><th>Role Profile</th><th>Shift Window</th><th>Status Metric</th><th>Exception Tracking Notes</th><th>Authenticated User Node</th></tr>
             </thead>
-            <tbody id="attendance-table-body"></tbody>
+            <tbody id="history-table-body"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-
-    <div id="reports-page" class="page-view">
-      <div class="panel-box" style="max-width: 800px; margin: 0 auto;">
-        <h3>📢 Submit Operational System Report</h3>
-        <div style="display: grid; gap: 12px;">
+    <div id="report-page" class="page-view">
+      <div class="panel-box" style="max-width:700px; margin: 0 auto;">
+        <h3>📢 Transmit System Escalation / Configuration Update Request</h3>
+        <p style="color:var(--text-muted); font-size:13px; margin-top:-10px; margin-bottom:20px;">Use this official secure node pipeline to submit change request items directly to enterprise system administrators.</p>
+        
+        <div style="display:grid; gap:16px;">
           <div>
-            <label>Submitter Name</label>
-            <input type="text" id="report-user-name" class="form-input" placeholder="Enter your full name">
+            <label>Operator Signature Name</label>
+            <input type="text" id="report-name" class="form-input" placeholder="Input your full name context">
           </div>
           <div>
-            <label>Your Job Role Profile</label>
-            <select id="report-user-role" class="form-input">
+            <label>Operational Responsibility Assignment</label>
+            <select id="report-role" class="form-input">
               <option value="Team Leader">Team Leader</option>
               <option value="Supervisor">Supervisor</option>
-              <option value="Security Guard">Security Guard</option>
+              <option value="Site Logistics Lead">Site Logistics Lead</option>
             </select>
           </div>
           <div>
-            <label>Required Configuration Update / Focus Area</label>
-            <input type="text" id="report-update-title" class="form-input" placeholder="e.g., Update Roster Shift timings, Change PIN code">
+            <label>Target Focus Summary Title</label>
+            <input type="text" id="report-title" class="form-input" placeholder="e.g., Update Shift Timing Map, Change Store Gate Entry PIN">
           </div>
           <div>
-            <label>Incident Details & Problem Description</label>
-            <textarea id="report-description" class="form-input" rows="5" placeholder="Explain the issue explicitly here..."></textarea>
+            <label>Detailed Request / System Incident Context</label>
+            <textarea id="report-desc" class="form-input" rows="5" placeholder="Elaborate on details explicitly..."></textarea>
           </div>
-          <button class="add-btn" onclick="submitSystemIncidentReportTicket()">Transmit System Ticket To Admin Panel</button>
+          <button class="action-submit-row-btn" style="background:#ef4444; color:#fff;" onclick="dispatchIncidentTicketToAdminDashboard()">Transmit High-Priority System Incident Ticket</button>
         </div>
       </div>
     </div>
 
-
     <div id="admin-page" class="page-view">
-      <div id="admin-view" class="admin-section panel-box" style="background: #151221; border-color: #4c1d95;">
-        <h3 style="color: #c084fc;">⚡ Enterprise Infrastructure Settings Control Panel</h3>
+      <div class="panel-box" style="background:#151221; border-color:#4c1d95;">
+        <h3 style="color:#c084fc;">⚡ Infrastructure Dynamic Control Panel Settings</h3>
         
-        <div style="background: #1e1730; border: 1px dashed #a78bfa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-          <h4 style="color: #e9d5ff; margin: 0 0 10px 0; font-size: 14px;">🔒 Site Authorization Gateway Matrix (Dynamic PIN Assignment Tokens)</h4>
-          <div id="dynamic-admin-pin-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;"></div>
-          <button class="add-btn" style="background: #c084fc; color: #151221; width: auto; padding: 8px 20px;" onclick="saveConfiguredPinsToCloudStore()">Commit Custom PIN Updates</button>
+        <div style="background:#1e1730; border:1px dashed #a78bfa; padding:15px; border-radius:8px; margin-bottom:25px;">
+          <h4 style="color:#e9d5ff; margin:0 0 12px 0; font-size:14px;">🔒 Dynamic Location Authorization Security Matrix Tokens (PIN Update)</h4>
+          <div id="admin-pin-injector-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:15px;"></div>
+          <button class="action-submit-row-btn" style="background:#c084fc; color:#151221; width:auto; padding:10px 24px;" onclick="commitDynamicPinsToCloudStorage()">Save Modified Matrix Tokens</button>
         </div>
 
-        <label style="color: #a78bfa; margin-bottom: 8px;">Regional Store Sync Health Metrics Grid:</label>
-        <div class="table-container">
-          <table style="min-width: 700px;">
-            <thead>
-              <tr><th>Location Identifier</th><th>Reporting Progress</th><th>Fulfillment Floor Strength</th><th>Last Synchronization Point Log</th></tr>
-            </thead>
-            <tbody id="admin-health-grid-body"></tbody>
-          </table>
-        </div>
-
-        <div class="grid-admin">
+        <div class="grid-2">
           <div>
-            <label>Register New Branch Location Option</label>
-            <div class="admin-input-group">
-              <input type="text" id="new-store-input" class="form-input" placeholder="e.g., QAA9 - Al Ain">
-              <button class="add-btn" style="background:#c084fc; color:#151221; width:auto;" onclick="addNewStoreOption()">+</button>
+            <label>Register New Branch Facility Hub</label>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <input type="text" id="admin-new-store" class="form-input" placeholder="e.g., QAA6 - Khalifa City">
+              <button class="action-submit-row-btn" style="background:#c084fc; color:#151221; width:auto;" onclick="registerNewStoreUnit()">Onboard</button>
             </div>
-            <div id="admin-stores-list" style="max-height: 140px; overflow-y: auto; margin-top: 10px;"></div>
+            <div id="admin-store-delete-list" style="max-height:150px; overflow-y:auto; margin-top:15px;"></div>
           </div>
+
+          <div>
+            <label>Onboard New Staff Worker & Assign Roster Group</label>
+            <div style="display:grid; gap:8px; margin-top:8px;">
+              <select id="admin-worker-store" class="form-input"></select>
+              <input type="text" id="admin-worker-name" class="form-input" placeholder="Full Employee Name">
+              <select id="admin-worker-role" class="form-input">
+                <option value="Warehouse Associate">Warehouse Associate</option>
+                <option value="Forklift Operator">Forklift Operator</option>
+                <option value="Team Leader">Team Leader</option>
+                <option value="Supervisor">Supervisor</option>
+              </select>
+              <select id="admin-worker-shift" class="form-input">
+                <option value="Day Shift">Day Shift</option>
+                <option value="Mid Shift">Mid Shift</option>
+                <option value="Night Shift">Night Shift</option>
+              </select>
+              <button class="action-submit-row-btn" style="background:#10b981;" onclick="onboardStaffWorkerToDirectory()">Save Associate
