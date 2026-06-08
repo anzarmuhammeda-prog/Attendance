@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DARKSTORE ATT - OPERATIONS COMMAND PORTAL</title>
+  <title>GWC DARKSTORE ATTENDANCE PORTAL</title>
   
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -15,6 +15,7 @@
       --bg-panel: #111926;
       --bg-input: #182232;
       --accent-blue: #00c3ff;
+      --accent-orange: #ff9800;
       --accent-purple: #bb86fc;
       --text-main: #ffffff;
       --text-muted: #7e8b9b;
@@ -22,7 +23,7 @@
     }
 
     body { 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
       background-color: var(--bg-dark); 
       color: var(--text-main); 
       margin: 0; 
@@ -31,45 +32,79 @@
       box-sizing: border-box;
     }
     
-    /* INTERACTIVE STANDALONE GATEWAY NODES */
+    /* LOGON LOCKSCREEN PANEL GATEWAY */
     .login-container-frame {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 85vh;
+      min-height: 90vh;
       width: 100%;
     }
     
     .tl-verification-card {
       background: var(--bg-panel);
-      border-radius: 20px;
-      padding: 30px 24px;
+      border-radius: 24px;
+      padding: 35px 24px;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       border: 1px solid var(--border-color);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 12px 45px rgba(0,0,0,0.5);
       text-align: center;
       box-sizing: border-box;
     }
-    
-    .lock-icon-shield {
-      width: 70px;
-      height: 70px;
-      background: #192b35;
-      border-radius: 20px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      margin-bottom: 20px;
-      border: 1px solid #234348;
+
+    .gwc-logo-container {
+      margin-bottom: 15px;
+    }
+    .gwc-logo-container img {
+      max-width: 150px;
+      height: auto;
+      filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
     }
     
-    .tl-verification-card h2 { margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: var(--text-main); }
-    .tl-verification-card p.subtitle { margin: 0 0 25px 0; font-size: 14px; color: var(--text-muted); line-height: 1.4; }
+    .tl-verification-card h2 { 
+      margin: 0 0 4px 0; 
+      font-size: 26px; 
+      font-weight: 800; 
+      color: #ff9800; 
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .tl-verification-card p.sub-node-lbl { margin: 0 0 6px 0; font-size: 13px; color: var(--accent-blue); opacity: 0.8; }
+    .tl-verification-card p.subtitle { margin: 12px 0 24px 0; font-size: 14px; color: var(--text-muted); line-height: 1.4; }
     
-    .form-block-element { text-align: left; margin-bottom: 16px; position: relative; }
-    .form-block-element label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* MODE SWITCHES */
+    .pathway-toggle-container {
+      display: flex; 
+      justify-content: center; 
+      gap: 10px; 
+      margin-bottom: 24px;
+      background: var(--bg-dark);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+    .pathway-toggle-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .pathway-toggle-btn.active-mode {
+      background: var(--accent-blue);
+      color: #000;
+    }
+    .pathway-toggle-btn.inactive-mode {
+      background: transparent;
+      color: var(--text-muted);
+    }
+
+    .form-block-element { text-align: left; margin-bottom: 20px; position: relative; }
+    .form-block-element label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
     
     .custom-select-input, .custom-text-field {
       width: 100%;
@@ -81,120 +116,109 @@
       font-size: 15px;
       box-sizing: border-box;
       outline: none;
-      transition: border-color 0.2s;
     }
-    .custom-select-input:focus, .custom-text-field:focus { border-color: var(--accent-blue); }
     
-    /* EYE TOGGLE POSITIONS */
-    .password-eye-wrapper { position: absolute; right: 14px; top: 38px; cursor: pointer; color: var(--text-muted); font-size: 16px; user-select: none; }
+    /* 4-DIGIT PIN SEPARATE BOX LAYOUT */
+    .pin-box-wrapper {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 10px 0;
+    }
+    .pin-digit-box {
+      width: 22%;
+      height: 65px;
+      background: var(--bg-input);
+      border: 1.5px solid #144957;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 24px;
+      color: var(--accent-blue);
+      font-weight: bold;
+      outline: none;
+    }
+    .pin-digit-box:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 8px rgba(0,195,255,0.2);
+    }
 
-    /* ACTION RADIANT INTERFACE BUTTONS */
     .radiant-action-btn {
       width: 100%;
-      padding: 15px;
+      padding: 16px;
       background: var(--accent-blue);
       color: #000;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      margin-top: 10px;
-      transition: opacity 0.2s;
+      margin-top: 15px;
     }
-    .radiant-action-btn:hover { opacity: 0.9; }
 
-    /* APPLICATION CORE MASTER DESKTOP WRAPPER */
-    .master-dashboard-layout { display: none; width: 100%; max-width: 1200px; margin: 0 auto; }
+    /* CORE DASHBOARD APPLICATION PANELS */
+    .master-dashboard-layout { display: none; width: 100%; max-width: 1240px; margin: 0 auto; }
     
-    /* SYSTEM HEADERS CONFIGURATIONS */
     .darkstore-app-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
+      padding: 14px 4px;
       border-bottom: 1px solid var(--border-color);
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
-    .brand-logo-node { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; }
-    .brand-logo-node span { color: var(--accent-blue); font-size: 12px; margin-left: 4px; border: 1px solid var(--accent-blue); padding: 2px 4px; border-radius: 4px; }
+    .brand-logo-node { font-size: 20px; font-weight: 900; letter-spacing: 0.5px; }
+    .brand-logo-node span { color: var(--accent-blue); font-size: 12px; margin-left: 6px; border: 1px solid var(--accent-blue); padding: 2px 5px; border-radius: 4px; }
     
-    /* SYSTEM TAB CONTROLS NAVIGATION MATRIX */
-    .app-navigation-bar { display: flex; background: var(--bg-panel); padding: 4px; border-radius: 10px; gap: 4px; margin-bottom: 15px; overflow-x: auto; }
+    .app-navigation-bar { display: flex; background: var(--bg-panel); padding: 5px; border-radius: 12px; gap: 4px; margin-bottom: 20px; overflow-x: auto; }
     .navigation-tab-item {
-      padding: 10px 16px; color: var(--text-muted); background: transparent; border: none;
-      border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap;
+      padding: 12px 20px; color: var(--text-muted); background: transparent; border: none;
+      border-radius: 9px; font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap;
     }
     .navigation-tab-item.tab-state-active { background: var(--accent-blue); color: #000; }
-    .navigation-tab-item.admin-exclusive-tab { border: 1px dashed var(--accent-purple); color: var(--accent-purple); }
-    .navigation-tab-item.admin-exclusive-tab.tab-state-active { background: var(--accent-purple); color: #000; }
     
     .disconnect-session-trigger { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.2); padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
 
-    /* COMPONENT BOX CONTENT CONTAINER LAYOUTS */
     .workspace-view-page { display: none; }
     .workspace-view-page.page-state-active { display: block; }
     
-    .content-panel-card {
-      background: var(--bg-panel);
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      padding: 18px;
-      margin-bottom: 15px;
-    }
-    .content-panel-card h3 { margin: 0 0 15px 0; font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+    .content-panel-card { background: var(--bg-panel); border-radius: 16px; border: 1px solid var(--border-color); padding: 20px; margin-bottom: 20px; }
+    .content-panel-card h3 { margin: 0 0 18px 0; font-size: 15px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* CARD STRUCTURES MATCHING CAPTURED IMAGES */
+    /* DASHBOARD INFRASTRUCTURE COUNTERS PANEL */
+    .metric-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .metric-counter-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; position: relative; }
+    .metric-counter-card h4 { margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+    .metric-counter-card .counter-value { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+    .metric-counter-card .counter-subtext { font-size: 12px; color: var(--text-muted); }
+
+    /* CARD GRID STRUCTURES FOR ASSOCIATES AND STATUSES */
     .associate-selection-row-card {
       background: var(--bg-input);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 14px 18px;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
+    .associate-selection-row-card.selected-active { border-color: var(--accent-blue); background: rgba(0,195,255,0.02); }
     .associate-info-meta b { font-size: 15px; display: block; margin-bottom: 2px; color: var(--text-main); }
     .associate-info-meta span { font-size: 12px; color: var(--text-muted); }
     
-    /* CUSTOM INTERACTIVE SYSTEM CHECKBOX DESIGN CELL */
-    .round-checkbox-control-wrapper input[type="checkbox"] {
-      width: 22px; height: 22px; accent-color: var(--accent-blue); cursor: pointer;
-    }
+    .round-checkbox-control-wrapper input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent-blue); cursor: pointer; }
 
-    /* SHEET INPUT CONTROLS HOUSING BLOCK */
-    .attendance-card-item-container {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .attendance-card-item-container .worker-profile-block { margin-bottom: 12px; }
-    .attendance-card-item-container .worker-profile-block h4 { margin: 0 0 2px 0; font-size: 16px; font-weight: 700; }
-    .attendance-card-item-container .worker-profile-block p { margin: 0; font-size: 12px; color: var(--text-muted); }
+    .attendance-card-item-container { background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
     
-    /* UTILITY CELL CONTROL ELEMENTS */
-    .set-all-utility-box {
-      background: rgba(0, 195, 255, 0.03);
-      border: 1px dashed rgba(0, 195, 255, 0.2);
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-    
+    .set-all-utility-box { background: rgba(0, 195, 255, 0.02); border: 1px dashed rgba(0, 195, 255, 0.2); padding: 16px; border-radius: 12px; margin-bottom: 20px; }
     .inline-split-flex-container { display: flex; gap: 10px; align-items: center; }
-    .inline-split-flex-container select { flex: 1; }
-    .apply-mini-btn { background: var(--accent-blue); color: #000; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
+    .apply-mini-btn { background: var(--accent-blue); color: #000; border: none; padding: 14px 24px; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
-    /* CORE DESKTOP GRID ADAPTIONS */
-    .desktop-responsive-layout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .desktop-responsive-layout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
     
-    /* LEGACY LOG TABLES */
-    .scroll-table-box { width: 100%; overflow-x: auto; border: 1px solid var(--border-color); border-radius: 10px; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; background: var(--bg-input); min-width: 700px; }
-    th, td { padding: 12px; border-bottom: 1px solid var(--border-color); }
+    .scroll-table-box { width: 100%; overflow-x: auto; border: 1px solid var(--border-color); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; background: var(--bg-input); min-width: 750px; }
+    th, td { padding: 14px; border-bottom: 1px solid var(--border-color); }
     th { background: #0c121c; color: var(--accent-blue); }
   </style>
 </head>
@@ -202,39 +226,48 @@
 
   <div id="login-view-node" class="login-container-frame">
     <div class="tl-verification-card">
-      <div class="lock-icon-shield">🔐</div>
-      <h2 id="gateway-title-label">TL Verification</h2>
-      <p id="gateway-subtitle-label" class="subtitle">Select your site and enter your PIN to submit attendance for your shift team.</p>
       
-      <div style="display:flex; justify-content:center; gap:8px; margin-bottom:20px;">
-        <button id="toggle-op-mode-btn" style="background:var(--accent-blue); color:#000; border:none; padding:6px 12px; font-size:11px; font-weight:bold; border-radius:6px; cursor:pointer;" onclick="toggleAccessPathwayMode('operator')">Operator Portal</button>
-        <button id="toggle-admin-mode-btn" style="background:transparent; color:var(--text-muted); border:1px solid var(--border-color); padding:6px 12px; font-size:11px; font-weight:bold; border-radius:6px; cursor:pointer;" onclick="toggleAccessPathwayMode('admin')">Admin Terminal</button>
+      <div class="gwc-logo-container">
+        <img src="https://www.gwc.com.qa/wp-content/uploads/2023/11/gwc-logo.svg" onerror="this.src='https://i.ibb.co/bRtZ4L5/gwc-fallback.png'" alt="GWC Logo">
+      </div>
+      
+      <h2>GWC Darkstore Attendance</h2>
+      <p class="sub-node-lbl">Darkstore Network Access Node</p>
+      <p class="subtitle">Select your site and enter your PIN to submit attendance for your shift team.</p>
+      
+      <div class="pathway-toggle-container">
+        <button id="toggle-op-mode-btn" class="pathway-toggle-btn active-mode" onclick="switchVerificationPathway('operator')">Operator Portal</button>
+        <button id="toggle-admin-mode-btn" class="pathway-toggle-btn inactive-mode" onclick="switchVerificationPathway('admin')">Admin Terminal</button>
       </div>
 
       <div id="wrapper-operator-credentials">
         <div class="form-block-element">
-          <label>Your Site Location Node</label>
+          <label>YOUR SITE LOCATION NODE</label>
           <select id="login-store-select-menu" class="custom-select-input"></select>
         </div>
+        
         <div class="form-block-element">
-          <label>Site Authentication PIN</label>
-          <input type="password" id="login-pin-input-field" class="custom-text-field" placeholder="••••" maxlength="4" style="text-align:center; font-size:18px; letter-spacing:8px;">
-          <span class="password-eye-wrapper" onclick="toggleFieldMaskVisibility('login-pin-input-field', this)">👁️</span>
+          <label>SITE AUTHENTICATION PIN</label>
+          <div class="pin-box-wrapper">
+            <input type="password" class="pin-digit-box" id="p1" maxlength="1" onkeyup="handlePinInputChain(this, 'p2', '')" inputmode="numeric">
+            <input type="password" class="pin-digit-box" id="p2" maxlength="1" onkeyup="handlePinInputChain(this, 'p3', 'p1')" inputmode="numeric">
+            <input type="password" class="pin-digit-box" id="p3" maxlength="1" onkeyup="handlePinInputChain(this, 'p4', 'p2')" inputmode="numeric">
+            <input type="password" class="pin-digit-box" id="p4" maxlength="1" onkeyup="handlePinInputChain(this, '', 'p3')" inputmode="numeric">
+          </div>
         </div>
-        <button class="radiant-action-btn" onclick="processOperatorGatewayVerification()">Unlock & Submit →</button>
+        <button class="radiant-action-btn" onclick="executeOperatorSecurityValidation()">Unlock & Submit →</button>
       </div>
 
       <div id="wrapper-admin-credentials" style="display:none;">
         <div class="form-block-element">
-          <label>Corporate Admin Email Address</label>
-          <input type="email" id="login-admin-email" class="custom-text-field" placeholder="username@darkstore.com">
+          <label>Corporate Admin Email</label>
+          <input type="email" id="login-admin-email" class="custom-text-field" placeholder="username@gmail.com">
         </div>
         <div class="form-block-element">
           <label>System Encryption Key</label>
           <input type="password" id="login-admin-password" class="custom-text-field" placeholder="••••••••">
-          <span class="password-eye-wrapper" onclick="toggleFieldMaskVisibility('login-admin-password', this)">👁️</span>
         </div>
-        <button class="radiant-action-btn" style="background:var(--accent-purple);" onclick="processAdminGatewayVerification()">Authenticate Root Context →</button>
+        <button class="radiant-action-btn" style="background:var(--accent-orange);" onclick="executeAdminDatabaseAuthentication()">Authenticate Interface →</button>
       </div>
       
       <p id="gateway-callback-error-log" style="color:#ff6b6b; font-size:13px; font-weight:bold; margin-top:15px; display:none;"></p>
@@ -242,35 +275,73 @@
   </div>
 
   <div id="dashboard-view-node" class="master-dashboard-layout">
+    
     <div class="darkstore-app-header">
-      <div class="brand-logo-node">DARKSTORE<span>ATT</span></div>
+      <div class="brand-logo-node">GWC DARKSTORE<span>TRACK</span></div>
       <div style="display:flex; align-items:center; gap:12px;">
-        <span id="session-identity-badge" style="font-size:12px; font-family:monospace; color:var(--text-muted);">Session Context Logged</span>
-        <button class="disconnect-session-trigger" onclick="terminateActiveTerminalSession()">Disconnect</button>
+        <span id="session-identity-badge" style="font-size:12px; font-family:monospace; color:var(--text-muted);">Session Context Pending</span>
+        <button class="disconnect-session-trigger" onclick="killTerminalSessionState()">Disconnect</button>
       </div>
     </div>
 
     <div class="app-navigation-bar">
-      <button id="nav-target-btn-attendance" class="navigation-tab-item tab-state-active" onclick="switchActiveWorkspaceViewPage('page-attendance-hub')">Submit Attendance</button>
-      <button id="nav-target-btn-history" class="navigation-tab-item" onclick="switchActiveWorkspaceViewPage('page-historical-ledger')">History Logs</button>
-      <button id="nav-target-btn-incident" class="navigation-tab-item" onclick="switchActiveWorkspaceViewPage('page-incident-reporting')">Report Issue</button>
-      <button id="nav-target-btn-infrastructure" class="navigation-tab-item admin-exclusive-tab" style="display:none;" onclick="switchActiveWorkspaceViewPage('page-infrastructure-controls')">Admin Settings</button>
+      <button id="nav-target-btn-dash" class="navigation-tab-item tab-state-active" onclick="routeWorkspaceNavigation('page-overview-analytics')">Dashboard</button>
+      <button id="nav-target-btn-attendance" class="navigation-tab-item" onclick="routeWorkspaceNavigation('page-attendance-hub')">Submit Attendance</button>
+      <button id="nav-target-btn-history" class="navigation-tab-item" onclick="routeWorkspaceNavigation('page-historical-ledger')">History Logs</button>
+      <button id="nav-target-btn-incident" class="navigation-tab-item" onclick="routeWorkspaceNavigation('page-incident-reporting')">Report Issue</button>
+      <button id="nav-target-btn-infrastructure" class="navigation-tab-item" style="border:1px dashed var(--accent-purple); color:var(--accent-purple); display:none;" onclick="routeWorkspaceNavigation('page-infrastructure-controls')">Admin Settings</button>
     </div>
 
-    <div id="page-attendance-hub" class="workspace-view-page page-state-active">
+    <div id="page-overview-analytics" class="workspace-view-page page-state-active">
+      <div class="metric-summary-grid">
+        <div class="metric-counter-card" style="border-left: 4px solid var(--accent-blue);">
+          <h4>TOTAL STAFF STRENGTH</h4>
+          <div class="counter-value" id="count-total-strength">0</div>
+          <div class="counter-subtext">Across all active channels</div>
+        </div>
+        <div class="metric-counter-card" style="border-left: 4px solid #00e676;">
+          <h4>PRESENT PERSONNEL</h4>
+          <div class="counter-value" id="count-total-present" style="color:#00e676;">0</div>
+          <div class="counter-subtext" id="rate-total-attendance">0% Attendance Rate</div>
+        </div>
+        <div class="metric-counter-card" style="border-left: 4px solid #ff5252;">
+          <h4>ABSENT ROWS</h4>
+          <div class="counter-value" id="count-total-absent" style="color:#ff5252;">0</div>
+          <div class="counter-subtext">Requires floor support replacement</div>
+        </div>
+        <div class="metric-counter-card" style="border-left: 4px solid #90a4ae;">
+          <h4>SCHEDULED WEEK-OFFS</h4>
+          <div class="counter-value" id="count-total-weekoff" style="color:#90a4ae;">0</div>
+          <div class="counter-subtext">Standard rotating roster allocations</div>
+        </div>
+      </div>
+
+      <div class="desktop-responsive-layout-grid">
+        <div class="content-panel-card">
+          <h3>Regional Hub Submission Status Tracker</h3>
+          <div id="regional-hub-status-list-container" style="display:grid; gap:10px;"></div>
+        </div>
+        <div class="content-panel-card">
+          <h3>Active Operational Bulletins</h3>
+          <div style="background:rgba(0,195,255,0.03); border-left:4px solid var(--accent-blue); padding:15px; border-radius:8px; font-size:13px; line-height:1.5;">
+            <strong>Notice:</strong> Ensure all attendance markings are logged within 45 minutes of shift startup sequence to prevent automation delays.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-attendance-hub" class="workspace-view-page">
       
       <div id="roster-pre-selection-panel" class="content-panel-card">
-        <h3>👥 Staff Roster Registry Activation</h3>
-        <p style="color:var(--text-muted); font-size:13px; margin:0 0 15px 0;">Verify which scheduled logistics team members have arrived for duty on this execution block window filter:</p>
-        
+        <h3>👥 Active Roster Staging Configuration Workspace</h3>
         <div class="desktop-responsive-layout-grid" style="margin-bottom:20px;">
           <div>
-            <label style="font-size:11px; color:var(--text-muted); text-transform:uppercase; font-weight:bold; margin-bottom:4px; display:block;">Reporting Target Date</label>
-            <input type="date" id="attendance-execution-date" class="custom-text-field" onchange="synchronizeInteractiveStaffRosterDeck()">
+            <label style="font-size:11px; color:var(--text-muted); font-weight:700; display:block; margin-bottom:6px;">REPORTING TARGET DATE</label>
+            <input type="date" id="attendance-execution-date" class="custom-text-field" onchange="synchronizeDynamicRosterInterfaceDeck()">
           </div>
           <div>
-            <label style="font-size:11px; color:var(--text-muted); text-transform:uppercase; font-weight:bold; margin-bottom:4px; display:block;">Active Shift Window Block</label>
-            <select id="attendance-execution-shift" class="custom-select-input" onchange="synchronizeInteractiveStaffRosterDeck()">
+            <label style="font-size:11px; color:var(--text-muted); font-weight:700; display:block; margin-bottom:6px;">ASSIGNED WINDOW SHIFT</label>
+            <select id="attendance-execution-shift" class="custom-select-input" onchange="synchronizeDynamicRosterInterfaceDeck()">
               <option value="Day">Day Shift</option>
               <option value="Mid">Mid Shift</option>
               <option value="Night">Night Shift</option>
@@ -278,54 +349,53 @@
           </div>
         </div>
 
-        <div id="roster-pre-selection-deck-wrapper" style="max-height:320px; overflow-y:auto; padding-right:4px;"></div>
-        <button class="radiant-action-btn" style="margin-top:15px;" onclick="advanceToRosterStatusMappingStage()">Generate Live Attendance Roster Cards →</button>
+        <div id="roster-pre-selection-deck-wrapper" style="max-height:350px; overflow-y:auto; padding-right:4px; margin-bottom:15px;"></div>
+        <button class="radiant-action-btn" onclick="commitStagedSelectionToRosterStatusDeck()">Generate Live Attendance Roster Cards →</button>
       </div>
 
       <div id="roster-status-mapping-panel" class="content-panel-card" style="display:none;">
         <h3>📝 Attendance Status Matrix Assignment</h3>
         
         <div class="set-all-utility-box">
-          <label style="font-size:11px; color:var(--accent-blue); text-transform:uppercase; font-weight:bold; margin-bottom:6px; display:block;">Global Roster Modifier Tool</label>
+          <label style="font-size:11px; color:var(--accent-blue); font-weight:700; margin-bottom:6px; display:block;">Global Roster Modifier Tool</label>
           <div class="inline-split-flex-container">
             <select id="global-bulk-status-selector" class="custom-select-input">
               <option value="Present">Present</option>
               <option value="Absent">Absent</option>
               <option value="Week-Off">Week-Off</option>
             </select>
-            <button class="apply-mini-btn" onclick="executeGlobalRosterBulkStatusOverride()">Apply</button>
+            <button class="apply-mini-btn" onclick="executeGlobalRosterBulkOverride()">Apply</button>
           </div>
         </div>
 
         <div id="active-attendance-card-deck-wrapper"></div>
         
-        <div class="content-panel-card" style="background:rgba(255,255,255,0.01); border-color:var(--border-color); margin-top:20px; padding:14px;">
+        <div class="content-panel-card" style="background:rgba(255,255,255,0.01); margin-top:20px; padding:15px;">
           <h3>👤 Submitter Verification Context</h3>
           <div class="form-block-element" style="margin:0;">
-            <label>Your Signature Name *</label>
+            <label>Your Name *</label>
             <input type="text" id="attendance-submitter-signature" class="custom-text-field" placeholder="Enter your name (TL or staff name)...">
           </div>
         </div>
 
-        <button class="radiant-action-btn" style="background:#00e676; margin-top:15px;" onclick="commitRosterAttendanceDatasetToCloudDb()">Submit Attendance →</button>
-        <button class="radiant-action-btn" style="background:transparent; color:var(--text-muted); border:1px solid var(--border-color); margin-top:8px;" onclick="rollbackToRosterSelectionStage()">← Re-adjust Activated Roster List</button>
+        <button class="radiant-action-btn" style="background:#00e676; margin-top:15px; color:#000;" onclick="pushAttendanceDatasetToCloudDatabase()">Submit Attendance →</button>
+        <button class="radiant-action-btn" style="background:transparent; color:var(--text-muted); border:1px solid var(--border-color); margin-top:8px;" onclick="fallbackToDirectoryStagingStage()">← Re-adjust Activated Roster List</button>
       </div>
-
     </div>
 
     <div id="page-historical-ledger" class="workspace-view-page">
       <div class="content-panel-card">
         <h3>📊 Activity Filter Engine Matrix</h3>
         <div class="desktop-responsive-layout-grid" style="margin-bottom:15px;">
-          <input type="date" id="ledger-query-date-filter" class="custom-text-field" onchange="queryHistoricalLedgerData()">
-          <select id="ledger-query-shift-filter" class="custom-select-input" onchange="queryHistoricalLedgerData()">
+          <input type="date" id="ledger-query-date-filter" class="custom-text-field" onchange="fetchHistoricalLedgerDocuments()">
+          <select id="ledger-query-shift-filter" class="custom-select-input" onchange="fetchHistoricalLedgerDocuments()">
             <option value="All">All Shift Allocations</option>
             <option value="Day">Day Shift</option>
             <option value="Mid">Mid Shift</option>
             <option value="Night">Night Shift</option>
           </select>
           <div style="display:flex; gap:6px;">
-            <button class="apply-mini-btn" style="background:var(--border-color); color:white; flex:1;" onclick="flushLedgerQueryFilters()">Reset Filters</button>
+            <button class="apply-mini-btn" style="background:var(--border-color); color:white; flex:1;" onclick="clearHistoricalSearchFilters()">Reset</button>
             <button class="apply-mini-btn" style="background:#1565c0; color:white;" onclick="triggerCsvExportSequence()">Export CSV</button>
           </div>
         </div>
@@ -352,7 +422,7 @@
           <label>Problem Profile Details & Explicit Action Request</label>
           <textarea id="ticket-issue-details" class="custom-text-field" rows="4" placeholder="Detail the system operational adjustments needed..." style="resize:vertical; font-family:inherit;"></textarea>
         </div>
-        <button class="radiant-action-btn" onclick="submitNewOperationalTicketToAdminServer()">Transmit Ticket Queue →</button>
+        <button class="radiant-action-btn" onclick="submitNewEscalationTicket()">Transmit Ticket Queue →</button>
       </div>
     </div>
 
@@ -360,7 +430,7 @@
       <div class="content-panel-card" style="border-color:var(--accent-purple);">
         <h3 style="color:var(--accent-purple);">⚡ Global Security Hub Gateway Tokens (PIN Access Control Panel)</h3>
         <div id="admin-pin-matrix-config-grid" class="desktop-responsive-layout-grid" style="margin-bottom:15px;"></div>
-        <button class="apply-mini-btn" style="background:var(--accent-purple); color:black;" onclick="commitUpdatedTerminalSecurityPinsToCloud()">Save Operational PIN Configurations</button>
+        <button class="apply-mini-btn" style="background:var(--accent-purple); color:black;" onclick="commitUpdatedTerminalSecurityPins()">Save Operational PIN Configurations</button>
       </div>
 
       <div class="desktop-responsive-layout-grid">
@@ -368,13 +438,15 @@
           <h3>📌 Register Pinned Node Location</h3>
           <div class="inline-split-flex-container">
             <input type="text" id="admin-new-store-input" class="custom-text-field" placeholder="e.g., QAA9 - Al Ain">
-            <button class="apply-mini-btn" onclick="registerNewLogisticsBranchNode()">+</button>
+            <button class="apply-mini-btn" onclick="createNewDarkstoreLocationNode()">+</button>
           </div>
         </div>
         <div class="content-panel-card">
           <h3>👤 Onboard Associate Staff Profile</h3>
           <div style="display:grid; gap:10px;">
-            <input type="text" id="admin-new-worker-name" class="custom-text-field" placeholder="Associate Full Name">
+            <select id="admin-new-worker-store" class="custom-select-input"></select>
+            <input type="text" id="admin-new-worker-name" class="custom-text-field" placeholder="Employee Full Name">
+            <input type="text" id="admin-new-worker-agency" class="custom-text-field" placeholder="Agency (e.g. Flexitalent, Align)">
             <select id="admin-new-worker-role" class="custom-select-input">
               <option value="Warehouse Associate">Warehouse Associate</option>
               <option value="Team Leader">Team Leader</option>
@@ -385,7 +457,7 @@
               <option value="Mid">Mid Shift</option>
               <option value="Night">Night Shift</option>
             </select>
-            <button class="radiant-action-btn" style="background:var(--accent-purple);" onclick="onboardNewWorkerToDirectoryRoster()">Commit Worker Record</button>
+            <button class="radiant-action-btn" style="background:var(--accent-purple);" onclick="commitNewWorkerToDirectory()">Commit Worker Record</button>
           </div>
         </div>
       </div>
@@ -394,7 +466,7 @@
   </div>
 
 <script>
-  // SECURE FIREBASE MASTER ENGINE POINTER MATRIX
+  // YOUR SECURE REPOSITORY FIREBASE PARAMS - ABSOLUTELY PERSISTED
   const firebaseConfig = {
     apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
     authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
@@ -417,33 +489,32 @@
   let databaseCachedPinMap = {};
   let currentPhaseSelectedWorkerArray = [];
 
-  // REQUIREMENT: Future Date Access Prevention Lock Rules
-  const targetCurrentCalendarDateStr = new Date().toISOString().split('T')[0];
-  document.getElementById("attendance-execution-date").value = targetCurrentCalendarDateStr;
-  document.getElementById("attendance-execution-date").setAttribute("max", targetCurrentCalendarDateStr);
+  // Lock target calendar boundaries to prevent post-dating entries
+  const currentSystemCalendarIsoDateStr = new Date().toISOString().split('T')[0];
+  document.getElementById("attendance-execution-date").value = currentSystemCalendarIsoDateStr;
+  document.getElementById("attendance-execution-date").setAttribute("max", currentSystemCalendarIsoDateStr);
 
-  // Secure User Channel Evaluation Listeners
-  auth.onAuthStateChanged(user => {
-    if(user) {
-      currentSessionOperatorEmail = user.email;
-      evaluateActiveUserPermissionNode(user.email);
-    } else {
-      if(!activeSessionStoreContext) { renderGatewayPortalAccessFrame(); }
+  // Focus chaining auto-stepping logic for the 4 separate individual PIN blocks
+  function handlePinInputChain(currentBox, nextFieldId, prevFieldId) {
+    if (currentBox.value.length >= 1 && nextFieldId) {
+      document.getElementById(nextFieldId).focus();
     }
-  });
-
-  function toggleFieldMaskVisibility(targetFieldId, elementIcon) {
-    const inputField = document.getElementById(targetFieldId);
-    if(inputField.type === "password") {
-      inputField.type = "text";
-      elementIcon.innerText = "🙈";
-    } else {
-      inputField.type = "password";
-      elementIcon.innerText = "👁️";
+    if (window.event.keyCode === 8 && prevFieldId) { // Backspace handling
+      document.getElementById(prevFieldId).focus();
     }
   }
 
-  function toggleAccessPathwayMode(selectedMode) {
+  // Handle initialization states on lifecycle trigger
+  auth.onAuthStateChanged(user => {
+    if(user) {
+      currentSessionOperatorEmail = user.email;
+      evaluateUserPermissionNode(user.email);
+    } else {
+      if(!activeSessionStoreContext) { initializeLogonTerminalInterface(); }
+    }
+  });
+
+  function switchVerificationPathway(selectedMode) {
     document.getElementById("gateway-callback-error-log").style.display = "none";
     const opBtn = document.getElementById("toggle-op-mode-btn");
     const adminBtn = document.getElementById("toggle-admin-mode-btn");
@@ -451,74 +522,26 @@
     if(selectedMode === 'operator') {
       document.getElementById("wrapper-operator-credentials").style.display = "block";
       document.getElementById("wrapper-admin-credentials").style.display = "none";
-      document.getElementById("gateway-title-label").innerText = "TL Verification";
-      document.getElementById("gateway-subtitle-label").innerText = "Select your site and enter your PIN to submit attendance for your shift team.";
-      opBtn.style.background = "var(--accent-blue)"; opBtn.style.color = "#000";
-      adminBtn.style.background = "transparent"; adminBtn.style.color = "var(--text-muted)";
+      opBtn.className = "pathway-toggle-btn active-mode";
+      adminBtn.className = "pathway-toggle-btn inactive-mode";
     } else {
       document.getElementById("wrapper-operator-credentials").style.display = "none";
       document.getElementById("wrapper-admin-credentials").style.display = "block";
-      document.getElementById("gateway-title-label").innerText = "Admin Console Override";
-      document.getElementById("gateway-subtitle-label").innerText = "Provide administrative root access signatures to manage operational node structures.";
-      opBtn.style.background = "transparent"; opBtn.style.color = "var(--text-muted)";
-      adminBtn.style.background = "var(--accent-purple)"; adminBtn.style.color = "#000";
+      opBtn.className = "pathway-toggle-btn inactive-mode";
+      adminBtn.className = "pathway-toggle-btn active-mode";
     }
   }
 
-  // REQUIREMENT: Unlock system workspace via Site Selection and localized 4-Digit Security Tokens
-  function processOperatorGatewayVerification() {
-    const targetSelectedStore = document.getElementById("login-store-select-menu").value;
-    const inputPassToken = document.getElementById("login-pin-input-field").value.trim();
-    const errorDisplay = document.getElementById("gateway-callback-error-log");
-
-    if(!targetSelectedStore) { alert("Please pick an operational darkstore site terminal."); return; }
-    
-    const calibratedTargetPin = databaseCachedPinMap[targetSelectedStore] || "1234";
-    
-    if(inputPassToken === calibratedTargetPin) {
-      errorDisplay.style.display = "none";
-      activeSessionStoreContext = targetSelectedStore;
-      isCurrentSessionAdmin = false;
-      currentSessionOperatorEmail = `terminal.${btoa(targetSelectedStore).replace(/=/g,'').substring(0,6).toLowerCase()}@darkstore.local`;
-      
-      document.getElementById("login-pin-input-field").value = "";
-      compileMainDashboardNavigationWorkspace();
-    } else {
-      errorDisplay.innerText = "❌ Site Access PIN mismatch. Attendance workspace context locked.";
-      errorDisplay.style.display = "block";
-    }
-  }
-
-  function processAdminGatewayVerification() {
-    const email = document.getElementById("login-admin-email").value.trim();
-    const password = document.getElementById("login-admin-password").value;
-    const errorDisplay = document.getElementById("gateway-callback-error-log");
-
-    if(!email || !password) { alert("Admin authorization buffers are incomplete."); return; }
-
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => { errorDisplay.style.display = "none"; })
-      .catch(err => { errorDisplay.innerText = "Access Refused: " + err.message; errorDisplay.style.display = "block"; });
-  }
-
-  function terminateActiveTerminalSession() {
-    auth.signOut();
-    activeSessionStoreContext = "";
-    currentSessionOperatorEmail = "";
-    isCurrentSessionAdmin = false;
-    renderGatewayPortalAccessFrame();
-  }
-
-  function renderGatewayPortalAccessFrame() {
+  function initializeLogonTerminalInterface() {
     document.getElementById("login-view-node").style.display = "flex";
     document.getElementById("dashboard-view-node").style.display = "none";
     
     db.collection("system_configs").doc("stores_matrix").get().then((doc) => {
       if(doc.exists && doc.data().stores) {
         databaseCachedStoresList = doc.data().stores;
-        const entryMenu = document.getElementById("login-store-select-menu");
-        entryMenu.innerHTML = "";
-        databaseCachedStoresList.forEach(store => { entryMenu.innerHTML += `<option value="${store}">${store}</option>`; });
+        const selectMenu = document.getElementById("login-store-select-menu");
+        selectMenu.innerHTML = "";
+        databaseCachedStoresList.forEach(store => { selectMenu.innerHTML += `<option value="${store}">${store}</option>`; });
       }
     });
     
@@ -527,147 +550,267 @@
     });
   }
 
-  function evaluateActiveUserPermissionNode(email) {
+  function executeOperatorSecurityValidation() {
+    const chosenStore = document.getElementById("login-store-select-menu").value;
+    const digit1 = document.getElementById("p1").value.trim();
+    const digit2 = document.getElementById("p2").value.trim();
+    const digit3 = document.getElementById("p3").value.trim();
+    const digit4 = document.getElementById("p4").value.trim();
+    const concatenatedPin = digit1 + digit2 + digit3 + digit4;
+    
+    const errorDisplay = document.getElementById("gateway-callback-error-log");
+
+    if(!chosenStore) { alert("Please specify your operational darkstore hub location context."); return; }
+    if(concatenatedPin.length < 4) { alert("Please complete the 4-digit verification sequence entry."); return; }
+    
+    const registeredTargetPin = databaseCachedPinMap[chosenStore] || "1234";
+    
+    if(concatenatedPin === registeredTargetPin) {
+      errorDisplay.style.display = "none";
+      activeSessionStoreContext = chosenStore;
+      isCurrentSessionAdmin = false;
+      currentSessionOperatorEmail = `terminal.${btoa(chosenStore).replace(/=/g,'').substring(0,6).toLowerCase()}@gwc.local`;
+      
+      // Flush fields cleanly
+      document.getElementById("p1").value = ""; document.getElementById("p2").value = "";
+      document.getElementById("p3").value = ""; document.getElementById("p4").value = "";
+      
+      constructWorkspaceLayout();
+    } else {
+      errorDisplay.innerText = "❌ Site Authentication PIN mismatch. Check credentials and retry.";
+      errorDisplay.style.display = "block";
+    }
+  }
+
+  function executeAdminDatabaseAuthentication() {
+    const email = document.getElementById("login-admin-email").value.trim();
+    const password = document.getElementById("login-admin-password").value;
+    const errorDisplay = document.getElementById("gateway-callback-error-log");
+
+    if(!email || !password) { alert("Please fulfill administrative authorization tokens."); return; }
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => { errorDisplay.style.display = "none"; })
+      .catch(err => { errorDisplay.innerText = "Access Denied: " + err.message; errorDisplay.style.display = "block"; });
+  }
+
+  function killTerminalSessionState() {
+    auth.signOut();
+    activeSessionStoreContext = "";
+    currentSessionOperatorEmail = "";
+    isCurrentSessionAdmin = false;
+    initializeLogonTerminalInterface();
+  }
+
+  function evaluateUserPermissionNode(email) {
     if(email === "anzarmuhammed.a@gmail.com" || email === "admin@attendance.com" || email === "anzar.mhd@gmail.com") {
       isCurrentSessionAdmin = true;
       activeSessionStoreContext = "";
     } else {
       isCurrentSessionAdmin = false;
     }
-    compileMainDashboardNavigationWorkspace();
+    constructWorkspaceLayout();
   }
 
-  function compileMainDashboardNavigationWorkspace() {
+  function constructWorkspaceLayout() {
     document.getElementById("login-view-node").style.display = "none";
     document.getElementById("dashboard-view-node").style.display = "block";
     
     const adminTab = document.getElementById("nav-target-btn-infrastructure");
-    const indicatorBadge = document.getElementById("session-identity-badge");
+    const sessionIdentityBadge = document.getElementById("session-identity-badge");
 
     if(isCurrentSessionAdmin) {
-      indicatorBadge.innerHTML = `OPERATOR context: <span style="color:var(--accent-purple); font-weight:bold;">ROOT ADMIN</span>`;
+      sessionIdentityBadge.innerHTML = `OPERATOR: <span style="color:var(--accent-purple); font-weight:bold;">ROOT ADMIN</span>`;
       adminTab.style.display = "block";
     } else {
-      indicatorBadge.innerHTML = `SITE node: <span style="color:var(--accent-blue); font-weight:bold;">${activeSessionStoreContext}</span>`;
+      sessionIdentityBadge.innerHTML = `SITE: <span style="color:var(--accent-blue); font-weight:bold;">${activeSessionStoreContext}</span>`;
       adminTab.style.display = "none";
     }
 
-    startRealtimeCloudDataSynchronizationSyncs();
-    switchActiveWorkspaceViewPage('page-attendance-hub');
+    startRealtimeSyncEngines();
+    routeWorkspaceNavigation('page-overview-analytics');
   }
 
-  // REQUIREMENT: Tab-Driven App dashboard pages
-  function switchActiveWorkspaceViewPage(targetPageId) {
+  function routeWorkspaceNavigation(targetPageId) {
     document.querySelectorAll(".workspace-view-page").forEach(page => page.classList.remove("page-state-active"));
     document.querySelectorAll(".navigation-tab-item").forEach(tab => tab.classList.remove("tab-state-active"));
     
-    const activePageContainer = document.getElementById(targetPageId);
-    if(activePageContainer) activePageContainer.classList.add("page-state-active");
+    const pageNode = document.getElementById(targetPageId);
+    if(pageNode) pageNode.classList.add("page-state-active");
 
+    if(targetPageId === 'page-overview-analytics') { document.getElementById('nav-target-btn-dash').classList.add('tab-state-active'); calculateOverviewAnalyticsMetrics(); }
     if(targetPageId === 'page-attendance-hub') document.getElementById('nav-target-btn-attendance').classList.add('tab-state-active');
-    if(targetPageId === 'page-historical-ledger') { document.getElementById('nav-target-btn-history').classList.add('tab-state-active'); queryHistoricalLedgerData(); }
+    if(targetPageId === 'page-historical-ledger') { document.getElementById('nav-target-btn-history').classList.add('tab-state-active'); fetchHistoricalLedgerDocuments(); }
     if(targetPageId === 'page-incident-reporting') document.getElementById('nav-target-btn-incident').classList.add('tab-state-active');
     if(targetPageId === 'page-infrastructure-controls') document.getElementById('nav-target-btn-infrastructure').classList.add('tab-state-active');
   }
 
-  function startRealtimeCloudDataSynchronizationSyncs() {
+  function startRealtimeSyncEngines() {
     db.collection("system_configs").doc("stores_matrix").onSnapshot(doc => {
-      if(doc.exists && doc.data().stores) databaseCachedStoresList = doc.data().stores;
+      if(doc.exists && doc.data().stores) {
+        databaseCachedStoresList = doc.data().stores;
+        
+        // Feed admin configuration options layout
+        const workerStoreSelector = document.getElementById("admin-new-worker-store");
+        if(workerStoreSelector) {
+          workerStoreSelector.innerHTML = "";
+          databaseCachedStoresList.forEach(s => workerStoreSelector.innerHTML += `<option value="${s}">${s}</option>`);
+        }
+      }
       
       db.collection("system_configs").doc("pin_authorization_matrix").onSnapshot(pinDoc => {
         if(pinDoc.exists) databaseCachedPinMap = pinDoc.data();
-        if(isCurrentSessionAdmin) generateDynamicAdminPinConfigurationLayoutGrid();
-        refreshGlobalDropdownMenusUI();
+        if(isCurrentSessionAdmin) syncAdminPinUIGrid();
       });
     });
 
     db.collection("employee_directory").onSnapshot(snapshot => {
       databaseCachedStaffDirectory = [];
       snapshot.forEach(doc => databaseCachedStaffDirectory.push({ id: doc.id, ...doc.data() }));
-      synchronizeInteractiveStaffRosterDeck();
+      synchronizeDynamicRosterInterfaceDeck();
+      calculateOverviewAnalyticsMetrics();
     });
   }
 
-  function refreshGlobalDropdownMenusUI() {
-    const infrastructureStoreAssignMenu = document.getElementById("admin-pin-matrix-config-grid");
-    // Dynamic initialization checks can process here if secondary components request
+  function calculateOverviewAnalyticsMetrics() {
+    const selectedDate = document.getElementById("attendance-execution-date").value;
+    
+    // Total registered employees
+    let totalStrength = databaseCachedStaffDirectory.length;
+    if(!isCurrentSessionAdmin && activeSessionStoreContext) {
+      totalStrength = databaseCachedStaffDirectory.filter(e => e.storeCode === activeSessionStoreContext).length;
+    }
+    document.getElementById("count-total-strength").innerText = totalStrength;
+
+    // Load active logs for live calculations
+    let queryRef = db.collection("attendance_ledger").where("selectedDate", "==", selectedDate);
+    if(!isCurrentSessionAdmin && activeSessionStoreContext) {
+      queryRef = queryRef.where("storeCode", "==", activeSessionStoreContext);
+    }
+
+    queryRef.get().then(snapshot => {
+      let presentCount = 0; let absentCount = 0; let weekoffCount = 0;
+      
+      snapshot.forEach(doc => {
+        const item = doc.data();
+        if(item.statusCondition === "Present") presentCount++;
+        else if(item.statusCondition === "Absent") absentCount++;
+        else if(item.statusCondition === "Week-Off") weekoffCount++;
+      });
+
+      document.getElementById("count-total-present").innerText = presentCount;
+      document.getElementById("count-total-absent").innerText = absentCount;
+      document.getElementById("count-total-weekoff").innerText = weekoffCount;
+
+      const totalMarked = presentCount + absentCount;
+      const rate = totalMarked > 0 ? Math.round((presentCount / totalMarked) * 100) : 0;
+      document.getElementById("rate-total-attendance").innerText = `${rate}% Attendance Rate`;
+
+      // Build live tracking sub-items dashboard status cards
+      buildHubSubmissionTrackerCards(selectedDate);
+    });
   }
 
-  // REQUIREMENT: Pre-selection phase workspace (`image_131bfd.jpg`)
-  function synchronizeInteractiveStaffRosterDeck() {
-    const targetActiveShift = document.getElementById("attendance-execution-shift").value;
-    const targetsContainerDeck = document.getElementById("roster-pre-selection-deck-wrapper");
-    if(!targetsContainerDeck) return;
+  function buildHubSubmissionTrackerCards(dateStr) {
+    const container = document.getElementById("regional-hub-status-list-container");
+    if(!container) return;
+    container.innerHTML = "";
 
-    let targetedRosterStaff = databaseCachedStaffDirectory;
-    
+    databaseCachedStoresList.forEach(store => {
+      // If operator mode, only show their explicit site
+      if(!isCurrentSessionAdmin && activeSessionStoreContext !== store) return;
+
+      db.collection("attendance_ledger")
+        .where("selectedDate", "==", dateStr)
+        .where("storeCode", "==", store)
+        .limit(1).get().then(snap => {
+          const checkStatus = !snap.empty;
+          container.innerHTML += `
+            <div style="background:var(--bg-input); padding:14px; border-radius:10px; display:flex; justify-content:between; align-items:center; border:1px solid var(--border-color);">
+              <div>
+                <strong style="font-size:14px; display:block;">${store}</strong>
+                <span style="font-size:12px; color:var(--text-muted);">Target Roster Active</span>
+              </div>
+              <span style="padding:4px 10px; font-size:11px; font-weight:bold; border-radius:6px; background:${checkStatus ? 'rgba(0,230,118,0.15)' : 'rgba(255,82,82,0.15)'}; color:${checkStatus ? '#00e676' : '#ff5252'};">
+                ${checkStatus ? 'COMPLETED' : 'PENDING'}
+              </span>
+            </div>`;
+        });
+    });
+  }
+
+  function synchronizeDynamicRosterInterfaceDeck() {
+    const filterShift = document.getElementById("attendance-execution-shift").value;
+    const wrapperDeck = document.getElementById("roster-pre-selection-deck-wrapper");
+    if(!wrapperDeck) return;
+
+    let targetRoster = databaseCachedStaffDirectory;
     if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      targetedRosterStaff = targetedRosterStaff.filter(emp => emp.storeCode === activeSessionStoreContext);
+      targetRoster = targetRoster.filter(emp => emp.storeCode === activeSessionStoreContext);
     }
-    
-    targetedRosterStaff = targetedRosterStaff.filter(emp => emp.shift === targetActiveShift);
+    targetRoster = targetRoster.filter(emp => emp.shift === filterShift);
 
-    if(targetedRosterStaff.length === 0) {
-      targetsContainerDeck.innerHTML = `<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:20px;">No registered logistics staff profiles match current filters.</p>`;
+    if(targetRoster.length === 0) {
+      wrapperDeck.innerHTML = `<p style="color:var(--text-muted); text-align:center; font-size:13px; padding:20px;">No registered logistics staff profiles match selection rules.</p>`;
       return;
     }
 
-    targetsContainerDeck.innerHTML = "";
-    targetedRosterStaff.forEach((emp, index) => {
-      targetsContainerDeck.innerHTML += `
-        <div class="associate-selection-row-card">
+    wrapperDeck.innerHTML = "";
+    targetRoster.forEach((emp) => {
+      wrapperDeck.innerHTML += `
+        <div class="associate-selection-row-card selected-active">
           <div class="associate-info-meta">
             <b>${emp.name}</b>
-            <span>${emp.role || 'Warehouse Associate'} // ${emp.storeCode}</span>
+            <span>${emp.role || 'Warehouse Associate'} // ${emp.agency || 'GWC Logistics'}</span>
           </div>
           <div class="round-checkbox-control-wrapper">
-            <input type="checkbox" class="preselect-roster-checkbox-element" data-name="${emp.name}" data-role="${emp.role}" data-store="${emp.storeCode}" data-shift="${emp.shift}" checked>
+            <input type="checkbox" class="preselect-roster-checkbox-element" data-name="${emp.name}" data-role="${emp.role}" data-store="${emp.storeCode}" data-shift="${emp.shift}" data-agency="${emp.agency || 'GWC'}" checked onchange="this.closest('.associate-selection-row-card').classList.toggle('selected-active', this.checked)">
           </div>
         </div>`;
     });
   }
 
-  function advanceToRosterStatusMappingStage() {
-    const selectedBoxes = document.querySelectorAll(".preselect-roster-checkbox-element:checked");
-    if(selectedBoxes.length === 0) { alert("Please select at least one active employee roster entry card to map."); return; }
+  function commitStagedSelectionToRosterStatusDeck() {
+    const nodesChecked = document.querySelectorAll(".preselect-roster-checkbox-element:checked");
+    if(nodesChecked.length === 0) { alert("Please select at least one active employee checklist card to populate."); return; }
 
     currentPhaseSelectedWorkerArray = [];
-    selectedBoxes.forEach(box => {
+    nodesChecked.forEach(box => {
       currentPhaseSelectedWorkerArray.push({
         name: box.getAttribute("data-name"),
         role: box.getAttribute("data-role"),
         storeCode: box.getAttribute("data-store"),
-        shift: box.getAttribute("data-shift")
+        shift: box.getAttribute("data-shift"),
+        agency: box.getAttribute("data-agency")
       });
     });
 
     document.getElementById("roster-pre-selection-panel").style.display = "none";
     document.getElementById("roster-status-mapping-panel").style.display = "block";
-    renderActiveAttendanceRosterCards();
+    buildActiveRosterStatusGridCards();
   }
 
-  function rollbackToRosterSelectionStage() {
+  function fallbackToDirectoryStagingStage() {
     document.getElementById("roster-pre-selection-panel").style.display = "block";
     document.getElementById("roster-status-mapping-panel").style.display = "none";
   }
 
-  // REQUIREMENT: Render attendance card decks matching mobile view patterns (`image_131bdf.jpg`)
-  function renderActiveAttendanceRosterCards() {
+  function buildActiveRosterStatusGridCards() {
     const mainDeckContainer = document.getElementById("active-attendance-card-deck-wrapper");
     if(!mainDeckContainer) return;
     mainDeckContainer.innerHTML = "";
 
-    currentPhaseSelectedWorkerArray.forEach((worker, index) => {
+    currentPhaseSelectedWorkerArray.forEach((worker) => {
       mainDeckContainer.innerHTML += `
-        <div class="attendance-card-item-container active-card-status-mapping-row" data-name="${worker.name}" data-role="${worker.role}" data-store="${worker.storeCode}" data-shift="${worker.shift}">
-          <div class="worker-profile-block">
-            <h4>${worker.name}</h4>
-            <p>${worker.role} • ${worker.storeCode} • ${worker.shift} Shift</p>
+        <div class="attendance-card-item-container live-status-mapping-row-node" data-name="${worker.name}" data-role="${worker.role}" data-store="${worker.storeCode}" data-shift="${worker.shift}" data-agency="${worker.agency}">
+          <div style="margin-bottom:12px;">
+            <h4 style="margin:0 0 3px 0; font-size:16px; font-weight:800;">${worker.name}</h4>
+            <p style="margin:0; font-size:12px; color:var(--text-muted);">${worker.role} • ${worker.agency} • ${worker.storeCode}</p>
           </div>
           
-          <div class="form-block-element" style="margin-bottom:10px;">
-            <label>Duty Status Condition Match</label>
-            <select class="custom-select-input individual-row-status-select-element">
+          <div class="form-block-element" style="margin-bottom:12px;">
+            <label style="font-size:10px;">DUTY STATUS CONDITION MATCH</label>
+            <select class="custom-select-input row-level-status-dropdown-element">
               <option value="Present">Present</option>
               <option value="Absent">Absent</option>
               <option value="Week-Off">Week-Off</option>
@@ -675,90 +818,91 @@
           </div>
           
           <div class="form-block-element" style="margin:0;">
-            <label>Remarks Exceptions Note</label>
-            <input type="text" class="custom-text-field individual-row-remarks-input-element" placeholder="Transit delays, medical certificates, etc...">
+            <label style="font-size:10px;">REMARKS EXCEPTIONS NOTE</label>
+            <input type="text" class="custom-text-field row-level-remarks-input-element" placeholder="Transit delays, medical exceptions, etc...">
           </div>
         </div>`;
     });
   }
 
-  // REQUIREMENT: "Set All" Bulk status tool operation logic (`image_131bfd.jpg`)
-  function executeGlobalRosterBulkStatusOverride() {
-    const targetedBulkModifierVal = document.getElementById("global-bulk-status-selector").value;
-    const activeSelectors = document.querySelectorAll(".individual-row-status-select-element");
-    activeSelectors.forEach(selectDropdown => {
-      selectDropdown.value = targetedBulkModifierVal;
+  function executeGlobalRosterBulkOverride() {
+    const globalVal = document.getElementById("global-bulk-status-selector").value;
+    document.querySelectorAll(".row-level-status-dropdown-element").forEach(select => {
+      select.value = globalVal;
     });
   }
 
-  // REQUIREMENT: Transmit staged checklist array values to server database buffer logs
-  function commitRosterAttendanceDatasetToCloudDb() {
-    const trackingTargetDate = document.getElementById("attendance-execution-date").value;
-    const loggingSupervisorSignature = document.getElementById("attendance-submitter-signature").value.trim();
-    const targetedActiveCards = document.querySelectorAll(".active-card-status-mapping-row");
+  function pushAttendanceDatasetToCloudDatabase() {
+    const selectedDate = document.getElementById("attendance-execution-date").value;
+    const signature = document.getElementById("attendance-submitter-signature").value.trim();
+    const targetedActiveCards = document.querySelectorAll(".live-status-mapping-row-node");
 
-    if(!trackingTargetDate) { alert("Calendar entry tracking matrix context missing."); return; }
-    if(!loggingSupervisorSignature) { alert("Please provide your authorization signature name parameter."); return; }
+    if(!selectedDate) { alert("Reporting transaction execution target date context missing."); return; }
+    if(!signature) { alert("Please input your authorization name signature execution parameter."); return; }
     if(targetedActiveCards.length === 0) return;
 
     const atomicBatchTransactionRef = db.batch();
-    const trackingSystemTimestampClockStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const systemTimestampClockStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     targetedActiveCards.forEach(card => {
       const name = card.getAttribute("data-name");
       const role = card.getAttribute("data-role");
       const storeCode = card.getAttribute("data-store");
       const shift = card.getAttribute("data-shift");
-      const statusCondition = card.querySelector(".individual-row-status-select-element").value;
-      const remarks = card.querySelector(".individual-row-remarks-input-element").value.trim() || "--";
+      const agency = card.getAttribute("data-agency");
+      const statusCondition = card.querySelector(".row-level-status-dropdown-element").value;
+      const remarks = card.querySelector(".row-level-remarks-input-element").value.trim() || "--";
 
-      const documentPointerLocationRef = db.collection("attendance_ledger").doc();
-      atomicBatchTransactionRef.set(documentPointerLocationRef, {
-        selectedDate: trackingTargetDate,
+      const docRef = db.collection("attendance_ledger").doc();
+      atomicBatchTransactionRef.set(docRef, {
+        selectedDate: selectedDate,
         storeCode: storeCode,
         name: name,
         role: role,
         shift: shift,
+        agency: agency,
         statusCondition: statusCondition,
         remarks: remarks,
         operatorEmail: currentSessionOperatorEmail,
-        supervisorSignature: loggingSupervisorSignature,
-        transmissionTime: trackingSystemTimestampClockStr
+        supervisorSignature: signature,
+        transmissionTime: systemTimestampClockStr
       });
     });
 
     atomicBatchTransactionRef.commit().then(() => {
-      alert(`🚀 Roster sheet logged successfully! Sync committed for ${targetedActiveCards.length} associates.`);
+      alert(`🚀 Success! Attendance sheets safely saved into GWC Cloud Network.`);
       document.getElementById("attendance-submitter-signature").value = "";
+      
       if(!isCurrentSessionAdmin) {
-        terminateActiveTerminalSession();
+        killTerminalSessionState();
       } else {
-        rollbackToRosterSelectionStage();
-        synchronizeInteractiveStaffRosterDeck();
+        fallbackToDirectoryStagingStage();
+        synchronizeDynamicRosterInterfaceDeck();
+        calculateOverviewAnalyticsMetrics();
       }
-    }).catch(err => alert("Data synchronization link down: " + err.message));
+    }).catch(err => alert("Data validation pipeline interface link breakdown: " + err.message));
   }
 
-  function queryHistoricalLedgerData() {
-    const queryDate = document.getElementById("ledger-query-date-filter").value;
-    const queryShift = document.getElementById("ledger-query-shift-filter").value;
+  function fetchHistoricalLedgerDocuments() {
+    const qDate = document.getElementById("ledger-query-date-filter").value;
+    const qShift = document.getElementById("ledger-query-shift-filter").value;
     const tableBody = document.getElementById("historical-data-table-body");
     
     if(!tableBody) return;
     tableBody.innerHTML = "";
 
-    let databaseQueryEngineRef = db.collection("attendance_ledger");
+    let ledgerRef = db.collection("attendance_ledger");
 
     if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      databaseQueryEngineRef = databaseQueryEngineRef.where("storeCode", "==", activeSessionStoreContext);
+      ledgerRef = ledgerRef.where("storeCode", "==", activeSessionStoreContext);
     }
-    if(queryDate) databaseQueryEngineRef = databaseQueryEngineRef.where("selectedDate", "==", queryDate);
-    if(queryShift && queryShift !== "All") databaseQueryEngineRef = databaseQueryEngineRef.where("shift", "==", queryShift);
+    if(qDate) ledgerRef = ledgerRef.where("selectedDate", "==", qDate);
+    if(qShift && qShift !== "All") ledgerRef = ledgerRef.where("shift", "==", qShift);
 
-    databaseQueryEngineRef.orderBy("selectedDate", "desc").limit(50).get().then(snapshot => {
+    ledgerRef.orderBy("selectedDate", "desc").limit(40).get().then(snapshot => {
       tableBody.innerHTML = "";
       if(snapshot.empty) {
-        tableBody.innerHTML = `<tr><td colspan="7" style="color:var(--text-muted); text-align:center; padding:15px;">No corresponding historical telemetry documents found.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="7" style="color:var(--text-muted); text-align:center; padding:15px;">No historical matching documents processed inside runtime logs scope.</td></tr>`;
         return;
       }
       snapshot.forEach(doc => {
@@ -767,20 +911,20 @@
           <tr>
             <td>${item.selectedDate}</td>
             <td style="color:var(--accent-blue); font-weight:bold;">${item.storeCode}</td>
-            <td><b>${item.name}</b></td>
+            <td><b>${item.name}</b><br><small style="color:var(--text-muted);">${item.agency || 'GWC'}</small></td>
             <td>${item.shift}</td>
             <td><span style="font-weight:bold; color:${item.statusCondition==='Present'?'#00e676':item.statusCondition==='Absent'?'#ff5252':'#90a4ae'}">${item.statusCondition}</span></td>
             <td style="color:var(--text-muted); font-style:italic;">${item.remarks}</td>
-            <td>${item.supervisorSignature || item.operatorEmail.split('@')[0]}</td>
+            <td>${item.supervisorSignature || 'System Terminal'}</td>
           </tr>`;
       });
     });
   }
 
-  function flushLedgerQueryFilters() {
+  function clearHistoricalSearchFilters() {
     document.getElementById("ledger-query-date-filter").value = "";
     document.getElementById("ledger-query-shift-filter").value = "All";
-    queryHistoricalLedgerData();
+    fetchHistoricalLedgerDocuments();
   }
 
   function triggerCsvExportSequence() {
@@ -790,12 +934,103 @@
     }
 
     datasetRef.get().then(snapshot => {
-      if(snapshot.empty) { alert("No historical document arrays compiled in the buffer target to export."); return; }
+      if(snapshot.empty) { alert("No compiled records data available to compile."); return; }
       
-      let csvContentsOutputString = "data:text/csv;charset=utf-8,Date,Site Location,Employee Name,Role Designation,Shift Window,Status,Remarks,Authorized Signature\n";
+      let csvOutput = "data:text/csv;charset=utf-8,Date,Hub Code,Employee Name,Agency,Shift,Status,Remarks,Authorized Signature\n";
       snapshot.forEach(doc => {
         const r = doc.data();
-        csvContentsOutputString += `"${r.selectedDate}","${r.storeCode}","${r.name}","${r.role || 'Associate'}","${r.shift}","${r.statusCondition}","${r.remarks}","${r.supervisorSignature || 'System'}"\n`;
+        csvOutput += `"${r.selectedDate}","${r.storeCode}","${r.name}","${r.agency || 'GWC'}","${r.shift}","${r.statusCondition}","${r.remarks}","${r.supervisorSignature}"\n`;
       });
 
-      const uriDataEncoderRoute = encodeURI(csvContents
+      const encodedUri = encodeURI(csvOutput);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `GWC_Attendance_Export_${currentSystemCalendarIsoDateStr}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
+  function submitNewEscalationTicket() {
+    const title = document.getElementById("ticket-issue-title").value.trim();
+    const description = document.getElementById("ticket-issue-details").value.trim();
+
+    if(!title || !description) { alert("Please compile issue summary tokens completely."); return; }
+
+    db.collection("incident_tickets").add({
+      title: title,
+      description: description,
+      status: "Pending",
+      timestamp: new Date().toLocaleString(),
+      originNode: activeSessionStoreContext || "Admin Terminal Override"
+    }).then(() => {
+      alert("🚀 Ticket securely stacked into server queues.");
+      document.getElementById("ticket-issue-title").value = "";
+      document.getElementById("ticket-issue-details").value = "";
+    });
+  }
+
+  function syncAdminPinUIGrid() {
+    const parentContainerBox = document.getElementById("admin-pin-matrix-config-grid");
+    if(!parentContainerBox) return;
+    parentContainerBox.innerHTML = "";
+
+    databaseCachedStoresList.forEach(store => {
+      const currentPin = databaseCachedPinMap[store] || "1234";
+      parentContainerBox.innerHTML += `
+        <div>
+          <label style="color:var(--accent-purple); font-size:11px;">${store} ACCESS PIN</label>
+          <input type="text" id="token-pin-identity-${btoa(store).replace(/=/g,'')}" class="custom-text-field" value="${currentPin}" maxlength="4" style="font-weight:bold; text-align:center;">
+        </div>`;
+    });
+  }
+
+  function commitUpdatedTerminalSecurityPins() {
+    if(!isCurrentSessionAdmin) return;
+    databaseCachedStoresList.forEach(store => {
+      const targetId = `token-pin-identity-${btoa(store).replace(/=/g,'')}`;
+      const elem = document.getElementById(targetId);
+      if(elem) databaseCachedPinMap[store] = elem.value.trim() || "1234";
+    });
+
+    db.collection("system_configs").doc("pin_authorization_matrix").set(databaseCachedPinMap)
+      .then(() => alert("🚀 Operational PIN configurations saved successfully."))
+      .catch(err => alert("Error syncing configuration maps: " + err.message));
+  }
+
+  function createNewDarkstoreLocationNode() {
+    const value = document.getElementById("admin-new-store-input").value.trim();
+    if(!value) return;
+
+    if(databaseCachedStoresList.includes(value)) { alert("Location identifier node already verified."); return; }
+    databaseCachedStoresList.push(value);
+
+    db.collection("system_configs").doc("stores_matrix").set({ stores: databaseCachedStoresList })
+      .then(() => { document.getElementById("admin-new-store-input").value = ""; alert("Location registration successful!"); });
+  }
+
+  function commitNewWorkerToDirectory() {
+    const name = document.getElementById("admin-new-worker-name").value.trim();
+    const agency = document.getElementById("admin-new-worker-agency").value.trim() || "GWC";
+    const role = document.getElementById("admin-new-worker-role").value;
+    const shift = document.getElementById("admin-new-worker-shift").value;
+    const store = document.getElementById("admin-new-worker-store").value;
+
+    if(!name) { alert("Please provide a name to create a valid record object."); return; }
+
+    db.collection("employee_directory").add({
+      storeCode: store,
+      name: name,
+      agency: agency,
+      role: role,
+      shift: shift
+    }).then(() => { 
+      document.getElementById("admin-new-worker-name").value = ""; 
+      document.getElementById("admin-new-worker-agency").value = "";
+      alert(`Profile added successfully for: ${name}`); 
+    });
+  }
+</script>
+</body>
+</html>
