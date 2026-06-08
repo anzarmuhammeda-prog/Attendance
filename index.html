@@ -32,7 +32,7 @@
       box-sizing: border-box;
     }
     
-    /* LOGON LOCKSCREEN PANEL GATEWAY */
+    /* LOGIN LOCKSCREEN FRAME */
     .login-container-frame {
       display: flex;
       justify-content: center;
@@ -52,28 +52,18 @@
       text-align: center;
       box-sizing: border-box;
     }
-
-    .gwc-logo-container {
-      margin-bottom: 15px;
-    }
-    .gwc-logo-container img {
-      max-width: 150px;
-      height: auto;
-      filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
-    }
     
     .tl-verification-card h2 { 
       margin: 0 0 4px 0; 
-      font-size: 26px; 
+      font-size: 24px; 
       font-weight: 800; 
-      color: #ff9800; 
+      color: #ffffff; 
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
     .tl-verification-card p.sub-node-lbl { margin: 0 0 6px 0; font-size: 13px; color: var(--accent-blue); opacity: 0.8; }
     .tl-verification-card p.subtitle { margin: 12px 0 24px 0; font-size: 14px; color: var(--text-muted); line-height: 1.4; }
     
-    /* MODE SWITCHES */
     .pathway-toggle-container {
       display: flex; 
       justify-content: center; 
@@ -94,14 +84,8 @@
       border: none;
       transition: all 0.2s;
     }
-    .pathway-toggle-btn.active-mode {
-      background: var(--accent-blue);
-      color: #000;
-    }
-    .pathway-toggle-btn.inactive-mode {
-      background: transparent;
-      color: var(--text-muted);
-    }
+    .pathway-toggle-btn.active-mode { background: var(--accent-blue); color: #000; }
+    .pathway-toggle-btn.inactive-mode { background: transparent; color: var(--text-muted); }
 
     .form-block-element { text-align: left; margin-bottom: 20px; position: relative; }
     .form-block-element label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -117,30 +101,46 @@
       box-sizing: border-box;
       outline: none;
     }
-    
-    /* 4-DIGIT PIN SEPARATE BOX LAYOUT */
+
+    /* PIN BOX ENGINE DESIGN WITH VISIBILITY EYE */
+    .pin-input-container-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
     .pin-box-wrapper {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      margin: 10px 0;
+      gap: 8px;
+      flex: 1;
     }
     .pin-digit-box {
-      width: 22%;
-      height: 65px;
+      width: 20%;
+      height: 55px;
       background: var(--bg-input);
       border: 1.5px solid #144957;
       border-radius: 12px;
       text-align: center;
-      font-size: 24px;
+      font-size: 22px;
       color: var(--accent-blue);
       font-weight: bold;
       outline: none;
     }
-    .pin-digit-box:focus {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 8px rgba(0,195,255,0.2);
+    .pin-digit-box:focus { border-color: var(--accent-blue); }
+    
+    .password-toggle-eye-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-left: 10px;
+      font-size: 18px;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    .password-toggle-eye-btn:hover { color: var(--text-main); }
 
     .radiant-action-btn {
       width: 100%;
@@ -155,7 +155,7 @@
       margin-top: 15px;
     }
 
-    /* CORE DASHBOARD APPLICATION PANELS */
+    /* CORE DASHBOARD WORKSPACE */
     .master-dashboard-layout { display: none; width: 100%; max-width: 1240px; margin: 0 auto; }
     
     .darkstore-app-header {
@@ -184,14 +184,14 @@
     .content-panel-card { background: var(--bg-panel); border-radius: 16px; border: 1px solid var(--border-color); padding: 20px; margin-bottom: 20px; }
     .content-panel-card h3 { margin: 0 0 18px 0; font-size: 15px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* DASHBOARD INFRASTRUCTURE COUNTERS PANEL */
+    /* DASHBOARD METRICS SUMMARY GRAPHICS */
     .metric-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
     .metric-counter-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; position: relative; }
     .metric-counter-card h4 { margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
     .metric-counter-card .counter-value { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
     .metric-counter-card .counter-subtext { font-size: 12px; color: var(--text-muted); }
 
-    /* CARD GRID STRUCTURES FOR ASSOCIATES AND STATUSES */
+    /* ASSOCIATE GRID CARD RENDERING ENGINE */
     .associate-selection-row-card {
       background: var(--bg-input);
       border: 1px solid var(--border-color);
@@ -220,16 +220,20 @@
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; background: var(--bg-input); min-width: 750px; }
     th, td { padding: 14px; border-bottom: 1px solid var(--border-color); }
     th { background: #0c121c; color: var(--accent-blue); }
+
+    .quick-onboard-section {
+      background: rgba(187, 134, 252, 0.03);
+      border: 1px dashed var(--accent-purple);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
 
   <div id="login-view-node" class="login-container-frame">
     <div class="tl-verification-card">
-      
-      <div class="gwc-logo-container">
-        <img src="https://www.gwc.com.qa/wp-content/uploads/2023/11/gwc-logo.svg" onerror="this.src='https://i.ibb.co/bRtZ4L5/gwc-fallback.png'" alt="GWC Logo">
-      </div>
       
       <h2>GWC Darkstore Attendance</h2>
       <p class="sub-node-lbl">Darkstore Network Access Node</p>
@@ -248,11 +252,14 @@
         
         <div class="form-block-element">
           <label>SITE AUTHENTICATION PIN</label>
-          <div class="pin-box-wrapper">
-            <input type="password" class="pin-digit-box" id="p1" maxlength="1" onkeyup="handlePinInputChain(this, 'p2', '')" inputmode="numeric">
-            <input type="password" class="pin-digit-box" id="p2" maxlength="1" onkeyup="handlePinInputChain(this, 'p3', 'p1')" inputmode="numeric">
-            <input type="password" class="pin-digit-box" id="p3" maxlength="1" onkeyup="handlePinInputChain(this, 'p4', 'p2')" inputmode="numeric">
-            <input type="password" class="pin-digit-box" id="p4" maxlength="1" onkeyup="handlePinInputChain(this, '', 'p3')" inputmode="numeric">
+          <div class="pin-input-container-row">
+            <div class="pin-box-wrapper">
+              <input type="password" class="pin-digit-box" id="p1" maxlength="1" onkeyup="handlePinInputChain(this, 'p2', '')" inputmode="numeric">
+              <input type="password" class="pin-digit-box" id="p2" maxlength="1" onkeyup="handlePinInputChain(this, 'p3', 'p1')" inputmode="numeric">
+              <input type="password" class="pin-digit-box" id="p3" maxlength="1" onkeyup="handlePinInputChain(this, 'p4', 'p2')" inputmode="numeric">
+              <input type="password" class="pin-digit-box" id="p4" maxlength="1" onkeyup="handlePinInputChain(this, '', 'p3')" inputmode="numeric">
+            </div>
+            <button type="button" class="password-toggle-eye-btn" onclick="togglePinObscurityState()">👁️</button>
           </div>
         </div>
         <button class="radiant-action-btn" onclick="executeOperatorSecurityValidation()">Unlock & Submit →</button>
@@ -297,7 +304,7 @@
         <div class="metric-counter-card" style="border-left: 4px solid var(--accent-blue);">
           <h4>TOTAL STAFF STRENGTH</h4>
           <div class="counter-value" id="count-total-strength">0</div>
-          <div class="counter-subtext">Across all active channels</div>
+          <div class="counter-subtext">Across active matching channels</div>
         </div>
         <div class="metric-counter-card" style="border-left: 4px solid #00e676;">
           <h4>PRESENT PERSONNEL</h4>
@@ -307,12 +314,12 @@
         <div class="metric-counter-card" style="border-left: 4px solid #ff5252;">
           <h4>ABSENT ROWS</h4>
           <div class="counter-value" id="count-total-absent" style="color:#ff5252;">0</div>
-          <div class="counter-subtext">Requires floor support replacement</div>
+          <div class="counter-subtext">Floor replacements requested</div>
         </div>
         <div class="metric-counter-card" style="border-left: 4px solid #90a4ae;">
           <h4>SCHEDULED WEEK-OFFS</h4>
           <div class="counter-value" id="count-total-weekoff" style="color:#90a4ae;">0</div>
-          <div class="counter-subtext">Standard rotating roster allocations</div>
+          <div class="counter-subtext">Rotating roster allocations</div>
         </div>
       </div>
 
@@ -354,8 +361,17 @@
       </div>
 
       <div id="roster-status-mapping-panel" class="content-panel-card" style="display:none;">
-        <h3>📝 Attendance Status Matrix Assignment</h3>
         
+        <div class="quick-onboard-section">
+          <h4 style="margin:0 0 10px 0; color:var(--accent-purple); font-size:13px;">➕ Quick Add New Associate to Current Shift</h4>
+          <div class="desktop-responsive-layout-grid">
+            <input type="text" id="quick-add-name" class="custom-text-field" placeholder="Full Name">
+            <input type="text" id="quick-add-agency" class="custom-text-field" placeholder="Agency (e.g., Flexitalent, Align)">
+            <button class="apply-mini-btn" style="background:var(--accent-purple); color:#000;" onclick="executeQuickAssociateOnboarding()">Add Inline</button>
+          </div>
+        </div>
+
+        <h3>📝 Attendance Status Matrix Assignment</h3>
         <div class="set-all-utility-box">
           <label style="font-size:11px; color:var(--accent-blue); font-weight:700; margin-bottom:6px; display:block;">Global Roster Modifier Tool</label>
           <div class="inline-split-flex-container">
@@ -381,6 +397,24 @@
         <button class="radiant-action-btn" style="background:#00e676; margin-top:15px; color:#000;" onclick="pushAttendanceDatasetToCloudDatabase()">Submit Attendance →</button>
         <button class="radiant-action-btn" style="background:transparent; color:var(--text-muted); border:1px solid var(--border-color); margin-top:8px;" onclick="fallbackToDirectoryStagingStage()">← Re-adjust Activated Roster List</button>
       </div>
+
+      <div id="roster-review-verification-panel" class="content-panel-card" style="display:none; border-color:#00e676;">
+        <h3 style="color:#00e676;">✅ Review Logged Sheet Verification Parameters</h3>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:20px;">Review your entry mappings below before releasing active terminal write controls.</p>
+        
+        <div class="scroll-table-box" style="margin-bottom:20px;">
+          <table>
+            <thead>
+              <tr><th>Associate Name</th><th>Agency</th><th>Shift Context</th><th>Assigned Status Mapping</th><th>Exceptions/Remarks</th></tr>
+            </thead>
+            <tbody id="review-verification-table-body"></tbody>
+          </table>
+        </div>
+
+        <button class="radiant-action-btn" style="background:#00e676; color:#000;" onclick="confirmAndFinalizeSubmissionPipeline()">Confirm Information & Close Session →</button>
+        <button class="radiant-action-btn" style="background:transparent; color:var(--accent-orange); border:1px solid var(--accent-orange); margin-top:8px;" onclick="unlockReviewSheetForLiveEditing()">⚠️ Modify Current Sheet Metrics</button>
+      </div>
+
     </div>
 
     <div id="page-historical-ledger" class="workspace-view-page">
@@ -430,7 +464,7 @@
       <div class="content-panel-card" style="border-color:var(--accent-purple);">
         <h3 style="color:var(--accent-purple);">⚡ Global Security Hub Gateway Tokens (PIN Access Control Panel)</h3>
         <div id="admin-pin-matrix-config-grid" class="desktop-responsive-layout-grid" style="margin-bottom:15px;"></div>
-        <button class="apply-mini-btn" style="background:var(--accent-purple); color:black;" onclick="commitUpdatedTerminalSecurityPins()">Save Operational PIN Configurations</button>
+        <button class="apply-mini-btn" style="background:var(--accent-purple); color:black;" onclick="commitUpdatedTerminalSecurityPins()">Save PIN Configurations</button>
       </div>
 
       <div class="desktop-responsive-layout-grid">
@@ -453,9 +487,9 @@
               <option value="Supervisor">Supervisor</option>
             </select>
             <select id="admin-new-worker-shift" class="custom-select-input">
-              <option value="Day">Day Shift</option>
-              <option value="Mid">Mid Shift</option>
-              <option value="Night">Night Shift</option>
+              <option value="Day Shift">Day Shift</option>
+              <option value="Mid Shift">Mid Shift</option>
+              <option value="Night Shift">Night Shift</option>
             </select>
             <button class="radiant-action-btn" style="background:var(--accent-purple);" onclick="commitNewWorkerToDirectory()">Commit Worker Record</button>
           </div>
@@ -466,7 +500,7 @@
   </div>
 
 <script>
-  // YOUR SECURE REPOSITORY FIREBASE PARAMS - ABSOLUTELY PERSISTED
+  // YOUR SECURE REPOSITORY FIREBASE CONFIGURATION PARAMS
   const firebaseConfig = {
     apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
     authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
@@ -488,23 +522,29 @@
   let databaseCachedStaffDirectory = [];
   let databaseCachedPinMap = {};
   let currentPhaseSelectedWorkerArray = [];
+  let pinnedReviewDatasetBuffer = [];
 
-  // Lock target calendar boundaries to prevent post-dating entries
   const currentSystemCalendarIsoDateStr = new Date().toISOString().split('T')[0];
   document.getElementById("attendance-execution-date").value = currentSystemCalendarIsoDateStr;
   document.getElementById("attendance-execution-date").setAttribute("max", currentSystemCalendarIsoDateStr);
 
-  // Focus chaining auto-stepping logic for the 4 separate individual PIN blocks
   function handlePinInputChain(currentBox, nextFieldId, prevFieldId) {
     if (currentBox.value.length >= 1 && nextFieldId) {
       document.getElementById(nextFieldId).focus();
     }
-    if (window.event.keyCode === 8 && prevFieldId) { // Backspace handling
+    if (window.event.keyCode === 8 && prevFieldId) {
       document.getElementById(prevFieldId).focus();
     }
   }
 
-  // Handle initialization states on lifecycle trigger
+  function togglePinObscurityState() {
+    const fields = ['p1', 'p2', 'p3', 'p4'];
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.type = el.type === "password" ? "text" : "password";
+    });
+  }
+
   auth.onAuthStateChanged(user => {
     if(user) {
       currentSessionOperatorEmail = user.email;
@@ -571,7 +611,6 @@
       isCurrentSessionAdmin = false;
       currentSessionOperatorEmail = `terminal.${btoa(chosenStore).replace(/=/g,'').substring(0,6).toLowerCase()}@gwc.local`;
       
-      // Flush fields cleanly
       document.getElementById("p1").value = ""; document.getElementById("p2").value = "";
       document.getElementById("p3").value = ""; document.getElementById("p4").value = "";
       
@@ -649,8 +688,6 @@
     db.collection("system_configs").doc("stores_matrix").onSnapshot(doc => {
       if(doc.exists && doc.data().stores) {
         databaseCachedStoresList = doc.data().stores;
-        
-        // Feed admin configuration options layout
         const workerStoreSelector = document.getElementById("admin-new-worker-store");
         if(workerStoreSelector) {
           workerStoreSelector.innerHTML = "";
@@ -675,24 +712,27 @@
   function calculateOverviewAnalyticsMetrics() {
     const selectedDate = document.getElementById("attendance-execution-date").value;
     
-    // Total registered employees
+    // Flexible substring matching structure logic to clean empty interface counts
     let totalStrength = databaseCachedStaffDirectory.length;
     if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      totalStrength = databaseCachedStaffDirectory.filter(e => e.storeCode === activeSessionStoreContext).length;
+      totalStrength = databaseCachedStaffDirectory.filter(e => 
+        e.storeCode && (e.storeCode.toLowerCase().includes(activeSessionStoreContext.toLowerCase()) || activeSessionStoreContext.toLowerCase().includes(e.storeCode.toLowerCase()))
+      ).length;
     }
     document.getElementById("count-total-strength").innerText = totalStrength;
 
-    // Load active logs for live calculations
     let queryRef = db.collection("attendance_ledger").where("selectedDate", "==", selectedDate);
-    if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      queryRef = queryRef.where("storeCode", "==", activeSessionStoreContext);
-    }
-
     queryRef.get().then(snapshot => {
       let presentCount = 0; let absentCount = 0; let weekoffCount = 0;
       
       snapshot.forEach(doc => {
         const item = doc.data();
+        // Structural filter check
+        if(!isCurrentSessionAdmin && activeSessionStoreContext) {
+          if(!item.storeCode || !(item.storeCode.toLowerCase().includes(activeSessionStoreContext.toLowerCase()) || activeSessionStoreContext.toLowerCase().includes(item.storeCode.toLowerCase()))) {
+            return;
+          }
+        }
         if(item.statusCondition === "Present") presentCount++;
         else if(item.statusCondition === "Absent") absentCount++;
         else if(item.statusCondition === "Week-Off") weekoffCount++;
@@ -706,7 +746,6 @@
       const rate = totalMarked > 0 ? Math.round((presentCount / totalMarked) * 100) : 0;
       document.getElementById("rate-total-attendance").innerText = `${rate}% Attendance Rate`;
 
-      // Build live tracking sub-items dashboard status cards
       buildHubSubmissionTrackerCards(selectedDate);
     });
   }
@@ -717,7 +756,6 @@
     container.innerHTML = "";
 
     databaseCachedStoresList.forEach(store => {
-      // If operator mode, only show their explicit site
       if(!isCurrentSessionAdmin && activeSessionStoreContext !== store) return;
 
       db.collection("attendance_ledger")
@@ -726,7 +764,7 @@
         .limit(1).get().then(snap => {
           const checkStatus = !snap.empty;
           container.innerHTML += `
-            <div style="background:var(--bg-input); padding:14px; border-radius:10px; display:flex; justify-content:between; align-items:center; border:1px solid var(--border-color);">
+            <div style="background:var(--bg-input); padding:14px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border-color);">
               <div>
                 <strong style="font-size:14px; display:block;">${store}</strong>
                 <span style="font-size:12px; color:var(--text-muted);">Target Roster Active</span>
@@ -745,10 +783,19 @@
     if(!wrapperDeck) return;
 
     let targetRoster = databaseCachedStaffDirectory;
+    
+    // FIXED: Soft comparison matching strings prevent false drop outs
     if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      targetRoster = targetRoster.filter(emp => emp.storeCode === activeSessionStoreContext);
+      targetRoster = targetRoster.filter(emp => 
+        emp.storeCode && (emp.storeCode.toLowerCase().includes(activeSessionStoreContext.toLowerCase()) || activeSessionStoreContext.toLowerCase().includes(emp.storeCode.toLowerCase()))
+      );
     }
-    targetRoster = targetRoster.filter(emp => emp.shift === filterShift);
+    
+    if(filterShift) {
+      targetRoster = targetRoster.filter(emp => 
+        emp.shift && (emp.shift.toLowerCase().includes(filterShift.toLowerCase()) || filterShift.toLowerCase().includes(emp.shift.toLowerCase()))
+      );
+    }
 
     if(targetRoster.length === 0) {
       wrapperDeck.innerHTML = `<p style="color:var(--text-muted); text-align:center; font-size:13px; padding:20px;">No registered logistics staff profiles match selection rules.</p>`;
@@ -764,10 +811,39 @@
             <span>${emp.role || 'Warehouse Associate'} // ${emp.agency || 'GWC Logistics'}</span>
           </div>
           <div class="round-checkbox-control-wrapper">
-            <input type="checkbox" class="preselect-roster-checkbox-element" data-name="${emp.name}" data-role="${emp.role}" data-store="${emp.storeCode}" data-shift="${emp.shift}" data-agency="${emp.agency || 'GWC'}" checked onchange="this.closest('.associate-selection-row-card').classList.toggle('selected-active', this.checked)">
+            <input type="checkbox" class="preselect-roster-checkbox-element" data-name="${emp.name}" data-role="${emp.role || 'Warehouse Associate'}" data-store="${emp.storeCode || activeSessionStoreContext}" data-shift="${emp.shift || filterShift}" data-agency="${emp.agency || 'GWC'}" checked onchange="this.closest('.associate-selection-row-card').classList.toggle('selected-active', this.checked)">
           </div>
         </div>`;
     });
+  }
+
+  function executeQuickAssociateOnboarding() {
+    const name = document.getElementById("quick-add-name").value.trim();
+    const agency = document.getElementById("quick-add-agency").value.trim() || "GWC";
+    const shift = document.getElementById("attendance-execution-shift").value;
+    const store = isCurrentSessionAdmin ? "Admin Hub" : activeSessionStoreContext;
+
+    if(!name) { alert("Please insert employee name."); return; }
+
+    const newWorkerObj = {
+      name: name,
+      agency: agency,
+      role: "Warehouse Associate",
+      shift: shift + " Shift",
+      storeCode: store
+    };
+
+    // Add locally to staging array immediately
+    currentPhaseSelectedWorkerArray.push(newWorkerObj);
+    
+    // Save to server database silently in background
+    db.collection("employee_directory").add(newWorkerObj);
+
+    // Flush fields and rebuild view
+    document.getElementById("quick-add-name").value = "";
+    document.getElementById("quick-add-agency").value = "";
+    
+    buildActiveRosterStatusGridCardsFromStagedArray();
   }
 
   function commitStagedSelectionToRosterStatusDeck() {
@@ -787,15 +863,10 @@
 
     document.getElementById("roster-pre-selection-panel").style.display = "none";
     document.getElementById("roster-status-mapping-panel").style.display = "block";
-    buildActiveRosterStatusGridCards();
+    buildActiveRosterStatusGridCardsFromStagedArray();
   }
 
-  function fallbackToDirectoryStagingStage() {
-    document.getElementById("roster-pre-selection-panel").style.display = "block";
-    document.getElementById("roster-status-mapping-panel").style.display = "none";
-  }
-
-  function buildActiveRosterStatusGridCards() {
+  function buildActiveRosterStatusGridCardsFromStagedArray() {
     const mainDeckContainer = document.getElementById("active-attendance-card-deck-wrapper");
     if(!mainDeckContainer) return;
     mainDeckContainer.innerHTML = "";
@@ -819,10 +890,16 @@
           
           <div class="form-block-element" style="margin:0;">
             <label style="font-size:10px;">REMARKS EXCEPTIONS NOTE</label>
-            <input type="text" class="custom-text-field row-level-remarks-input-element" placeholder="Transit delays, medical exceptions, etc...">
+            <input type="text" class="custom-text-field row-level-remarks-input-element" placeholder="Exceptions context notes...">
           </div>
         </div>`;
     });
+  }
+
+  function fallbackToDirectoryStagingStage() {
+    document.getElementById("roster-pre-selection-panel").style.display = "block";
+    document.getElementById("roster-status-mapping-panel").style.display = "none";
+    document.getElementById("roster-review-verification-panel").style.display = "none";
   }
 
   function executeGlobalRosterBulkOverride() {
@@ -833,36 +910,65 @@
   }
 
   function pushAttendanceDatasetToCloudDatabase() {
-    const selectedDate = document.getElementById("attendance-execution-date").value;
     const signature = document.getElementById("attendance-submitter-signature").value.trim();
     const targetedActiveCards = document.querySelectorAll(".live-status-mapping-row-node");
 
-    if(!selectedDate) { alert("Reporting transaction execution target date context missing."); return; }
     if(!signature) { alert("Please input your authorization name signature execution parameter."); return; }
     if(targetedActiveCards.length === 0) return;
 
+    pinnedReviewDatasetBuffer = [];
+    targetedActiveCards.forEach(card => {
+      pinnedReviewDatasetBuffer.push({
+        name: card.getAttribute("data-name"),
+        role: card.getAttribute("data-role"),
+        storeCode: card.getAttribute("data-store"),
+        shift: card.getAttribute("data-shift"),
+        agency: card.getAttribute("data-agency"),
+        statusCondition: card.querySelector(".row-level-status-dropdown-element").value,
+        remarks: card.querySelector(".row-level-remarks-input-element").value.trim() || "--"
+      });
+    });
+
+    // OPEN REVIEW SCREEN INSTEAD OF FORCE LOGOUT
+    document.getElementById("roster-status-mapping-panel").style.display = "none";
+    document.getElementById("roster-review-verification-panel").style.display = "block";
+    
+    const reviewTbody = document.getElementById("review-verification-table-body");
+    reviewTbody.innerHTML = "";
+    pinnedReviewDatasetBuffer.forEach(item => {
+      reviewTbody.innerHTML += `
+        <tr>
+          <td><b>${item.name}</b></td>
+          <td>${item.agency}</td>
+          <td>${item.shift}</td>
+          <td><span style="font-weight:bold; color:${item.statusCondition==='Present'?'#00e676':'#ff5252'}">${item.statusCondition}</span></td>
+          <td>${item.remarks}</td>
+        </tr>`;
+    });
+  }
+
+  function unlockReviewSheetForLiveEditing() {
+    document.getElementById("roster-status-mapping-panel").style.display = "block";
+    document.getElementById("roster-review-verification-panel").style.display = "none";
+  }
+
+  function confirmAndFinalizeSubmissionPipeline() {
+    const selectedDate = document.getElementById("attendance-execution-date").value;
+    const signature = document.getElementById("attendance-submitter-signature").value.trim();
     const atomicBatchTransactionRef = db.batch();
     const systemTimestampClockStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    targetedActiveCards.forEach(card => {
-      const name = card.getAttribute("data-name");
-      const role = card.getAttribute("data-role");
-      const storeCode = card.getAttribute("data-store");
-      const shift = card.getAttribute("data-shift");
-      const agency = card.getAttribute("data-agency");
-      const statusCondition = card.querySelector(".row-level-status-dropdown-element").value;
-      const remarks = card.querySelector(".row-level-remarks-input-element").value.trim() || "--";
-
+    pinnedReviewDatasetBuffer.forEach(item => {
       const docRef = db.collection("attendance_ledger").doc();
       atomicBatchTransactionRef.set(docRef, {
         selectedDate: selectedDate,
-        storeCode: storeCode,
-        name: name,
-        role: role,
-        shift: shift,
-        agency: agency,
-        statusCondition: statusCondition,
-        remarks: remarks,
+        storeCode: item.storeCode,
+        name: item.name,
+        role: item.role,
+        shift: item.shift,
+        agency: item.agency,
+        statusCondition: item.statusCondition,
+        remarks: item.remarks,
         operatorEmail: currentSessionOperatorEmail,
         supervisorSignature: signature,
         transmissionTime: systemTimestampClockStr
@@ -870,8 +976,9 @@
     });
 
     atomicBatchTransactionRef.commit().then(() => {
-      alert(`🚀 Success! Attendance sheets safely saved into GWC Cloud Network.`);
+      alert(`🚀 Success! Sheet parameters successfully written to the secure ledger system.`);
       document.getElementById("attendance-submitter-signature").value = "";
+      document.getElementById("roster-review-verification-panel").style.display = "none";
       
       if(!isCurrentSessionAdmin) {
         killTerminalSessionState();
@@ -880,7 +987,7 @@
         synchronizeDynamicRosterInterfaceDeck();
         calculateOverviewAnalyticsMetrics();
       }
-    }).catch(err => alert("Data validation pipeline interface link breakdown: " + err.message));
+    }).catch(err => alert("Pipeline block failed: " + err.message));
   }
 
   function fetchHistoricalLedgerDocuments() {
@@ -902,7 +1009,7 @@
     ledgerRef.orderBy("selectedDate", "desc").limit(40).get().then(snapshot => {
       tableBody.innerHTML = "";
       if(snapshot.empty) {
-        tableBody.innerHTML = `<tr><td colspan="7" style="color:var(--text-muted); text-align:center; padding:15px;">No historical matching documents processed inside runtime logs scope.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="7" style="color:var(--text-muted); text-align:center; padding:15px;">No matching ledger logs stored for selection inputs.</td></tr>`;
         return;
       }
       snapshot.forEach(doc => {
@@ -995,7 +1102,7 @@
     });
 
     db.collection("system_configs").doc("pin_authorization_matrix").set(databaseCachedPinMap)
-      .then(() => alert("🚀 Operational PIN configurations saved successfully."))
+      .then(() => alert("🚀 PIN configurations saved successfully."))
       .catch(err => alert("Error syncing configuration maps: " + err.message));
   }
 
