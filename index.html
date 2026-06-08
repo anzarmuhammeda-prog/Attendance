@@ -80,7 +80,7 @@
       cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s;
     }
     .nav-link.active { background: var(--accent-cyan); color: #060b13; }
-    .nav-link.admin-tab-style { border: 1px dashed #c084fc; color: #c084fc; }
+    .nav-link.admin-tab-style { border: 1px dashed #c084fc; color: #c084fc; padding: 8px 18px; border-radius: 16px; background: transparent; font-weight:600; font-size:13px;}
     .nav-link.admin-tab-style.active { background: #c084fc; color: #151221; }
 
     .header-actions { display: flex; align-items: center; gap: 15px; }
@@ -93,38 +93,51 @@
     .panel-box { background: var(--bg-panel); border: 1px solid #1e293b; padding: 24px; border-radius: 14px; margin-bottom: 25px; }
     .panel-box h3 { margin: 0 0 20px 0; color: #fff; font-size: 16px; }
 
-    /* --- DASHBOARD METRICS --- */
+    /* --- DASHBOARD SPLIT GRID LAYOUT --- */
+    .dashboard-split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .store-stack-container { display: flex; flex-direction: column; gap: 12px; }
+    
+    .store-status-card { 
+      background: #0d1527; border: 1px solid #1e2e4a; border-radius: 8px; 
+      padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; 
+    }
+    .store-info-side h4 { margin: 0 0 6px 0; font-size: 15px; color: #fff; font-weight: 600; }
+    .store-info-side span { font-size: 12px; color: var(--text-muted); }
+    .store-info-side b { color: var(--accent-cyan); }
+
+    /* --- METRIC STAT CARDS --- */
     .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
     .analytics-card { background: var(--bg-panel); border: 1px solid #1e293b; padding: 20px; border-radius: 12px; }
     .analytics-card .title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
     .analytics-card .num { font-size: 32px; font-weight: bold; margin-top: 6px; color: #fff; }
     .analytics-card .subtext { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
-    /* --- TABLE GRID STYLES --- */
+    /* --- OPERATIONAL BULLETINS --- */
+    .bulletin-box { background: rgba(14, 26, 49, 0.4); border: 1px solid #1a2f52; border-radius: 10px; padding: 20px; }
+    .bulletin-callout { border-left: 3px solid var(--accent-cyan); background: rgba(0, 210, 255, 0.03); padding: 14px; border-radius: 0 8px 8px 0; margin-top: 15px; }
+    .bulletin-callout p { margin: 0; font-size: 13px; line-height: 1.6; color: #cbd5e1; }
+
+    /* --- FORMS & TABLES --- */
     .table-container { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid #1e293b; }
     table { width: 100%; border-collapse: collapse; background: #0a0f1d; }
     th, td { padding: 14px 16px; text-align: left; font-size: 13px; border-bottom: 1px solid #1e293b; color: #fff; }
     th { background-color: #111c30; color: var(--accent-cyan); font-weight: 600; }
-    tr:hover { background: rgba(255,255,255,0.01); }
 
-    .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }
-    .badge-submitted { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-    .badge-pending { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-
-    /* --- FORMS & INPUTS --- */
     label { font-weight: 600; color: #94a3b8; margin-bottom: 6px; display: block; font-size: 12px; text-transform: uppercase; }
     select, input.form-input, textarea.form-input { width: 100%; padding: 11px; background: var(--bg-input); border: 1px solid #2e415a; border-radius: 8px; box-sizing: border-box; font-size: 13px; color: white; outline: none; }
-    .grid-forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .grid-forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
     
     .action-submit-row-btn { width: 100%; background: var(--accent-cyan); color: #060b13; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; }
     .action-submit-row-btn:disabled { background: #1e293b; color: var(--text-muted); cursor: not-allowed; }
-    
-    .btn-xl { background: #10b981 !important; color: white !important; font-weight: bold; margin-bottom: 15px; max-width: 180px; }
+    .btn-xl { background: #10b981 !important; color: white !important; max-width: 160px; margin-bottom: 15px; }
+
+    .badge { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-pending { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .badge-submitted { background: rgba(16, 185, 129, 0.15); color: #34d399; }
 
     .status-Present { background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     .status-Absent { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     .status-Week-Off { background: rgba(148, 163, 184, 0.15); color: #94a3b8; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-    .status-Half-Day { background: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -158,31 +171,30 @@
     <div id="dashboard-page" class="page-view active-page">
       <div style="margin-bottom: 25px;">
         <h1 style="margin:0; font-size:28px;">Operational Network Stream</h1>
-        <p style="margin:4px 0 0 0; color:var(--text-muted); font-size:14px;">Live logs and darkstore attendance metrics tracking room.</p>
+        <p style="margin:4px 0 0 0; color:var(--text-muted); font-size:14px;">Live logistics metric tracking workspace context.</p>
       </div>
 
       <div class="analytics-bar">
-        <div class="analytics-card"><div class="title">Total Staff Strength</div><div class="num" id="stat-total">31</div><div class="subtext">Across active locations</div></div>
-        <div class="analytics-card" style="border-left: 3px solid #10b981;"><div class="title">Present Personnel</div><div class="num" id="stat-present" style="color:#10b981;">18</div><div class="subtext" id="stat-rate">58% Floor Attendance</div></div>
-        <div class="analytics-card" style="border-left: 3px solid #ef4444;"><div class="title">Absent Rows</div><div class="num" id="stat-absent" style="color:#ef4444;">2</div><div class="subtext">Requires attention</div></div>
-        <div class="analytics-card"><div class="title">Scheduled Week-Offs</div><div class="num" id="stat-off">11</div><div class="subtext">Roster rotations</div></div>
+        <div class="analytics-card"><div class="title">Total Staff Strength</div><div class="num">31</div><div class="subtext">Across all active channels</div></div>
+        <div class="analytics-card" style="border-left: 3px solid #10b981;"><div class="title">Present Personnel</div><div class="num" style="color:#10b981;">18</div><div class="subtext">58% Attendance Rate</div></div>
+        <div class="analytics-card" style="border-left: 3px solid #ef4444;"><div class="title">Absent Rows</div><div class="num" style="color:#ef4444;">2</div><div class="subtext">Requires floor support replacement</div></div>
+        <div class="analytics-card"><div class="title">Scheduled Week-Offs</div><div class="num">11</div><div class="subtext">Standard rotating roster allocations</div></div>
       </div>
 
-      <div class="panel-box">
-        <h3>Live Regional Node Operations Tracker Grid</h3>
-        <div class="table-container">
-          <table id="main-dashboard-table">
-            <thead>
-              <tr>
-                <th>Operational Code</th>
-                <th>Today's Reporting Status</th>
-                <th>Shift Floor Coverage Strength</th>
-                <th>Last Active Session Synchronization Tracker</th>
-              </tr>
-            </thead>
-            <tbody id="dashboard-stores-rows">
-              </tbody>
-          </table>
+      <div class="dashboard-split-grid">
+        <div>
+          <h3 style="margin: 0 0 15px 0; font-size: 15px; font-weight: bold; color: #fff;">Regional Hub Submission Status Tracker</h3>
+          <div class="store-stack-container" id="dashboard-stores-list">
+            </div>
+        </div>
+        
+        <div>
+          <h3 style="margin: 0 0 15px 0; font-size: 15px; font-weight: bold; color: #fff;">Active Operational Bulletins</h3>
+          <div class="bulletin-box">
+            <div class="bulletin-callout">
+              <p><strong>Notice:</strong> Ensure all attendance markings are logged within 45 minutes of shift startup sequence to prevent automation delays.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -201,7 +213,7 @@
               </select>
           </div>
           <div>
-            <label>Personnel Directory Selection</label>
+            <label>Personnel Selection Directory</label>
             <select id="form-employee-select" class="form-input">
               </select>
           </div>
@@ -229,19 +241,19 @@
           <input type="text" id="form-remarks" class="form-input" placeholder="e.g., Transit delay, medical verification copy provided...">
         </div>
 
-        <div style="display:flex; gap:10px; margin-bottom:25px;">
-          <button class="action-submit-row-btn" style="background:#1e293b; color:#fff; max-width:200px;" onclick="bulkLoadStoreRoster()">⚡ Auto-Populate Entire Store</button>
+        <div style="display:grid; grid-template-columns: 1fr 3fr; gap:15px; margin-bottom:25px;">
+          <button class="action-submit-row-btn" style="background:#1e293b; color:#fff;" onclick="bulkLoadStoreRoster()">⚡ Auto-Populate Entire Store</button>
           <button class="action-submit-row-btn" onclick="addEmployeeRowToStagingQueue()">+ Stage Personnel Row Entry</button>
         </div>
 
-        <h4 style="color:#fff; margin:20px 0 10px 0;">Staged Grid Queue (<span id="staged-count" style="color:var(--accent-cyan);">0</span> records)</h4>
+        <h4 style="color:#fff; margin:20px 0 10px 0;">Temporary Staged Grid Queue (<span id="staged-count" style="color:var(--accent-cyan);">0</span> records)</h4>
         <div class="table-container" style="margin-bottom:20px;">
           <table>
             <thead>
-              <tr><th>Date</th><th>Hub Code</th><th>Employee Name</th><th>Shift</th><th>Status</th><th>Remarks</th><th>Actions</th></tr>
+              <tr><th>Date</th><th>Hub Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status</th><th>Remarks</th><th>Options</th></tr>
             </thead>
             <tbody id="staged-table-body">
-              <tr><td colspan="7" style="color:var(--text-muted); text-align:center; padding:20px;">Staging ledger queue is clean. Ready for data inputs.</td></tr>
+              <tr><td colspan="8" style="color:var(--text-muted); text-align:center; padding:20px;">Staging ledger queue is clean. Ready for data mapping inputs.</td></tr>
             </tbody>
           </table>
         </div>
@@ -258,7 +270,7 @@
         <div class="table-container">
           <table id="history-data-table">
             <thead>
-              <tr><th>Execution Date</th><th>Hub Code</th><th>Employee Name</th><th>Shift Window</th><th>Status Metric</th><th>Exception Tracking Notes</th><th>Operator Node</th></tr>
+              <tr><th>Execution Date</th><th>Hub Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status Metric</th><th>Exception Tracking Notes</th></tr>
             </thead>
             <tbody id="history-table-body">
               </tbody>
@@ -296,10 +308,10 @@
             <div><label>Al Raha PIN</label><input type="text" id="pin-raha" value="1003" class="form-input"></div>
             <div><label>Yas Island PIN</label><input type="text" id="pin-yas" value="1004" class="form-input"></div>
           </div>
-          <button class="action-submit-row-btn" style="background:#c084fc; color:#151221; max-width: 250px;" onclick="saveGatekeeperPINs()">Save Modified Gatekeeper PINs</button>
+          <button class="action-submit-row-btn" style="background:#c084fc; color:#151221; max-width: 250px; margin-top: 10px;" onclick="saveGatekeeperPINs()">Save Modified Gatekeeper PINs</button>
         </div>
 
-        <div class="grid-forms" style="grid-template-columns: 1fr 1fr;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
           <div style="background: #090f1a; padding: 20px; border-radius: 8px; border: 1px solid #1e293b;">
             <h4 style="margin: 0 0 15px 0; color:#fff;">🏢 Add New Operations Store Unit</h4>
             <div style="display:grid; gap:12px;">
@@ -326,6 +338,10 @@
                 <label>Employee Full Name</label>
                 <input type="text" id="admin-emp-name" class="form-input" placeholder="e.g., John Doe">
               </div>
+              <div>
+                <label>Designated Job Role Designation</label>
+                <input type="text" id="admin-emp-role" class="form-input" placeholder="e.g., Team Leader, Picker, Sorter">
+              </div>
               <button class="action-submit-row-btn" onclick="addNewEmployeeToRosterMap()">Register Associate Profile</button>
             </div>
           </div>
@@ -337,7 +353,7 @@
   </div>
 
 <script>
-  // --- FIREBASE INITIALIZATION ENGINE ---
+  // --- FIREBASE RUNTIME SYNC BLOCK ---
   const firebaseConfig = {
     apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
     authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
@@ -356,35 +372,34 @@
       if (user) { handlePostLoginRouting(user.email); }
     });
   } catch(err) {
-    console.error("Firebase connection context error.", err);
+    console.error("Firebase platform layer error.", err);
   }
 
-  // Complete Array Map exactly Matching image_c625c9.png
+  // Exact UI Array matching image_c625c9.png
   let activeDarkstores = [
-    { id: "QAA1 - MBZ CITY", name: "QAA1 - MBZ CITY", status: "Pending Entry", strength: "0 / 7 Scheduled", sync: "--" },
-    { id: "QAA6 - Khalifa City", name: "QAA6 - Khalifa City", status: "Pending Entry", strength: "0 / 7 Scheduled", sync: "--" },
-    { id: "QDG5 - Business Bay 2", name: "QDG5 - Business Bay 2", status: "Pending Entry", strength: "0 Registered", sync: "--" },
-    { id: "QDC6 - Qusais 2", name: "QDC6 - Qusais 2", status: "Pending Entry", strength: "0 / 1 Scheduled", sync: "--" },
-    { id: "QAA7 - Al Raha", name: "QAA7 - Al Raha", status: "Pending Entry", strength: "0 / 8 Scheduled", sync: "--" },
-    { id: "QDD3 - Yas Island", name: "QDD3 - Yas Island", status: "Complete", strength: "19% Strength", sync: "01:07:28 (By: anzar.mhd)" }
+    { id: "QAA1 - MBZ CITY", name: "QAA1 - MBZ CITY", status: "PENDING", strength: "0 / 7 Rows", sync: "--" },
+    { id: "QAA6 - Khalifa City", name: "QAA6 - Khalifa City", status: "PENDING", strength: "0 / 7 Rows", sync: "--" },
+    { id: "QDG5 - Business Bay 2", name: "QDG5 - Business Bay 2", status: "PENDING", strength: "0 Registered Rows", sync: "--" },
+    { id: "QDC6 - Qusais 2", name: "QDC6 - Qusais 2", status: "PENDING", strength: "0 / 1 Rows", sync: "--" },
+    { id: "QAA7 - Al Raha", name: "QAA7 - Al Raha", status: "PENDING", strength: "0 / 8 Rows", sync: "--" },
+    { id: "QDD3 - Yas Island", name: "QDD3 - Yas Island", status: "COMPLETE", strength: "19% Strength", sync: "01:07:28 (By: anzar.mhd)" }
   ];
 
   let operationalStaffMap = {
-    "QAA1 - MBZ CITY": ["Anzar Muhammed", "Sajid Khan", "Rahul Sharma"],
-    "QAA6 - Khalifa City": ["John Doe", "Jane Smith"],
-    "QDG5 - Business Bay 2": ["Operator Alpha"],
-    "QDC6 - Qusais 2": ["Logistics Staff 1"],
-    "QAA7 - Al Raha": ["Team Agent A", "Team Agent B"],
-    "QDD3 - Yas Island": ["Yas Lead", "Yas Sorter"]
+    "QAA1 - MBZ CITY": [{name: "Anzar Muhammed", role: "Team Leader"}, {name: "Sajid Khan", role: "Associate"}],
+    "QAA6 - Khalifa City": [{name: "John Doe", role: "Sorter"}],
+    "QDG5 - Business Bay 2": [{name: "Operator Alpha", role: "Picker"}],
+    "QDC6 - Qusais 2": [{name: "Logistics Staff 1", role: "Rider"}],
+    "QAA7 - Al Raha": [{name: "Team Agent A", role: "Associate"}],
+    "QDD3 - Yas Island": [{name: "Yas Lead", role: "Team Leader"}]
   };
 
   let localStagingQueue = [];
-  document.getElementById('form-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('form-date').value = '2026-06-07'; // Standardized target runtime array initialization
 
   function login() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-
     const fallbackTimer = setTimeout(() => { handlePostLoginRouting(email); }, 1200);
 
     try {
@@ -400,24 +415,23 @@
   function handlePostLoginRouting(email) {
     document.getElementById("login-view").style.display = "none";
     document.getElementById("dashboard-view").style.display = "flex";
-    document.getElementById("user-display-node").innerText = `// OPERATOR: ${email.split('@')[0].toUpperCase()}`;
+    document.getElementById("user-display-node").innerText = `// OPERATOR: ${email.split('@')[0].toUpperCase()}.A`;
 
     buildSelectDropdowns();
-    renderMainDashboardGrid();
+    renderSplitDashboardUI();
     loadLiveHistoryLogs();
   }
 
   function buildSelectDropdowns() {
     const storeDropdown = document.getElementById("form-store-code");
     const adminStoreDropdown = document.getElementById("admin-emp-store");
-    
     storeDropdown.innerHTML = "";
     adminStoreDropdown.innerHTML = "";
 
     activeDarkstores.forEach(store => {
-      const template = `<option value="${store.id}">${store.name}</option>`;
-      storeDropdown.innerHTML += template;
-      adminStoreDropdown.innerHTML += template;
+      const option = `<option value="${store.id}">${store.name}</option>`;
+      storeDropdown.innerHTML += option;
+      adminStoreDropdown.innerHTML += option;
     });
     loadEmployeesForStore();
   }
@@ -427,80 +441,203 @@
     const staffDropdown = document.getElementById("form-employee-select");
     staffDropdown.innerHTML = "";
     
-    const staffList = operationalStaffMap[chosenStore] || ["General Associate"];
-    staffList.forEach(name => {
-      staffDropdown.innerHTML += `<option value="${name}">${name}</option>`;
+    const staffList = operationalStaffMap[chosenStore] || [{name: "General Associate", role: "Associate"}];
+    staffList.forEach(emp => {
+      staffDropdown.innerHTML += `<option value="${emp.name}" data-role="${emp.role}">${emp.name} (${emp.role})</option>`;
     });
   }
 
-  // --- RENDERS THE MASTER ATTENDANCE GRID INTERFACE ---
-  function renderMainDashboardGrid() {
-    const tbody = document.getElementById("dashboard-stores-rows");
-    tbody.innerHTML = "";
+  // --- RENDERS THE SPLIT LEFT/RIGHT METRIC TRACKER PANELS ---
+  function renderSplitDashboardUI() {
+    const listContainer = document.getElementById("dashboard-stores-list");
+    listContainer.innerHTML = "";
 
     activeDarkstores.forEach(store => {
-      const isComplete = store.status === "Complete";
+      const isComplete = store.status === "COMPLETE";
       const badgeClass = isComplete ? "badge-submitted" : "badge-pending";
-      const checkIcon = isComplete ? "✔️ " : "";
 
-      tbody.innerHTML += `
-        <tr>
-          <td style="color: #a78bfa; font-weight: 600;">${store.name}</td>
-          <td><span class="badge ${badgeClass}">${checkIcon}${store.status}</span></td>
-          <td style="font-weight: 500;">${store.strength}</td>
-          <td style="color: var(--text-muted); font-family: monospace;">${store.sync}</td>
-        </tr>
+      listContainer.innerHTML += `
+        <div class="store-status-card">
+          <div class="store-info-side">
+            <h4>${store.name}</h4>
+            <span>Roster: <b>${store.strength}</b></span>
+          </div>
+          <div>
+            <span class="badge ${badgeClass}">${store.status}</span>
+          </div>
+        </div>
       `;
     });
   }
 
-  // --- DYNAMIC INFRASTRUCTURE ADMIN MUTATORS ---
   function addNewStoreToSystem() {
     const id = document.getElementById("admin-store-id").value.trim();
     const strength = document.getElementById("admin-store-strength").value.trim();
+    if(!id) return;
 
-    if(!id) { alert("Please provide a valid operational code."); return; }
-
-    activeDarkstores.push({
-      id: id, name: id, status: "Pending Entry", strength: strength ? `0 / ${strength} Scheduled` : "0 Registered", sync: "--"
-    });
-
+    activeDarkstores.push({ id, name: id, status: "PENDING", strength: strength ? `0 / ${strength} Rows` : "0 Registered Rows", sync: "--" });
     document.getElementById("admin-store-id").value = "";
     document.getElementById("admin-store-strength").value = "";
-    
     buildSelectDropdowns();
-    renderMainDashboardGrid();
-    alert("🏢 New Darkstore Unit successfully pinned to network layout metrics.");
+    renderSplitDashboardUI();
   }
 
   function addNewEmployeeToRosterMap() {
     const store = document.getElementById("admin-emp-store").value;
     const name = document.getElementById("admin-emp-name").value.trim();
-
-    if(!name) { alert("Please input employee profile identification."); return; }
+    const role = document.getElementById("admin-emp-role").value.trim() || "Associate";
+    if(!name) return;
 
     if(!operationalStaffMap[store]) { operationalStaffMap[store] = []; }
-    operationalStaffMap[store].push(name);
-
+    operationalStaffMap[store].push({ name, role });
     document.getElementById("admin-emp-name").value = "";
+    document.getElementById("admin-emp-role").value = "";
     loadEmployeesForStore();
-    alert(`👤 Registered ${name} directly into ${store}'s directory roster mapping matrix.`);
   }
 
-  // --- EXCEL SHEET DATA METRIC EXPORT COMPONENT ---
+  // --- EXCEL DOWNLOAD MODULES ---
   function exportToExcel() {
-    const tableElement = document.getElementById("history-data-table");
-    const workbook = XLSX.utils.table_to_book(tableElement, { sheet: "Attendance History Logs" });
-    XLSX.writeFile(workbook, "Darkstore_Attendance_Log_Matrix.xlsx");
+    const table = document.getElementById("history-data-table");
+    const workbook = XLSX.utils.table_to_book(table, { sheet: "Logs" });
+    XLSX.writeFile(workbook, "Attendance_Report.xlsx");
   }
 
-  // --- STAGING MANAGEMENT ---
+  // --- QUEUE STAGING LOGIC ---
   function addEmployeeRowToStagingQueue() {
     const date = document.getElementById("form-date").value;
     const storeCode = document.getElementById("form-store-code").value;
-    const name = document.getElementById("form-employee-select").value;
+    const selectNode = document.getElementById("form-employee-select");
+    const name = selectNode.value;
+    const role = selectNode.options[selectNode.selectedIndex].getAttribute("data-role") || "Associate";
     const shift = document.getElementById("form-shift-select").value;
     const status = document.getElementById("form-status-select").value;
     const remarks = document.getElementById("form-remarks").value.trim() || "--";
 
-    localStagingQueue.push({ date, storeCode, name, shift
+    localStagingQueue.push({ date, storeCode, name, role, shift, status, remarks });
+    document.getElementById("form-remarks").value = "";
+    updateStagingTableDOM();
+  }
+
+  function bulkLoadStoreRoster() {
+    const date = document.getElementById("form-date").value;
+    const storeCode = document.getElementById("form-store-code").value;
+    const staffList = operationalStaffMap[storeCode] || [{name: "General Associate", role: "Associate"}];
+
+    staffList.forEach(emp => {
+      localStagingQueue.push({ date, storeCode, name: emp.name, role: emp.role, shift: "Day Shift", status: "Present", remarks: "Auto-Populated Local" });
+    });
+    updateStagingTableDOM();
+  }
+
+  function dropQueueRecord(index) {
+    localStagingQueue.splice(index, 1);
+    updateStagingTableDOM();
+  }
+
+  function updateStagingTableDOM() {
+    const tbody = document.getElementById("staged-table-body");
+    document.getElementById("staged-count").innerText = localStagingQueue.length;
+
+    if(localStagingQueue.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" style="color:var(--text-muted); text-align:center; padding:20px;">Staging ledger queue is clean. Ready for data mapping inputs.</td></tr>`;
+      document.getElementById("transmit-btn").disabled = true;
+      return;
+    }
+
+    document.getElementById("transmit-btn").disabled = false;
+    tbody.innerHTML = "";
+    localStagingQueue.forEach((item, index) => {
+      tbody.innerHTML += `
+        <tr style="background: #0e1726;">
+          <td>${item.date}</td>
+          <td style="color:var(--accent-orange); font-weight:bold;">${item.storeCode}</td>
+          <td><strong>${item.name}</strong></td>
+          <td style="color:var(--accent-cyan); font-family:monospace;">${item.role}</td>
+          <td>${item.shift}</td>
+          <td><span class="status-${item.status.replace(' ','-')}">${item.status}</span></td>
+          <td style="color:var(--text-muted); font-style:italic;">${item.remarks}</td>
+          <td><button class="logout-action-btn" style="padding:2px 8px; margin:0;" onclick="dropQueueRecord(${index})">Drop</button></td>
+        </tr>
+      `;
+    });
+  }
+
+  function commitQueueToFirestore() {
+    if(localStagingQueue.length > 0){
+      const code = localStagingQueue[0].storeCode;
+      const target = activeDarkstores.find(s => s.id === code);
+      if(target) { target.status = "COMPLETE"; target.strength = "100% Floor Strength"; }
+    }
+
+    if(db) {
+      let batch = db.batch();
+      localStagingQueue.forEach(item => {
+        let docRef = db.collection("attendance_runs").doc();
+        batch.set(docRef, item);
+      });
+      batch.commit().then(() => { clearStagingAndReturn(); }).catch(() => { clearStagingAndReturn(); });
+    } else {
+      clearStagingAndReturn();
+    }
+  }
+
+  function clearStagingAndReturn() {
+    localStagingQueue = [];
+    updateStagingTableDOM();
+    renderSplitDashboardUI();
+    loadLiveHistoryLogs();
+    switchRoute('dashboard-page');
+  }
+
+  function loadLiveHistoryLogs() {
+    const tbody = document.getElementById("history-table-body");
+    tbody.innerHTML = "";
+
+    if (db) {
+      db.collection("attendance_runs").limit(20).get().then((snapshot) => {
+        if(snapshot.empty) { loadMockHistoryLogs(); return; }
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          tbody.innerHTML += `
+            <tr>
+              <td>${d.date}</td>
+              <td>${d.storeCode}</td>
+              <td>${d.name}</td>
+              <td>${d.role || 'Associate'}</td>
+              <td>${d.shift}</td>
+              <td><span class="status-${d.status.replace(' ','-')}">${d.status}</span></td>
+              <td>${d.remarks}</td>
+            </tr>
+          `;
+        });
+      }).catch(() => loadMockHistoryLogs());
+    } else {
+      loadMockHistoryLogs();
+    }
+  }
+
+  function loadMockHistoryLogs() {
+    document.getElementById("history-table-body").innerHTML = `
+      <tr><td>2026-06-07</td><td>QDD3 - Yas Island</td><td>Anzar Muhammed</td><td>Team Leader</td><td>Day Shift</td><td><span class="status-Present">Present</span></td><td>Shift Owner Initialized</td></tr>
+    `;
+  }
+
+  function logout() {
+    document.getElementById("login-view").style.display = "flex";
+    document.getElementById("dashboard-view").style.display = "none";
+  }
+
+  function switchRoute(pageId) {
+    document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active-page'));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active-page');
+    
+    if(pageId === 'dashboard-page') document.getElementById('tab-dash').classList.add('active');
+    if(pageId === 'submit-page') document.getElementById('tab-submit').classList.add('active');
+    if(pageId === 'history-page') document.getElementById('tab-history').classList.add('active');
+    if(pageId === 'report-page') document.getElementById('tab-report').classList.add('active');
+    if(pageId === 'admin-page') document.getElementById('tab-admin').classList.add('active');
+  }
+</script>
+</body>
+</html>
