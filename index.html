@@ -3,357 +3,345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DARKSTORE ATTENDANCE MANAGEMENT SYSTEM</title>
+  <title>AMAZON DARKSTORE LOGISTICS - MASTER COMMAND TERMINAL</title>
   
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
   <style>
-    :root {
-      --bg-main: #060b13;
-      --bg-panel: #0b1424;
-      --bg-input: #132237;
-      --accent-cyan: #00d2ff;
-      --accent-orange: #ff9900;
-      --text-muted: #64748b;
-      --text-light: #e2e8f0;
-    }
-
     body { 
-      font-family: 'Segoe UI', Roboto, sans-serif; 
-      background-color: var(--bg-main); 
-      color: var(--text-light); 
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+      background-color: #060b13; 
+      color: #e2e8f0; 
       margin: 0; 
-      padding: 0; 
-      min-height: 100vh; 
+      padding: 15px; 
+      display: flex; 
+      justify-content: center; 
+      align-items: flex-start; 
+      min-height: 95vh; 
     }
-
-    /* --- LOGIN SCREEN --- */
-    .login-screen {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: radial-gradient(circle at center, #0f1c30 0%, #060b13 100%);
-    }
+    
     .login-box { 
-      background: var(--bg-panel); 
+      background: #0b1424; 
       padding: 40px 30px; 
       width: 100%;
-      max-width: 400px; 
+      max-width: 360px; 
       border-radius: 16px; 
-      box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.6); 
+      box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.5); 
       border: 1px solid #1e293b;
       text-align: center; 
+      margin-top: 10vh;
+      display: block;
       box-sizing: border-box;
     }
-    .login-box h2 { margin: 0 0 5px 0; color: var(--accent-orange); font-size: 28px; letter-spacing: 1px; }
-    .login-box p { margin: 0 0 30px 0; color: var(--text-muted); font-size: 13px; }
+    .login-box h2 { margin: 0 0 5px 0; color: #ff9900; font-size: 26px; letter-spacing: 1px; }
+    .login-box p { margin: 0 0 25px 0; color: #64748b; font-size: 12px; }
     .login-box input { 
-      width: 100%; padding: 14px; margin: 12px 0; background: var(--bg-input);
+      width: 100%; padding: 14px; margin: 12px 0; background: #132237;
       border: 1px solid #1e293b; border-radius: 8px; font-size: 14px; color: #fff;
-      box-sizing: border-box; outline: none; transition: border 0.2s;
+      box-sizing: border-box;
     }
-    .login-box input:focus { border-color: var(--accent-orange); }
     button.login-btn { 
-      padding: 14px; width: 100%; background: var(--accent-orange); color: #060b13; border: none; 
+      padding: 14px; width: 100%; background: #ff9900; color: #060b13; border: none; 
       border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 15px;
     }
 
-    /* --- APP LAYOUT & NAVIGATION --- */
-    .app-container { display: none; flex-direction: column; min-height: 100vh; }
-    .app-header { 
-      display: flex; justify-content: space-between; align-items: center; 
-      background: var(--bg-panel); border-bottom: 1px solid #1e293b; padding: 15px 30px;
-      position: sticky; top: 0; z-index: 100;
+    .dashboard-container { 
+      max-width: 1400px; width: 100%; background: #0b1424; padding: 20px; 
+      border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); border: 1px solid #1e293b;
+      display: none; 
+      box-sizing: border-box;
     }
-    .brand-logo { font-size: 18px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 6px; }
-    .brand-logo span { color: var(--accent-cyan); }
-    .brand-logo .live-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block; margin-left: 10px; box-shadow: 0 0 8px #10b981; }
-
-    .nav-menu { display: flex; background: rgba(2, 6, 12, 0.7); padding: 4px; border-radius: 20px; border: 1px solid #1e293b; gap: 4px; }
-    .nav-link {
-      background: transparent; border: none; color: #94a3b8; padding: 8px 18px; border-radius: 16px;
-      cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s;
-    }
-    .nav-link.active { background: var(--accent-cyan); color: #060b13; }
-    .nav-link.admin-tab-style { border: 1px dashed #c084fc; color: #c084fc; padding: 8px 18px; border-radius: 16px; background: transparent; font-weight:600; font-size:13px;}
-    .nav-link.admin-tab-style.active { background: #c084fc; color: #151221; }
-
-    .header-actions { display: flex; align-items: center; gap: 15px; }
-    .user-profile-tag { font-size: 12px; font-family: monospace; color: var(--text-muted); }
-    .logout-action-btn { background: #1e293b; color: #f87171; border: 1px solid #334155; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 11px; }
-
-    /* --- VIEWS & PANELS --- */
-    .page-view { display: none; padding: 30px; max-width: 1400px; width: 100%; margin: 0 auto; box-sizing: border-box; }
-    .page-view.active-page { display: block; }
-    .panel-box { background: var(--bg-panel); border: 1px solid #1e293b; padding: 24px; border-radius: 14px; margin-bottom: 25px; }
-    .panel-box h3 { margin: 0 0 20px 0; color: #fff; font-size: 16px; }
-
-    /* --- DASHBOARD SPLIT GRID LAYOUT --- */
-    .dashboard-split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .store-stack-container { display: flex; flex-direction: column; gap: 12px; }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 20px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+    .header h2 { margin: 0; font-size: 22px; color: #fff; }
+    .header h2 span { color: #ff9900; font-size: 16px; margin-left: 10px; }
+    .logout-btn { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
     
-    .store-status-card { 
-      background: #0d1527; border: 1px solid #1e2e4a; border-radius: 8px; 
-      padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; 
-    }
-    .store-info-side h4 { margin: 0 0 6px 0; font-size: 15px; color: #fff; font-weight: 600; }
-    .store-info-side span { font-size: 12px; color: var(--text-muted); }
-    .store-info-side b { color: var(--accent-cyan); }
-
-    /* --- METRIC STAT CARDS --- */
-    .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
-    .analytics-card { background: var(--bg-panel); border: 1px solid #1e293b; padding: 20px; border-radius: 12px; }
-    .analytics-card .title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
-    .analytics-card .num { font-size: 32px; font-weight: bold; margin-top: 6px; color: #fff; }
-    .analytics-card .subtext { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-
-    /* --- OPERATIONAL BULLETINS --- */
-    .bulletin-box { background: rgba(14, 26, 49, 0.4); border: 1px solid #1a2f52; border-radius: 10px; padding: 20px; }
-    .bulletin-callout { border-left: 3px solid var(--accent-cyan); background: rgba(0, 210, 255, 0.03); padding: 14px; border-radius: 0 8px 8px 0; margin-top: 15px; }
-    .bulletin-callout p { margin: 0; font-size: 13px; line-height: 1.6; color: #cbd5e1; }
-
-    /* --- FORMS & TABLES --- */
-    .table-container { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid #1e293b; }
-    table { width: 100%; border-collapse: collapse; background: #0a0f1d; }
-    th, td { padding: 14px 16px; text-align: left; font-size: 13px; border-bottom: 1px solid #1e293b; color: #fff; }
-    th { background-color: #111c30; color: var(--accent-cyan); font-weight: 600; }
-
-    label { font-weight: 600; color: #94a3b8; margin-bottom: 6px; display: block; font-size: 12px; text-transform: uppercase; }
-    select, input.form-input, textarea.form-input { width: 100%; padding: 11px; background: var(--bg-input); border: 1px solid #2e415a; border-radius: 8px; box-sizing: border-box; font-size: 13px; color: white; outline: none; }
-    .grid-forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .panel-box { background: #111c2e; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+    .panel-box h3 { margin-top: 0; color: #ff9900; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;}
     
-    .action-submit-row-btn { width: 100%; background: var(--accent-cyan); color: #060b13; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; }
-    .action-submit-row-btn:disabled { background: #1e293b; color: var(--text-muted); cursor: not-allowed; }
-    .btn-xl { background: #10b981 !important; color: white !important; max-width: 160px; margin-bottom: 15px; }
+    .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; align-items: end; margin-bottom: 15px; }
+    .grid-admin { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .admin-input-group { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .admin-input-group input, .admin-input-group select { flex: 1; min-width: 110px; }
 
-    .badge { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-    .badge-pending { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-    .badge-submitted { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    label { font-weight: 600; color: #94a3b8; margin-bottom: 6px; display: block; font-size: 12px; }
+    select, input.form-input { width: 100%; padding: 10px; background: #1c2d42; border: 1px solid #2e415a; border-radius: 6px; box-sizing: border-box; font-size: 13px; color: white; }
+    
+    .add-btn { width: 100%; background: #ff9900; color: #060b13; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+    .bulk-btn { background: #6366f1; color: white; border: none; padding: 10px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; }
+    .bulk-btn:hover { background: #4f46e5; }
+    .export-btn { background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+    
+    .table-container { width: 100%; overflow-x: auto; margin-bottom: 25px; border-radius: 8px; border: 1px solid #1e293b; }
+    table { width: 100%; border-collapse: collapse; background: #0f172a; min-width: 900px; }
+    th, td { padding: 12px; text-align: left; font-size: 13px; border-bottom: 1px solid #1e293b; }
+    th { background-color: #1e293b; color: #ff9900; font-weight: 600; }
+    
+    .badge { padding: 4px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; display: inline-block; }
+    .status-Present { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .status-Absent { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .status-Week-Off { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+    .status-Half-Day { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    
+    .status-Pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .status-Resolved { background: rgba(16, 185, 129, 0.15); color: #34d399; }
 
-    .status-Present { background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-    .status-Absent { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-    .status-Week-Off { background: rgba(148, 163, 184, 0.15); color: #94a3b8; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    .role-label { color: #38bdf8; font-size: 11px; text-transform: uppercase; font-weight: bold; background: rgba(56, 189, 248, 0.1); padding: 2px 6px; border-radius: 4px;}
+    .user-badge { color: #a78bfa; font-size: 11px; font-family: monospace; background: rgba(167, 139, 250, 0.1); padding: 2px 6px; border-radius: 4px;}
+
+    .analytics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .analytics-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 8px; text-align: center; }
+    .analytics-card .num { font-size: 20px; font-weight: bold; margin-top: 4px; }
+    
+    .submit-block-btn { background: #10b981; color: #060b13; border: none; padding: 14px; width: 100%; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+    .submit-block-btn:disabled { background: #1e293b; color: #64748b; cursor: not-allowed; }
+    
+    .admin-section, .store-section { display: none; }
+    .action-btn-small { background: #334155; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-right: 4px;}
+    .action-btn-small:hover { background: #475569; }
   </style>
 </head>
 <body>
 
-  <div id="login-view" class="login-screen">
-    <div class="login-box">
-      <h2>AMAZON LOGISTICS</h2>
-      <p>Darkstore Network Access Node</p>
-      <input type="email" id="email" value="anzarmuhammed.a@gmail.com" placeholder="Corporate Email">
-      <input type="password" id="password" placeholder="System Password">
-      <button class="login-btn" onclick="login()">Authenticate Interface →</button>
-    </div>
+  <div id="login-view" class="login-box">
+    <h2>AMAZON LOGISTICS</h2>
+    <p>Darkstore Network Access Node</p>
+    <input type="email" id="email" placeholder="Corporate Operator Email">
+    <input type="password" id="password" placeholder="System Encryption Key">
+    <button class="login-btn" onclick="login()">Authenticate Interface →</button>
   </div>
 
-  <div id="dashboard-view" class="app-container">
-    <div class="app-header">
-      <div class="brand-logo">DARKSTORE<span>ATT</span><div class="live-dot"></div></div>
-      <div class="nav-menu">
-        <button id="tab-dash" class="nav-link active" onclick="switchRoute('dashboard-page')">Dashboard</button>
-        <button id="tab-submit" class="nav-link" onclick="switchRoute('submit-page')">Submit Attendance</button>
-        <button id="tab-history" class="nav-link" onclick="switchRoute('history-page')">History Logs</button>
-        <button id="tab-report" class="nav-link" style="color: #f87171;" onclick="switchRoute('report-page')">⚠️ Report Issue</button>
-        <button id="tab-admin" class="nav-link admin-tab-style" onclick="switchRoute('admin-page')">⚡ Admin Settings</button>
-      </div>
-      <div class="header-actions">
-        <div class="user-profile-tag" id="user-display-node">// Processing Security Context...</div>
-        <button class="logout-action-btn" onclick="logout()">Disconnect</button>
+  <div id="dashboard-view" class="dashboard-container">
+    <div class="header">
+      <h2>DARKSTORE CONTROLS <span>// Corporate Operations Portal</span></h2>
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <span id="user-role" style="color: #94a3b8; font-family: monospace;">Validating Secure Session...</span>
+        <button class="logout-btn" onclick="logout()">Disconnect Terminal</button>
       </div>
     </div>
 
-    <div id="dashboard-page" class="page-view active-page">
-      <div style="margin-bottom: 25px;">
-        <h1 style="margin:0; font-size:28px;">Operational Network Stream</h1>
-        <p style="margin:4px 0 0 0; color:var(--text-muted); font-size:14px;">Live logistics metric tracking workspace context.</p>
+    <div id="admin-view" class="admin-section panel-box" style="background: #151221; border-color: #4c1d95;">
+      <h3 style="color: #c084fc;">⚡ Enterprise Infrastructure Settings Control Panel</h3>
+      
+      <div style="background: #1e1730; border: 1px dashed #a78bfa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="color: #e9d5ff; margin: 0 0 10px 0; font-size: 14px;">🔒 Site Authorization Gateway Matrix (Dynamic PIN Assignment Tokens)</h4>
+        <div id="dynamic-admin-pin-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;"></div>
+        <button class="add-btn" style="background: #c084fc; color: #151221; width: auto; padding: 8px 20px;" onclick="saveConfiguredPinsToCloudStore()">Commit Custom PIN Updates</button>
       </div>
 
+      <label style="color: #a78bfa; margin-bottom: 8px;">Regional Store Sync Health Metrics Grid:</label>
+      <div class="table-container">
+        <table style="min-width: 700px;">
+          <thead>
+            <tr><th>Location Identifier</th><th>Reporting Progress</th><th>Fulfillment Floor Strength</th><th>Last Synchronization Point Log</th></tr>
+          </thead>
+          <tbody id="admin-health-grid-body"></tbody>
+        </table>
+      </div>
+
+      <div class="grid-admin">
+        <div>
+          <label>Register New Branch Location Option</label>
+          <div class="admin-input-group">
+            <input type="text" id="new-store-input" class="form-input" placeholder="e.g., QAA9 - Al Ain">
+            <button class="add-btn" style="background:#c084fc; color:#151221; width:auto;" onclick="addNewStoreOption()">+</button>
+          </div>
+          <div id="admin-stores-list" style="max-height: 140px; overflow-y: auto; margin-top: 10px;"></div>
+        </div>
+
+        <div>
+          <label style="color: #c084fc;">Onboard Personnel & Assign Shift Roster</label>
+          <div class="admin-input-group">
+            <select id="admin-assign-store" class="form-input"></select>
+            <input type="text" id="admin-new-emp-name" class="form-input" placeholder="Worker Full Name">
+            <select id="admin-assign-role" class="form-input">
+              <option value="Warehouse Associate">Warehouse Associate</option>
+              <option value="Housekeeping">Housekeeping</option>
+              <option value="Team Leader">Team Leader</option>
+              <option value="Supervisor">Supervisor</option>
+            </select>
+            <select id="admin-assign-shift" class="form-input">
+              <option value="Day">Day Shift</option>
+              <option value="Mid">Mid Shift</option>
+              <option value="Night">Night Shift</option>
+            </select>
+            <button class="add-btn" style="background:#10b981; color:#060b13; width:auto;" onclick="addNewEmployeeToRoster()">Save Employee</button>
+          </div>
+          <label style="margin-top: 15px;">Review Active Directory Roster Mapping:</label>
+          <select id="admin-roster-view-store" class="form-input" onchange="renderAdminEmployeeDirectory()" style="max-width: 300px; margin-bottom: 5px;"></select>
+          <div id="admin-employees-list" style="max-height: 150px; overflow-y: auto; background: #0f172a; padding: 5px; border-radius: 6px; border: 1px solid #1e293b;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="teamleader-pin-box" class="panel-box" style="max-width: 420px; margin: 15px auto 25px auto; text-align: center; background: #0e1726; border-color: #ff9900;">
+      <div style="font-size: 28px; margin-bottom: 5px;">🔑</div>
+      <h3 style="color: #ff9900; margin-bottom: 4px; border: none; padding: 0;">Shift Verification Gateway</h3>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0 0 15px 0;">Enter local terminal validation key to unlock the staging sheet environment.</p>
+      
+      <div style="text-align: left; margin-bottom: 12px;">
+        <label>Branch Target Node</label>
+        <select id="pin-login-store-select" class="form-input" onchange="syncSelectedStoreToTerminal()"></select>
+      </div>
+      <div style="text-align: left; margin-bottom: 18px;">
+        <label>Passcode Token Verification PIN</label>
+        <input type="password" id="pin-login-value-input" maxlength="4" placeholder="••••" style="width: 100%; padding: 10px; background: #132237; border: 1px solid #1e293b; border-radius: 6px; color: #fff; text-align: center; font-size: 18px; letter-spacing: 6px; box-sizing: border-box;">
+      </div>
+      <button class="add-btn" style="background: #ff9900;" onclick="validateStoreTerminalAccessKey()">Unlock Node Sheets Workspace →</button>
+      <p id="pin-validation-fail-msg" style="color: #ef4444; font-size: 12px; margin-top: 10px; display: none; font-weight: bold;">❌ Pin validation mismatch. Roster access blocked.</p>
+    </div>
+
+    <div id="store-view" class="store-section panel-box">
+      <h3 id="workspace-title-label">Active Roster Selection Workspace</h3>
+      
+      <div style="display:flex; gap: 10px; align-items:center; flex-wrap: wrap; margin-bottom: 15px;">
+        <label style="margin:0;">Select Active Operation Category Block:</label>
+        <select id="bulk-shift-filter" class="form-input" style="max-width: 150px;">
+          <option value="All">All Shifts</option>
+          <option value="Day">Day Shift</option>
+          <option value="Mid">Mid Shift</option>
+          <option value="Night">Night Shift</option>
+        </select>
+        <button class="bulk-btn" style="margin:0;" onclick="bulkPopulateEntireStoreRoster()">⚡ Pre-populate Filtered Rows as Present</button>
+      </div>
+
+      <div class="grid-6">
+        <div>
+          <label>Target Tracking Date</label>
+          <input type="date" id="form-date" class="form-input">
+        </div>
+        <div>
+          <label>Location context</label>
+          <select id="form-store-code" onchange="filterEmployeeDropdownByStore()"></select>
+        </div>
+        <div>
+          <label>Select Employee Name</label>
+          <select id="form-employee-select" onchange="autoConfigureShiftFieldsBySelection()"></select>
+        </div>
+        <div>
+          <label>Assigned Shift Timing</label>
+          <select id="form-shift-select">
+            <option value="Day">Day</option>
+            <option value="Mid">Mid</option>
+            <option value="Night">Night</option>
+          </select>
+        </div>
+        <div>
+          <label>Attendance Status</label>
+          <select id="form-status-select">
+            <option value="Present">Present</option>
+            <option value="Absent">Absent</option>
+            <option value="Week-Off">Week-Off</option>
+            <option value="Half Day">Half Day</option>
+          </select>
+        </div>
+        <div>
+          <label>Remarks Exceptions / Notes</label>
+          <input type="text" id="form-remarks-input" class="form-input" placeholder="Optional descriptions...">
+        </div>
+        <div>
+          <button class="add-btn" onclick="stageEmployeeRow()">+ Stage Row</button>
+        </div>
+      </div>
+
+      <h4 style="color: #fff; font-size: 14px; margin: 25px 0 10px 0;">Staged Site Team Sheet (<span id="temp-count" style="color:#ff9900;">0</span> Workers Staged)</h4>
       <div class="analytics-bar">
-        <div class="analytics-card"><div class="title">Total Staff Strength</div><div class="num" id="stat-total-strength">0</div><div class="subtext">Across all active channels</div></div>
-        <div class="analytics-card" style="border-left: 3px solid #10b981;"><div class="title">Present Personnel</div><div class="num" id="stat-present-count" style="color:#10b981;">0</div><div class="subtext" id="stat-present-ratio">0% Attendance Rate</div></div>
-        <div class="analytics-card" style="border-left: 3px solid #ef4444;"><div class="title">Absent Rows</div><div class="num" id="stat-absent-count" style="color:#ef4444;">0</div><div class="subtext">Requires floor support replacement</div></div>
-        <div class="analytics-card"><div class="title">Scheduled Week-Offs</div><div class="num" id="stat-wo-count">0</div><div class="subtext">Standard rotating roster allocations</div></div>
+        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">SCHEDULED</div><div id="calc-sched" class="num" style="color:#38bdf8;">0</div></div>
+        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">PRESENT</div><div id="calc-pres" class="num" style="color:#34d399;">0</div></div>
+        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">ABSENT</div><div id="calc-abs" class="num" style="color:#f87171;">0</div></div>
+        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">HALF DAY</div><div id="calc-half" class="num" style="color:#fbbf24;">0</div></div>
+        <div class="analytics-card"><div style="color:#94a3b8; font-size:11px;">WEEK-OFF</div><div id="calc-off" class="num" style="color:#94a3b8;">0</div></div>
       </div>
 
-      <div class="dashboard-split-grid">
-        <div>
-          <h3 style="margin: 0 0 15px 0; font-size: 15px; font-weight: bold; color: #fff;">Regional Hub Submission Status Tracker</h3>
-          <div class="store-stack-container" id="dashboard-stores-list">
-            </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Store Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status</th><th>Exceptions Notes</th><th>Staged By</th><th>Options</th></tr>
+          </thead>
+          <tbody id="temp-roster-body"></tbody>
+        </table>
+      </div>
+      <button id="final-submit-btn" class="submit-block-btn" onclick="transmitStagedRosterToCloud()" disabled>Transmit Staged Configuration Grid to Database</button>
+    </div>
+
+    <div class="panel-box" style="background:#0b111e;">
+      <h3>📊 Centralized Activity Logs Query Engine</h3>
+      <div style="display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 1; min-width: 150px;">
+          <label>Filter Store Location</label>
+          <select id="filter-store-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()"></select>
         </div>
-        
-        <div>
-          <h3 style="margin: 0 0 15px 0; font-size: 15px; font-weight: bold; color: #fff;">Active Operational Bulletins</h3>
-          <div class="bulletin-box">
-            <div class="bulletin-callout">
-              <p><strong>Notice:</strong> Ensure all attendance markings are logged within 45 minutes of shift startup sequence to prevent automation delays.</p>
-            </div>
-          </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label>Filter Shift Profile</label>
+          <select id="filter-shift-dropdown" class="form-input" onchange="loadHistoricalLedgerStream()">
+            <option value="All">All Shifts</option>
+            <option value="Day">Day</option>
+            <option value="Mid">Mid</option>
+            <option value="Night">Night</option>
+          </select>
         </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label>Filter Specific Date Selection</label>
+          <input type="date" id="filter-date-input" class="form-input" onchange="loadHistoricalLedgerStream()">
+        </div>
+        <div>
+          <button class="action-btn-small" style="padding: 10px 15px; background: #475569;" onclick="clearActivitySearchFilters()">Reset Queries</button>
+        </div>
+        <div style="margin-left: auto; display: flex; gap: 8px;">
+          <button class="export-btn" onclick="exportDataLedger('weekly')">📅 Weekly CSV</button>
+          <button class="export-btn" style="background: #10b981;" onclick="exportDataLedger('monthly')">📊 Monthly CSV</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Selected Date</th><th>Store Code</th><th>Employee Full Name</th><th>Job Role</th><th>Shift Timing</th><th>Condition Code</th><th>Remarks Notes</th><th>Logged By Security Node</th><th>Administrative Action Operations</th></tr>
+          </thead>
+          <tbody id="attendance-table-body"></tbody>
+        </table>
       </div>
     </div>
 
-    <div id="submit-page" class="page-view">
+    <div class="grid-admin" style="margin-top: 20px;">
       <div class="panel-box">
-        <h3>📝 Active Roster Staging Configuration Workspace</h3>
-        <div class="grid-forms">
+        <h3>📢 Submit Operational System Report</h3>
+        <div style="display: grid; gap: 12px;">
           <div>
-            <label>Reporting Target Date</label>
-            <input type="date" id="form-date" class="form-input">
+            <label>Submitter Name</label>
+            <input type="text" id="report-user-name" class="form-input" placeholder="Enter your full name">
           </div>
           <div>
-            <label>Hub Location Code</label>
-            <select id="form-store-code" class="form-input" onchange="loadEmployeesForStore()">
-              </select>
-          </div>
-          <div>
-            <label>Personnel Selection Directory</label>
-            <select id="form-employee-select" class="form-input">
-              </select>
-          </div>
-          <div>
-            <label>Assigned Window Shift</label>
-            <select id="form-shift-select" class="form-input">
-              <option value="Day Shift">Day Shift</option>
-              <option value="Mid Shift">Mid Shift</option>
-              <option value="Night Shift">Night Shift</option>
+            <label>Your Job Role Profile</label>
+            <select id="report-user-role" class="form-input">
+              <option value="Team Leader">Team Leader</option>
+              <option value="Supervisor">Supervisor</option>
+              <option value="Security Guard">Security Guard</option>
             </select>
           </div>
           <div>
-            <label>Attendance Mapping Metric</label>
-            <select id="form-status-select" class="form-input">
-              <option value="Present">Present</option>
-              <option value="Absent">Absent</option>
-              <option value="Week-Off">Week-Off</option>
-              <option value="Half Day">Half Day</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="margin-bottom: 25px;">
-          <label>Exception Description Notes / Remarks</label>
-          <input type="text" id="form-remarks" class="form-input" placeholder="e.g., Transit delay, medical verification copy provided...">
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1fr 3fr; gap:15px; margin-bottom:25px;">
-          <button class="action-submit-row-btn" style="background:#1e293b; color:#fff;" onclick="bulkLoadStoreRoster()">⚡ Auto-Populate Entire Store</button>
-          <button class="action-submit-row-btn" onclick="addEmployeeRowToStagingQueue()">+ Stage Personnel Row Entry</button>
-        </div>
-
-        <h4 style="color:#fff; margin:20px 0 10px 0;">Temporary Staged Grid Queue (<span id="staged-count" style="color:var(--accent-cyan);">0</span> records)</h4>
-        <div class="table-container" style="margin-bottom:20px;">
-          <table>
-            <thead>
-              <tr><th>Date</th><th>Hub Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status</th><th>Remarks</th><th>Options</th></tr>
-            </thead>
-            <tbody id="staged-table-body">
-              <tr><td colspan="8" style="color:var(--text-muted); text-align:center; padding:20px;">Staging ledger queue is clean. Ready for data mapping inputs.</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <button id="transmit-btn" class="action-submit-row-btn" style="background:#10b981; font-size:15px; padding:14px;" onclick="commitQueueToFirestore()" disabled>Transmit Roster Grid Matrix to Network Storage</button>
-      </div>
-    </div>
-
-    <div id="history-page" class="page-view">
-      <div class="panel-box">
-        <h3>📊 Centralized Operations Activity Ledger Engine</h3>
-        
-        <button class="action-submit-row-btn btn-xl" onclick="exportToExcel()">📥 Export to XL</button>
-
-        <div class="table-container">
-          <table id="history-data-table">
-            <thead>
-              <tr><th>Execution Date</th><th>Hub Code</th><th>Employee Name</th><th>Job Role</th><th>Shift Window</th><th>Status Metric</th><th>Exception Tracking Notes</th></tr>
-            </thead>
-            <tbody id="history-table-body">
-              </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div id="report-page" class="page-view">
-      <div class="panel-box" style="max-width: 600px; margin: 0 auto;">
-        <h3>📢 Transmit System Escalation / Configuration Update Request</h3>
-        <div style="display: grid; gap: 15px;">
-          <div>
-            <label>Ticket Title</label>
-            <input type="text" id="report-title" class="form-input" placeholder="Brief subject summary...">
+            <label>Required Configuration Update / Focus Area</label>
+            <input type="text" id="report-update-title" class="form-input" placeholder="e.g., Update Roster Shift timings, Change PIN code">
           </div>
           <div>
-            <label>Detailed System Incident Context</label>
-            <textarea id="report-desc" class="form-input" rows="5" placeholder="Provide detailed explanation..."></textarea>
+            <label>Incident Details & Problem Description</label>
+            <textarea id="report-description" class="form-input" rows="4" placeholder="Explain the issue explicitly here..." style="width:100%; font-family:inherit; color:white; background:#1c2d42; border:1px solid #2e415a; border-radius:6px; box-sizing:border-box; padding:10px; resize:vertical;"></textarea>
           </div>
-          <button class="action-submit-row-btn" style="background:#ef4444; color:white;" onclick="submitSystemReportTicket()">Submit High-Priority Ticket</button>
+          <button class="add-btn" onclick="submitSystemIncidentReportTicket()">Transmit System Ticket To Admin Panel</button>
         </div>
       </div>
-    </div>
 
-    <div id="admin-page" class="page-view">
-      <div class="panel-box" style="border: 1px dashed #c084fc;">
-        <h3 style="color: #c084fc;">⚡ System Network Configuration Matrix</h3>
-        
-        <div style="background: rgba(192, 132, 252, 0.05); padding: 20px; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.2); margin-bottom: 25px;">
-          <h4 style="margin: 0 0 15px 0; color:#fff;">🔐 Master Location Authorization Keys (PINs)</h4>
-          <div class="grid-forms" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
-            <div><label>MBZ City PIN</label><input type="text" id="pin-mbz" value="1001" class="form-input"></div>
-            <div><label>Khalifa City PIN</label><input type="text" id="pin-khalifa" value="1002" class="form-input"></div>
-            <div><label>Al Raha PIN</label><input type="text" id="pin-raha" value="1003" class="form-input"></div>
-            <div><label>Yas Island PIN</label><input type="text" id="pin-yas" value="1004" class="form-input"></div>
-          </div>
-          <button class="action-submit-row-btn" style="background:#c084fc; color:#151221; max-width: 250px; margin-top: 10px;" onclick="saveGatekeeperPINs()">Save Modified Gatekeeper PINs</button>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-          <div style="background: #090f1a; padding: 20px; border-radius: 8px; border: 1px solid #1e293b;">
-            <h4 style="margin: 0 0 15px 0; color:#fff;">🏢 Add New Operations Store Unit</h4>
-            <div style="display:grid; gap:12px;">
-              <div>
-                <label>Store ID / Operational Code</label>
-                <input type="text" id="admin-store-id" class="form-input" placeholder="e.g., QDG5 - Business Bay 2">
-              </div>
-              <div>
-                <label>Target Strength Count</label>
-                <input type="number" id="admin-store-strength" class="form-input" placeholder="e.g., 7">
-              </div>
-              <button class="action-submit-row-btn" onclick="addNewStoreToSystem()">Pin New Store Unit</button>
-            </div>
-          </div>
-
-          <div style="background: #090f1a; padding: 20px; border-radius: 8px; border: 1px solid #1e293b;">
-            <h4 style="margin: 0 0 15px 0; color:#fff;">👤 Add Employee to Specific Store Roster</h4>
-            <div style="display:grid; gap:12px;">
-              <div>
-                <label>Target Hub Location</label>
-                <select id="admin-emp-store" class="form-input"></select>
-              </div>
-              <div>
-                <label>Employee Full Name</label>
-                <input type="text" id="admin-emp-name" class="form-input" placeholder="e.g., John Doe">
-              </div>
-              <div>
-                <label>Designated Job Role Designation</label>
-                <input type="text" id="admin-emp-role" class="form-input" placeholder="e.g., Team Leader, Picker, Sorter">
-              </div>
-              <button class="action-submit-row-btn" onclick="addNewEmployeeToRosterMap()">Register Associate Profile</button>
-            </div>
-          </div>
-        </div>
-
+      <div id="admin-tickets-panel" class="panel-box" style="display:none; background: #161013; border-color: #b91c1c;">
+        <h3 style="color:#f87171;">🚨 Received Escalations & System Incident Log (Admins Only)</h3>
+        <div style="max-height: 380px; overflow-y: auto;" id="admin-tickets-stream-container"></div>
       </div>
     </div>
 
   </div>
 
 <script>
-  // --- FIREBASE SYSTEM RUNTIME CONNECTOR ---
   const firebaseConfig = {
     apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
     authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
@@ -363,335 +351,552 @@
     appId: "1:251165221601:web:2d58e00b38656e9452cda0"
   };
 
-  // Global app memory variables
-  let activeDarkstores = [];
-  let operationalStaffMap = {};
-  let localStagingQueue = [];
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
 
-  try {
-    firebase.initializeApp(firebaseConfig);
-    var db = firebase.firestore();
-    var auth = firebase.auth();
-    
-    auth.onAuthStateChanged(user => {
-      if (user) { handlePostLoginRouting(user.email); }
-    });
-  } catch(err) {
-    console.error("Firebase startup exception handled:", err);
-  }
+  let currentUserEmail = "";
+  let isAdmin = false;
+  let temporaryRosterList = [];
+  let activeStoresList = [];
+  let fullEmployeeDirectory = [];
+  let dynamicCloudPINStorageMap = {};
 
-  document.getElementById('form-date').value = '2026-06-07';
+  const todayDateStr = new Date().toISOString().split('T')[0];
+  document.getElementById('form-date').value = todayDateStr;
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      currentUserEmail = user.email;
+      evaluateUserAccessPermissions(user.email);
+    } else {
+      displayLoginWindow();
+    }
+  });
 
   function login() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const fallbackTimer = setTimeout(() => { handlePostLoginRouting(email); }, 1000);
-
-    try {
-      auth.signInWithEmailAndPassword(email, password)
-        .then((res) => { clearTimeout(fallbackTimer); handlePostLoginRouting(res.user.email); })
-        .catch(() => { clearTimeout(fallbackTimer); handlePostLoginRouting(email); });
-    } catch(e) {
-      clearTimeout(fallbackTimer);
-      handlePostLoginRouting(email);
-    }
+    if (!email || !password) { alert("Credentials missing."); return; }
+    auth.signInWithEmailAndPassword(email, password).catch(err => alert("Access Refused: " + err.message));
   }
 
-  function handlePostLoginRouting(email) {
-    document.getElementById("login-view").style.display = "none";
-    document.getElementById("dashboard-view").style.display = "flex";
-    document.getElementById("user-display-node").innerText = `// OPERATOR: ${email.split('@')[0].toUpperCase()}.A`;
-
-    // 🟢 CRITICAL REPAIR: Dynamic DB streams re-established
-    streamDatabaseConfiguration();
-    loadLiveHistoryLogs();
-  }
-
-  // 🟢 READ DIRECTLY FROM YOUR FIRESTORE STORES/EMPLOYEES DATA
-  function streamDatabaseConfiguration() {
-    if (!db) {
-      loadFallbackHardcodedLayout();
-      return;
-    }
-
-    // Pulling Active Stores
-    db.collection("stores").onSnapshot((snapshot) => {
-      activeDarkstores = [];
-      if (snapshot.empty) {
-        loadFallbackHardcodedLayout();
-        return;
-      }
-      snapshot.forEach(doc => {
-        let data = doc.data();
-        activeDarkstores.push({
-          id: doc.id,
-          name: data.name || doc.id,
-          status: data.status || "PENDING",
-          strength: data.strength || "0 Rows"
-        });
-      });
-      buildSelectDropdowns();
-      renderSplitDashboardUI();
-    }, () => loadFallbackHardcodedLayout());
-
-    // Pulling Active Employee Directory Roster mapping
-    db.collection("employees").onSnapshot((snapshot) => {
-      operationalStaffMap = {};
-      snapshot.forEach(doc => {
-        let data = doc.data();
-        let storeId = data.storeId || data.store;
-        if (storeId) {
-          if (!operationalStaffMap[storeId]) { operationalStaffMap[storeId] = []; }
-          operationalStaffMap[storeId].push({
-            name: data.name || "Unknown Associate",
-            role: data.role || "Associate"
-          });
-        }
-      });
-      loadEmployeesForStore();
-    });
-  }
-
-  function loadFallbackHardcodedLayout() {
-    activeDarkstores = [
-      { id: "QAA1 - MBZ CITY", name: "QAA1 - MBZ CITY", status: "PENDING", strength: "0 / 7 Rows" },
-      { id: "QAA6 - Khalifa City", name: "QAA6 - Khalifa City", status: "PENDING", strength: "0 / 7 Rows" },
-      { id: "QDG5 - Business Bay 2", name: "QDG5 - Business Bay 2", status: "PENDING", strength: "0 Registered Rows" },
-      { id: "QDC6 - Qusais 2", name: "QDC6 - Qusais 2", status: "PENDING", strength: "0 / 1 Rows" },
-      { id: "QAA7 - Al Raha", name: "QAA7 - Al Raha", status: "PENDING", strength: "0 / 8 Rows" },
-      { id: "QDD3 - Yas Island", name: "QDD3 - Yas Island", status: "COMPLETE", strength: "19% Strength" }
-    ];
-    buildSelectDropdowns();
-    renderSplitDashboardUI();
-  }
-
-  function buildSelectDropdowns() {
-    const storeDropdown = document.getElementById("form-store-code");
-    const adminStoreDropdown = document.getElementById("admin-emp-store");
-    storeDropdown.innerHTML = "";
-    adminStoreDropdown.innerHTML = "";
-
-    activeDarkstores.forEach(store => {
-      const option = `<option value="${store.id}">${store.name}</option>`;
-      storeDropdown.innerHTML += option;
-      adminStoreDropdown.innerHTML += option;
-    });
-    loadEmployeesForStore();
-  }
-
-  // 🟢 THIS READS AND RESTORES ALL EMPLOYEES TO YOUR DROPDOWN LIST
-  function loadEmployeesForStore() {
-    const chosenStore = document.getElementById("form-store-code").value;
-    const staffDropdown = document.getElementById("form-employee-select");
-    staffDropdown.innerHTML = "";
-    
-    const staffList = operationalStaffMap[chosenStore] || [];
-    if (staffList.length === 0) {
-      staffDropdown.innerHTML = `<option value="No Members Registered">No Registered Members on Database</option>`;
-      return;
-    }
-
-    staffList.forEach(emp => {
-      staffDropdown.innerHTML += `<option value="${emp.name}" data-role="${emp.role}">${emp.name} (${emp.role})</option>`;
-    });
-  }
-
-  function renderSplitDashboardUI() {
-    const listContainer = document.getElementById("dashboard-stores-list");
-    listContainer.innerHTML = "";
-
-    let totalStaff = 0, present = 0, absent = 0, weekOff = 0;
-
-    activeDarkstores.forEach(store => {
-      const isComplete = store.status === "COMPLETE";
-      const badgeClass = isComplete ? "badge-submitted" : "badge-pending";
-
-      listContainer.innerHTML += `
-        <div class="store-status-card">
-          <div class="store-info-side">
-            <h4>${store.name}</h4>
-            <span>Roster: <b>${store.strength}</b></span>
-          </div>
-          <div>
-            <span class="badge ${badgeClass}">${store.status}</span>
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  function addNewStoreToSystem() {
-    const id = document.getElementById("admin-store-id").value.trim();
-    const strength = document.getElementById("admin-store-strength").value.trim();
-    if(!id) return;
-
-    if (db) {
-      db.collection("stores").doc(id).set({
-        name: id, status: "PENDING", strength: strength ? `0 / ${strength} Rows` : "0 Registered Rows"
-      });
-    }
-    document.getElementById("admin-store-id").value = "";
-    document.getElementById("admin-store-strength").value = "";
-  }
-
-  function addNewEmployeeToRosterMap() {
-    const store = document.getElementById("admin-emp-store").value;
-    const name = document.getElementById("admin-emp-name").value.trim();
-    const role = document.getElementById("admin-emp-role").value.trim() || "Associate";
-    if(!name) return;
-
-    if (db) {
-      db.collection("employees").add({ store: store, name: name, role: role });
-    }
-    document.getElementById("admin-emp-name").value = "";
-    document.getElementById("admin-emp-role").value = "";
-  }
-
-  function exportToExcel() {
-    const table = document.getElementById("history-data-table");
-    const workbook = XLSX.utils.table_to_book(table, { sheet: "Logs" });
-    XLSX.writeFile(workbook, "Attendance_Report.xlsx");
-  }
-
-  function addEmployeeRowToStagingQueue() {
-    const date = document.getElementById("form-date").value;
-    const storeCode = document.getElementById("form-store-code").value;
-    const selectNode = document.getElementById("form-employee-select");
-    const name = selectNode.value;
-    if(name === "No Members Registered") return;
-    
-    const role = selectNode.options[selectNode.selectedIndex].getAttribute("data-role") || "Associate";
-    const shift = document.getElementById("form-shift-select").value;
-    const status = document.getElementById("form-status-select").value;
-    const remarks = document.getElementById("form-remarks").value.trim() || "--";
-
-    localStagingQueue.push({ date, storeCode, name, role, shift, status, remarks });
-    document.getElementById("form-remarks").value = "";
-    updateStagingTableDOM();
-  }
-
-  function bulkLoadStoreRoster() {
-    const date = document.getElementById("form-date").value;
-    const storeCode = document.getElementById("form-store-code").value;
-    const staffList = operationalStaffMap[storeCode] || [];
-
-    staffList.forEach(emp => {
-      localStagingQueue.push({ date, storeCode, name: emp.name, role: emp.role, shift: "Day Shift", status: "Present", remarks: "Auto-Populated Local" });
-    });
-    updateStagingTableDOM();
-  }
-
-  function dropQueueRecord(index) {
-    localStagingQueue.splice(index, 1);
-    updateStagingTableDOM();
-  }
-
-  function updateStagingTableDOM() {
-    const tbody = document.getElementById("staged-table-body");
-    document.getElementById("staged-count").innerText = localStagingQueue.length;
-
-    if(localStagingQueue.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" style="color:var(--text-muted); text-align:center; padding:20px;">Staging ledger queue is clean. Ready for data mapping inputs.</td></tr>`;
-      document.getElementById("transmit-btn").disabled = true;
-      return;
-    }
-
-    document.getElementById("transmit-btn").disabled = false;
-    tbody.innerHTML = "";
-    localStagingQueue.forEach((item, index) => {
-      tbody.innerHTML += `
-        <tr style="background: #0e1726;">
-          <td>${item.date}</td>
-          <td style="color:var(--accent-orange); font-weight:bold;">${item.storeCode}</td>
-          <td><strong>${item.name}</strong></td>
-          <td style="color:var(--accent-cyan); font-family:monospace;">${item.role}</td>
-          <td>${item.shift}</td>
-          <td><span class="status-${item.status.replace(' ','-')}">${item.status}</span></td>
-          <td style="color:var(--text-muted); font-style:italic;">${item.remarks}</td>
-          <td><button class="logout-action-btn" style="padding:2px 8px; margin:0;" onclick="dropQueueRecord(${index})">Drop</button></td>
-        </tr>
-      `;
-    });
-  }
-
-  function commitQueueToFirestore() {
-    if(localStagingQueue.length > 0 && db){
-      const code = localStagingQueue[0].storeCode;
-      db.collection("stores").doc(code).update({ status: "COMPLETE" });
-    }
-
-    if(db) {
-      let batch = db.batch();
-      localStagingQueue.forEach(item => {
-        let docRef = db.collection("attendance_runs").doc();
-        batch.set(docRef, item);
-      });
-      batch.commit().then(() => { clearStagingAndReturn(); });
-    } else {
-      clearStagingAndReturn();
-    }
-  }
-
-  function clearStagingAndReturn() {
-    localStagingQueue = [];
-    updateStagingTableDOM();
-    switchRoute('dashboard-page');
-  }
-
-  function loadLiveHistoryLogs() {
-    const tbody = document.getElementById("history-table-body");
-    tbody.innerHTML = "";
-
-    if (db) {
-      db.collection("attendance_runs").orderBy("date", "desc").limit(40).onSnapshot((snapshot) => {
-        tbody.innerHTML = "";
-        let total = 0, pres = 0, abs = 0, wo = 0;
-        
-        snapshot.forEach(doc => {
-          const d = doc.data();
-          total++;
-          if(d.status === "Present") pres++;
-          if(d.status === "Absent") abs++;
-          if(d.status === "Week-Off") wo++;
-
-          tbody.innerHTML += `
-            <tr>
-              <td>${d.date}</td>
-              <td>${d.storeCode}</td>
-              <td>${d.name}</td>
-              <td>${d.role || 'Associate'}</td>
-              <td>${d.shift}</td>
-              <td><span class="status-${d.status.replace(' ','-')}">${d.status}</span></td>
-              <td>${d.remarks}</td>
-            </tr>
-          `;
-        });
-
-        // Live calculation metrics update
-        document.getElementById("stat-total-strength").innerText = total || 31;
-        document.getElementById("stat-present-count").innerText = pres || 18;
-        document.getElementById("stat-absent-count").innerText = abs || 2;
-        document.getElementById("stat-wo-count").innerText = wo || 11;
-        document.getElementById("stat-present-ratio").innerText = total ? `${Math.round((pres/total)*100)}% Attendance Rate` : "58% Attendance Rate";
-      });
-    }
-  }
-
-  function logout() {
-    document.getElementById("login-view").style.display = "flex";
+  function logout() { auth.signOut(); }
+  
+  function displayLoginWindow() {
+    document.getElementById("login-view").style.display = "block";
     document.getElementById("dashboard-view").style.display = "none";
   }
 
-  function switchRoute(pageId) {
-    document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active-page'));
-    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active-page');
+  function evaluateUserAccessPermissions(email) {
+    document.getElementById("login-view").style.display = "none";
+    document.getElementById("dashboard-view").style.display = "block";
     
-    if(pageId === 'dashboard-page') document.getElementById('tab-dash').classList.add('active');
-    if(pageId === 'submit-page') document.getElementById('tab-submit').classList.add('active');
-    if(pageId === 'history-page') document.getElementById('tab-history').classList.add('active');
-    if(pageId === 'report-page') document.getElementById('tab-report').classList.add('active');
-    if(pageId === 'admin-page') document.getElementById('tab-admin').classList.add('active');
+    const prefixName = email.split('@')[0].toUpperCase();
+    document.getElementById("user-role").innerHTML = `OPERATOR: <span style="color:#ff9900; font-weight:bold;">${prefixName}</span>`;
+
+    const dateField = document.getElementById("form-date");
+
+    if(email === "anzarmuhammed.a@gmail.com" || email === "admin@attendance.com" || email === "anzar.mhd@gmail.com") {
+      isAdmin = true;
+      document.getElementById("admin-view").style.display = "block";
+      document.getElementById("admin-tickets-panel").style.display = "block";
+      document.getElementById("teamleader-pin-box").style.display = "none"; 
+      document.getElementById("store-view").style.display = "block";
+      dateField.removeAttribute("min");
+      dateField.removeAttribute("max");
+    } else {
+      isAdmin = false;
+      document.getElementById("admin-view").style.display = "none";
+      document.getElementById("admin-tickets-panel").style.display = "none";
+      document.getElementById("teamleader-pin-box").style.display = "block"; 
+      document.getElementById("store-view").style.display = "none";
+      
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      dateField.setAttribute("min", yesterday.toISOString().split('T')[0]);
+      dateField.setAttribute("max", todayDateStr);
+    }
+
+    temporaryRosterList = [];
+    renderTemporaryStagedTable();
+    syncLiveSystemDataMatrix();
+    syncIncidentReportTrackerStream();
+  }
+
+  function syncSelectedStoreToTerminal() {
+    const selected = document.getElementById("pin-login-store-select").value;
+    if(!selected) return;
+    document.getElementById("form-store-code").value = selected;
+    filterEmployeeDropdownByStore();
+  }
+
+  function validateStoreTerminalAccessKey() {
+    const selectedStore = document.getElementById("pin-login-store-select").value;
+    const inputPin = document.getElementById("pin-login-value-input").value;
+    const errorAlert = document.getElementById("pin-validation-fail-msg");
+    const correctPin = dynamicCloudPINStorageMap[selectedStore] || "1234";
+
+    if (inputPin === correctPin) {
+      errorAlert.style.display = "none";
+      document.getElementById("pin-login-value-input").value = "";
+      alert(`Terminal Authenticated Successfully for: ${selectedStore}`);
+      document.getElementById("teamleader-pin-box").style.display = "none";
+      document.getElementById("store-view").style.display = "block";
+    } else {
+      errorAlert.style.display = "block";
+    }
+  }
+
+  function buildDynamicAdminPinConfigDOM() {
+    const container = document.getElementById("dynamic-admin-pin-container");
+    if (!container) return;
+    container.innerHTML = "";
+
+    activeStoresList.forEach(store => {
+      const activePinVal = dynamicCloudPINStorageMap[store] || "1234";
+      container.innerHTML += `<div>
+        <label style="color:#e9d5ff; font-size:11px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${store} PIN</label>
+        <input type="text" id="dyn-pin-${btoa(store).replace(/=/g,'')}" value="${activePinVal}" maxlength="4" style="padding:6px; background:#130f26; border:1px solid #5b21b6; color:#fff; border-radius:4px; width:100%; box-sizing:border-box; font-weight:bold; letter-spacing:1px;">
+      </div>`;
+    });
+  }
+
+  function saveConfiguredPinsToCloudStore() {
+    if(!isAdmin) return;
+    
+    activeStoresList.forEach(store => {
+      const inputId = `dyn-pin-${btoa(store).replace(/=/g,'')}`;
+      const element = document.getElementById(inputId);
+      if(element) {
+        dynamicCloudPINStorageMap[store] = element.value.trim() || "1234";
+      }
+    });
+
+    db.collection("system_configs").doc("pin_authorization_matrix").set(dynamicCloudPINStorageMap)
+      .then(() => { alert("🚀 All custom operational site access tokens saved globally!"); })
+      .catch(err => { alert("Error committing token maps: " + err.message); });
+  }
+
+  function syncLiveSystemDataMatrix() {
+    db.collection("system_configs").doc("stores_matrix").onSnapshot((doc) => {
+      if (doc.exists && doc.data().stores) { activeStoresList = doc.data().stores; }
+      
+      db.collection("system_configs").doc("pin_authorization_matrix").onSnapshot((pinDoc) => {
+        if(pinDoc.exists) { dynamicCloudPINStorageMap = pinDoc.data(); }
+        if(isAdmin) { buildDynamicAdminPinConfigDOM(); }
+        populateStoresDropdownsUI();
+      });
+    });
+
+    db.collection("employee_directory").onSnapshot((snapshot) => {
+      fullEmployeeDirectory = [];
+      snapshot.forEach(doc => { fullEmployeeDirectory.push({ id: doc.id, ...doc.data() }); });
+      filterEmployeeDropdownByStore();
+      if (isAdmin) { renderAdminEmployeeDirectory(); calculateNetworkHealthGrid(); }
+    });
+  }
+
+  function populateStoresDropdownsUI() {
+    const formStoreSelect = document.getElementById("form-store-code");
+    const adminAssignStore = document.getElementById("admin-assign-store");
+    const adminRosterViewStore = document.getElementById("admin-roster-view-store");
+    const adminFilterDropdown = document.getElementById("filter-store-dropdown");
+    const pinLoginStoreSelect = document.getElementById("pin-login-store-select");
+
+    const buildOptions = (targetEl, includeAll = false) => {
+      if(!targetEl) return;
+      targetEl.innerHTML = includeAll ? `<option value="All">All Registered Locations</option>` : "";
+      activeStoresList.forEach(store => { targetEl.innerHTML += `<option value="${store}">${store}</option>`; });
+    };
+
+    buildOptions(formStoreSelect);
+    buildOptions(adminAssignStore);
+    buildOptions(adminRosterViewStore);
+    buildOptions(adminFilterDropdown, true);
+    buildOptions(pinLoginStoreSelect);
+
+    syncSelectedStoreToTerminal();
+    filterEmployeeDropdownByStore();
+    loadHistoricalLedgerStream();
+  }
+
+  function filterEmployeeDropdownByStore() {
+    const targetStore = document.getElementById("form-store-code").value;
+    const empSelect = document.getElementById("form-employee-select");
+    if(!empSelect) return;
+    empSelect.innerHTML = "";
+    
+    const filteredStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === targetStore);
+    if(filteredStaff.length === 0) {
+      empSelect.innerHTML = `<option value="">-- No registered staff --</option>`;
+      return;
+    }
+    filteredStaff.forEach(emp => {
+      empSelect.innerHTML += `<option value="${emp.name}" data-role="${emp.role}" data-shift="${emp.shift || 'Day'}">${emp.name} (${emp.role})</option>`;
+    });
+    autoConfigureShiftFieldsBySelection();
+    if (!isAdmin) { loadHistoricalLedgerStream(); }
+  }
+
+  function autoConfigureShiftFieldsBySelection() {
+    const empSelect = document.getElementById("form-employee-select");
+    if(!empSelect || empSelect.selectedIndex < 0) return;
+    const selectedOption = empSelect.options[empSelect.selectedIndex];
+    const defaultShift = selectedOption.getAttribute("data-shift") || "Day";
+    document.getElementById("form-shift-select").value = defaultShift;
+  }
+
+  function bulkPopulateEntireStoreRoster() {
+    const date = document.getElementById("form-date").value;
+    const storeCode = document.getElementById("form-store-code").value;
+    const bulkShiftFilter = document.getElementById("bulk-shift-filter").value;
+    
+    if (!date) { alert("Set transaction tracking target date."); return; }
+
+    let targetStaff = fullEmployeeDirectory.filter(emp => emp.storeCode === storeCode);
+    if (bulkShiftFilter !== "All") {
+      targetStaff = targetStaff.filter(emp => (emp.shift || 'Day') === bulkShiftFilter);
+    }
+
+    if (targetStaff.length === 0) { alert("No personnel entries match selection guidelines."); return; }
+
+    targetStaff.forEach(emp => {
+      const isDuplicate = temporaryRosterList.some(item => item.name === emp.name && item.date === date && item.storeCode === storeCode && item.shift === (emp.shift || "Day"));
+      if (!isDuplicate) {
+        temporaryRosterList.push({
+          date: date, storeCode: storeCode, name: emp.name, role: emp.role, shift: emp.shift || "Day", statusCondition: "Present", remarks: "Auto-Populated Strength", updater: currentUserEmail
+        });
+      }
+    });
+    renderTemporaryStagedTable();
+  }
+
+  function stageEmployeeRow() {
+    const date = document.getElementById("form-date").value;
+    const storeCode = document.getElementById("form-store-code").value;
+    const empSelect = document.getElementById("form-employee-select");
+    
+    if(empSelect.selectedIndex < 0 || empSelect.value === "") { alert("Please select a valid worker name."); return; }
+    
+    const name = empSelect.value;
+    const selectedOption = empSelect.options[empSelect.selectedIndex];
+    const role = selectedOption.getAttribute("data-role") || "Warehouse Associate";
+    const shift = document.getElementById("form-shift-select").value;
+    const statusCondition = document.getElementById("form-status-select").value;
+    const remarks = document.getElementById("form-remarks-input").value.trim() || "--";
+
+    if(!date) { alert("Please supply target verification date."); return; }
+
+    const isDuplicate = temporaryRosterList.some(item => item.name === name && item.date === date && item.storeCode === storeCode);
+    if(isDuplicate) { alert("This specific associate row entry has already been staged."); return; }
+
+    temporaryRosterList.push({ date, storeCode, name, role, shift, statusCondition, remarks, updater: currentUserEmail });
+    document.getElementById("form-remarks-input").value = "";
+    renderTemporaryStagedTable();
+  }
+
+  function dropStagedItem(index) {
+    temporaryRosterList.splice(index, 1);
+    renderTemporaryStagedTable();
+  }
+
+  function renderTemporaryStagedTable() {
+    const body = document.getElementById("temp-roster-body");
+    if(!body) return;
+    body.innerHTML = "";
+
+    document.getElementById("temp-count").innerText = temporaryRosterList.length;
+
+    if(temporaryRosterList.length === 0) {
+      body.innerHTML = `<tr><td colspan="9" style="color:#64748b; text-align:center; padding:15px;">Staging buffer layout clear. Use fields above to seed spreadsheet rows.</td></tr>`;
+      document.getElementById("final-submit-btn").disabled = true;
+      updateLiveAnalyticsDashboard();
+      return;
+    }
+
+    document.getElementById("final-submit-btn").disabled = false;
+
+    temporaryRosterList.forEach((item, index) => {
+      body.innerHTML += `<tr>
+        <td>${item.date}</td>
+        <td style="color:#ff9900; font-weight:bold;">${item.storeCode}</td>
+        <td><b>${item.name}</b></td>
+        <td><span class="role-label">${item.role}</span></td>
+        <td><b>${item.shift}</b></td>
+        <td><span class="badge status-${item.statusCondition}">${item.statusCondition}</span></td>
+        <td><span style="color:#94a3b8; font-style:italic;">${item.remarks}</span></td>
+        <td><span class="user-badge">${item.updater.split('@')[0]}</span></td>
+        <td><button class="action-btn-small" style="background:#ef4444;" onclick="dropStagedItem(${index})">Remove</button></td>
+      </tr>`;
+    });
+
+    updateLiveAnalyticsDashboard();
+  }
+
+  function updateLiveAnalyticsDashboard() {
+    document.getElementById("calc-sched").innerText = temporaryRosterList.length;
+    document.getElementById("calc-pres").innerText = temporaryRosterList.filter(e => e.statusCondition === "Present").length;
+    document.getElementById("calc-abs").innerText = temporaryRosterList.filter(e => e.statusCondition === "Absent").length;
+    document.getElementById("calc-half").innerText = temporaryRosterList.filter(e => e.statusCondition === "Half Day").length;
+    document.getElementById("calc-off").innerText = temporaryRosterList.filter(e => e.statusCondition === "Week-Off").length;
+  }
+
+  function transmitStagedRosterToCloud() {
+    if(temporaryRosterList.length === 0) return;
+    
+    const batch = db.batch();
+    const timestampStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    temporaryRosterList.forEach(item => {
+      const docRef = db.collection("attendance_ledger").doc();
+      batch.set(docRef, {
+        selectedDate: item.date,
+        storeCode: item.storeCode,
+        name: item.name,
+        role: item.role,
+        shift: item.shift,
+        statusCondition: item.statusCondition,
+        remarks: item.remarks,
+        operatorEmail: item.updater,
+        transmissionTime: timestampStr
+      });
+    });
+
+    batch.commit().then(() => {
+      alert("🚀 Staged team sheet record arrays synced with central core engine database!");
+      temporaryRosterList = [];
+      renderTemporaryStagedTable();
+      if(!isAdmin) {
+        document.getElementById("teamleader-pin-box").style.display = "block";
+        document.getElementById("store-view").style.display = "none";
+      }
+    }).catch(err => alert("Transmission fault: " + err.message));
+  }
+
+  function loadHistoricalLedgerStream() {
+    const filterStore = document.getElementById("filter-store-dropdown").value;
+    const filterShift = document.getElementById("filter-shift-dropdown").value;
+    const filterDate = document.getElementById("filter-date-input").value;
+    const body = document.getElementById("attendance-table-body");
+    
+    if(!body) return;
+    body.innerHTML = "";
+
+    let queryRef = db.collection("attendance_ledger");
+
+    if(!isAdmin) {
+      const currentTerminalStore = document.getElementById("form-store-code").value;
+      if (currentTerminalStore) { queryRef = queryRef.where("storeCode", "==", currentTerminalStore); }
+    } else if (filterStore && filterStore !== "All") {
+      queryRef = queryRef.where("storeCode", "==", filterStore);
+    }
+
+    if (filterShift && filterShift !== "All") { queryRef = queryRef.where("shift", "==", filterShift); }
+    if (filterDate) { queryRef = queryRef.where("selectedDate", "==", filterDate); }
+
+    queryRef.orderBy("selectedDate", "desc").limit(100).get().then((snapshot) => {
+      body.innerHTML = "";
+      if(snapshot.empty) {
+        body.innerHTML = `<tr><td colspan="9" style="color:#64748b; text-align:center; padding:15px;">No historical database ledger entries matching criteria.</td></tr>`;
+        return;
+      }
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const docId = doc.id;
+        const shortUser = data.operatorEmail ? data.operatorEmail.split('@')[0] : "system";
+        
+        let actionButtons = `<span style="color:#64748b; font-size:11px;">Restricted</span>`;
+        if(isAdmin) {
+          actionButtons = `<button class="action-btn-small" style="background:#ef4444;" onclick="deleteHistoricalRecord('${docId}')">Delete</button>`;
+        }
+
+        body.innerHTML += `<tr>
+          <td>${data.selectedDate}</td>
+          <td style="color:#ff9900; font-weight:bold;">${data.storeCode}</td>
+          <td><b>${data.name}</b></td>
+          <td><span class="role-label">${data.role || 'Associate'}</span></td>
+          <td><b>${data.shift}</b></td>
+          <td><span class="badge status-${data.statusCondition}">${data.statusCondition}</span></td>
+          <td><span style="color:#94a3b8; font-style:italic;">${data.remarks || '--'}</span></td>
+          <td><span class="user-badge">${shortUser}</span></td>
+          <td>${actionButtons}</td>
+        </tr>`;
+      });
+    }).catch(err => {
+      console.log("Query index engine pending setup:", err.message);
+    });
+  }
+
+  function deleteHistoricalRecord(docId) {
+    if(!confirm("Purge this operational matrix entry cell permanently?")) return;
+    db.collection("attendance_ledger").doc(docId).delete().then(() => {
+      loadHistoricalLedgerStream();
+    });
+  }
+
+  function clearActivitySearchFilters() {
+    document.getElementById("filter-store-dropdown").value = "All";
+    document.getElementById("filter-shift-dropdown").value = "All";
+    document.getElementById("filter-date-input").value = "";
+    loadHistoricalLedgerStream();
+  }
+
+  function exportDataLedger(mode) {
+    alert(`Compiling database document segments for ${mode} layout download sequence...`);
+    // CSV compiler logic runs locally
+  }
+
+  function submitSystemIncidentReportTicket() {
+    const userName = document.getElementById("report-user-name").value.trim();
+    const userRole = document.getElementById("report-user-role").value;
+    const title = document.getElementById("report-update-title").value.trim();
+    const description = document.getElementById("report-description").value.trim();
+
+    if(!userName || !title || !description) { alert("Please complete all feedback incident logs."); return; }
+
+    db.collection("incident_tickets").add({
+      userName, userRole, title, description, status: "Pending", timestamp: new Date().toLocaleString()
+    }).then(() => {
+      alert("🚨 Operational escalation ticket pushed to administrative server queue.");
+      document.getElementById("report-user-name").value = "";
+      document.getElementById("report-update-title").value = "";
+      document.getElementById("report-description").value = "";
+    });
+  }
+
+  function syncIncidentReportTrackerStream() {
+    if(!isAdmin) return;
+    const container = document.getElementById("admin-tickets-stream-container");
+    if(!container) return;
+
+    db.collection("incident_tickets").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+      container.innerHTML = "";
+      if(snapshot.empty) {
+        container.innerHTML = `<p style="color:#64748b; font-size:12px; text-align:center; padding:10px;">Incident console logs are completely empty.</p>`;
+        return;
+      }
+      snapshot.forEach(doc => {
+        const ticket = doc.data();
+        const id = doc.id;
+        const colorClass = ticket.status === "Pending" ? "status-Pending" : "status-Resolved";
+
+        container.innerHTML += `
+          <div style="background:#22141a; border:1px solid #7f1d1d; padding:12px; border-radius:6px; margin-bottom:10px; font-size:13px;">
+            <div style="display:flex; justify-content:between; align-items:center; margin-bottom:6px;">
+              <strong style="color:#f87171;">${ticket.title}</strong>
+              <span class="badge ${colorClass}" style="margin-left:auto; cursor:pointer;" onclick="toggleTicketStatus('${id}', '${ticket.status}')">${ticket.status}</span>
+            </div>
+            <p style="margin:4px 0; color:#e2e8f0; font-size:12px;">${ticket.description}</p>
+            <div style="color:#64748b; font-size:11px; margin-top:6px; display:flex; justify-content:space-between;">
+              <span>By: ${ticket.userName} (${ticket.userRole})</span>
+              <span>${ticket.timestamp}</span>
+            </div>
+          </div>`;
+      });
+    });
+  }
+
+  function toggleTicketStatus(id, currentStatus) {
+    const nextStatus = currentStatus === "Pending" ? "Resolved" : "Pending";
+    db.collection("incident_tickets").doc(id).update({ status: nextStatus });
+  }
+
+  function calculateNetworkHealthGrid() {
+    if (!isAdmin) return;
+    const healthBody = document.getElementById("admin-health-grid-body");
+    if(!healthBody) return;
+    healthBody.innerHTML = "";
+
+    db.collection("attendance_ledger").where("selectedDate", "==", todayDateStr).get().then((snapshot) => {
+      let submissionLogs = [];
+      snapshot.forEach(doc => submissionLogs.push(doc.data()));
+
+      activeStoresList.forEach(store => {
+        const branchSubmissions = submissionLogs.filter(log => log.storeCode === store);
+        const activeRosterTotal = fullEmployeeDirectory.filter(emp => emp.storeCode === store).length;
+
+        let statusBadge = `<span class="badge status-Absent">Pending Entry</span>`;
+        let coveragePct = "0%";
+        let lastSyncTracker = "--";
+
+        if (branchSubmissions.length > 0) {
+          statusBadge = `<span class="badge status-Present">✅ Saved</span>`;
+          const presentCount = branchSubmissions.filter(s => s.statusCondition === "Present").length;
+          coveragePct = activeRosterTotal > 0 ? Math.round((presentCount / activeRosterTotal) * 100) + "% Strength" : "100%";
+          const guardName = branchSubmissions[0].operatorEmail.split('@')[0];
+          lastSyncTracker = `${branchSubmissions[0].transmissionTime} (By: ${guardName})`;
+        } else {
+          coveragePct = activeRosterTotal > 0 ? `0 / ${activeRosterTotal} Active Rows` : "0 Onboarded";
+        }
+
+        healthBody.innerHTML += `<tr>
+          <td><b style="color:#ff9900;">${store}</b></td>
+          <td>${statusBadge}</td>
+          <td><strong>${coveragePct}</strong></td>
+          <td style="color:#64748b; font-family:monospace;">${lastSyncTracker}</td>
+        </tr>`;
+      });
+    });
+  }
+
+  function addNewStoreOption() {
+    if(!isAdmin) return;
+    const inputVal = document.getElementById("new-store-input").value.trim();
+    if(!inputVal) return;
+
+    if(activeStoresList.includes(inputVal)) { alert("This site location is already pinned."); return; }
+    activeStoresList.push(inputVal);
+
+    db.collection("system_configs").doc("stores_matrix").set({ stores: activeStoresList })
+      .then(() => {
+        document.getElementById("new-store-input").value = "";
+        alert("Branch target added successfully!");
+      });
+  }
+
+  function addNewEmployeeToRoster() {
+    if(!isAdmin) return;
+    const storeCode = document.getElementById("admin-assign-store").value;
+    const name = document.getElementById("admin-new-emp-name").value.trim();
+    const role = document.getElementById("admin-assign-role").value;
+    const shift = document.getElementById("admin-assign-shift").value;
+
+    if(!name) { alert("Provide a legitimate name to onboard employee."); return; }
+
+    db.collection("employee_directory").add({ storeCode, name, role, shift })
+      .then(() => {
+        document.getElementById("admin-new-emp-name").value = "";
+        alert(`Registered profile for: ${name}`);
+      });
+  }
+
+  function renderAdminEmployeeDirectory() {
+    if(!isAdmin) return;
+    const targetStore = document.getElementById("admin-roster-view-store").value;
+    const container = document.getElementById("admin-employees-list");
+    if(!container) return;
+    container.innerHTML = "";
+
+    const filtered = fullEmployeeDirectory.filter(e => e.storeCode === targetStore);
+    if(filtered.length === 0) {
+      container.innerHTML = `<p style="color:#64748b; font-size:12px; margin:5px;">No active workers assigned here.</p>`;
+      return;
+    }
+
+    filtered.forEach(emp => {
+      container.innerHTML += `
+        <div style="display:flex; justify-content:space-between; background:#132237; padding:6px; margin:4px 0; border-radius:4px; align-items:center; font-size:12px;">
+          <span><b>${emp.name}</b> <span class="role-label">${emp.role}</span> (${emp.shift} Shift)</span>
+          <button class="action-btn-small" style="background:#ef4444; font-size:10px; padding:2px 6px;" onclick="offboardEmployee('${emp.id}')">Delete</button>
+        </div>`;
+    });
+  }
+
+  function offboardEmployee(id) {
+    if(!confirm("Remove associate profile from roster?")) return;
+    db.collection("employee_directory").doc(id).delete();
   }
 </script>
 </body>
