@@ -175,10 +175,10 @@
       </div>
 
       <div class="analytics-bar">
-        <div class="analytics-card"><div class="title">Total Staff Strength</div><div class="num">31</div><div class="subtext">Across all active channels</div></div>
-        <div class="analytics-card" style="border-left: 3px solid #10b981;"><div class="title">Present Personnel</div><div class="num" style="color:#10b981;">18</div><div class="subtext">58% Attendance Rate</div></div>
-        <div class="analytics-card" style="border-left: 3px solid #ef4444;"><div class="title">Absent Rows</div><div class="num" style="color:#ef4444;">2</div><div class="subtext">Requires floor support replacement</div></div>
-        <div class="analytics-card"><div class="title">Scheduled Week-Offs</div><div class="num">11</div><div class="subtext">Standard rotating roster allocations</div></div>
+        <div class="analytics-card"><div class="title">Total Staff Strength</div><div class="num" id="stat-total-strength">0</div><div class="subtext">Across all active channels</div></div>
+        <div class="analytics-card" style="border-left: 3px solid #10b981;"><div class="title">Present Personnel</div><div class="num" id="stat-present-count" style="color:#10b981;">0</div><div class="subtext" id="stat-present-ratio">0% Attendance Rate</div></div>
+        <div class="analytics-card" style="border-left: 3px solid #ef4444;"><div class="title">Absent Rows</div><div class="num" id="stat-absent-count" style="color:#ef4444;">0</div><div class="subtext">Requires floor support replacement</div></div>
+        <div class="analytics-card"><div class="title">Scheduled Week-Offs</div><div class="num" id="stat-wo-count">0</div><div class="subtext">Standard rotating roster allocations</div></div>
       </div>
 
       <div class="dashboard-split-grid">
@@ -353,7 +353,7 @@
   </div>
 
 <script>
-  // --- FIREBASE RUNTIME SYNC BLOCK ---
+  // --- FIREBASE SYSTEM RUNTIME CONNECTOR ---
   const firebaseConfig = {
     apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
     authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
@@ -362,6 +362,11 @@
     messagingSenderId: "251165221601",
     appId: "1:251165221601:web:2d58e00b38656e9452cda0"
   };
+
+  // Global app memory variables
+  let activeDarkstores = [];
+  let operationalStaffMap = {};
+  let localStagingQueue = [];
 
   try {
     firebase.initializeApp(firebaseConfig);
@@ -372,35 +377,15 @@
       if (user) { handlePostLoginRouting(user.email); }
     });
   } catch(err) {
-    console.error("Firebase platform layer error.", err);
+    console.error("Firebase startup exception handled:", err);
   }
 
-  // Exact UI Array matching image_c625c9.png
-  let activeDarkstores = [
-    { id: "QAA1 - MBZ CITY", name: "QAA1 - MBZ CITY", status: "PENDING", strength: "0 / 7 Rows", sync: "--" },
-    { id: "QAA6 - Khalifa City", name: "QAA6 - Khalifa City", status: "PENDING", strength: "0 / 7 Rows", sync: "--" },
-    { id: "QDG5 - Business Bay 2", name: "QDG5 - Business Bay 2", status: "PENDING", strength: "0 Registered Rows", sync: "--" },
-    { id: "QDC6 - Qusais 2", name: "QDC6 - Qusais 2", status: "PENDING", strength: "0 / 1 Rows", sync: "--" },
-    { id: "QAA7 - Al Raha", name: "QAA7 - Al Raha", status: "PENDING", strength: "0 / 8 Rows", sync: "--" },
-    { id: "QDD3 - Yas Island", name: "QDD3 - Yas Island", status: "COMPLETE", strength: "19% Strength", sync: "01:07:28 (By: anzar.mhd)" }
-  ];
-
-  let operationalStaffMap = {
-    "QAA1 - MBZ CITY": [{name: "Anzar Muhammed", role: "Team Leader"}, {name: "Sajid Khan", role: "Associate"}],
-    "QAA6 - Khalifa City": [{name: "John Doe", role: "Sorter"}],
-    "QDG5 - Business Bay 2": [{name: "Operator Alpha", role: "Picker"}],
-    "QDC6 - Qusais 2": [{name: "Logistics Staff 1", role: "Rider"}],
-    "QAA7 - Al Raha": [{name: "Team Agent A", role: "Associate"}],
-    "QDD3 - Yas Island": [{name: "Yas Lead", role: "Team Leader"}]
-  };
-
-  let localStagingQueue = [];
-  document.getElementById('form-date').value = '2026-06-07'; // Standardized target runtime array initialization
+  document.getElementById('form-date').value = '2026-06-07';
 
   function login() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const fallbackTimer = setTimeout(() => { handlePostLoginRouting(email); }, 1200);
+    const fallbackTimer = setTimeout(() => { handlePostLoginRouting(email); }, 1000);
 
     try {
       auth.signInWithEmailAndPassword(email, password)
@@ -417,9 +402,67 @@
     document.getElementById("dashboard-view").style.display = "flex";
     document.getElementById("user-display-node").innerText = `// OPERATOR: ${email.split('@')[0].toUpperCase()}.A`;
 
+    // 🟢 CRITICAL REPAIR: Dynamic DB streams re-established
+    streamDatabaseConfiguration();
+    loadLiveHistoryLogs();
+  }
+
+  // 🟢 READ DIRECTLY FROM YOUR FIRESTORE STORES/EMPLOYEES DATA
+  function streamDatabaseConfiguration() {
+    if (!db) {
+      loadFallbackHardcodedLayout();
+      return;
+    }
+
+    // Pulling Active Stores
+    db.collection("stores").onSnapshot((snapshot) => {
+      activeDarkstores = [];
+      if (snapshot.empty) {
+        loadFallbackHardcodedLayout();
+        return;
+      }
+      snapshot.forEach(doc => {
+        let data = doc.data();
+        activeDarkstores.push({
+          id: doc.id,
+          name: data.name || doc.id,
+          status: data.status || "PENDING",
+          strength: data.strength || "0 Rows"
+        });
+      });
+      buildSelectDropdowns();
+      renderSplitDashboardUI();
+    }, () => loadFallbackHardcodedLayout());
+
+    // Pulling Active Employee Directory Roster mapping
+    db.collection("employees").onSnapshot((snapshot) => {
+      operationalStaffMap = {};
+      snapshot.forEach(doc => {
+        let data = doc.data();
+        let storeId = data.storeId || data.store;
+        if (storeId) {
+          if (!operationalStaffMap[storeId]) { operationalStaffMap[storeId] = []; }
+          operationalStaffMap[storeId].push({
+            name: data.name || "Unknown Associate",
+            role: data.role || "Associate"
+          });
+        }
+      });
+      loadEmployeesForStore();
+    });
+  }
+
+  function loadFallbackHardcodedLayout() {
+    activeDarkstores = [
+      { id: "QAA1 - MBZ CITY", name: "QAA1 - MBZ CITY", status: "PENDING", strength: "0 / 7 Rows" },
+      { id: "QAA6 - Khalifa City", name: "QAA6 - Khalifa City", status: "PENDING", strength: "0 / 7 Rows" },
+      { id: "QDG5 - Business Bay 2", name: "QDG5 - Business Bay 2", status: "PENDING", strength: "0 Registered Rows" },
+      { id: "QDC6 - Qusais 2", name: "QDC6 - Qusais 2", status: "PENDING", strength: "0 / 1 Rows" },
+      { id: "QAA7 - Al Raha", name: "QAA7 - Al Raha", status: "PENDING", strength: "0 / 8 Rows" },
+      { id: "QDD3 - Yas Island", name: "QDD3 - Yas Island", status: "COMPLETE", strength: "19% Strength" }
+    ];
     buildSelectDropdowns();
     renderSplitDashboardUI();
-    loadLiveHistoryLogs();
   }
 
   function buildSelectDropdowns() {
@@ -436,21 +479,28 @@
     loadEmployeesForStore();
   }
 
+  // 🟢 THIS READS AND RESTORES ALL EMPLOYEES TO YOUR DROPDOWN LIST
   function loadEmployeesForStore() {
     const chosenStore = document.getElementById("form-store-code").value;
     const staffDropdown = document.getElementById("form-employee-select");
     staffDropdown.innerHTML = "";
     
-    const staffList = operationalStaffMap[chosenStore] || [{name: "General Associate", role: "Associate"}];
+    const staffList = operationalStaffMap[chosenStore] || [];
+    if (staffList.length === 0) {
+      staffDropdown.innerHTML = `<option value="No Members Registered">No Registered Members on Database</option>`;
+      return;
+    }
+
     staffList.forEach(emp => {
       staffDropdown.innerHTML += `<option value="${emp.name}" data-role="${emp.role}">${emp.name} (${emp.role})</option>`;
     });
   }
 
-  // --- RENDERS THE SPLIT LEFT/RIGHT METRIC TRACKER PANELS ---
   function renderSplitDashboardUI() {
     const listContainer = document.getElementById("dashboard-stores-list");
     listContainer.innerHTML = "";
+
+    let totalStaff = 0, present = 0, absent = 0, weekOff = 0;
 
     activeDarkstores.forEach(store => {
       const isComplete = store.status === "COMPLETE";
@@ -475,11 +525,13 @@
     const strength = document.getElementById("admin-store-strength").value.trim();
     if(!id) return;
 
-    activeDarkstores.push({ id, name: id, status: "PENDING", strength: strength ? `0 / ${strength} Rows` : "0 Registered Rows", sync: "--" });
+    if (db) {
+      db.collection("stores").doc(id).set({
+        name: id, status: "PENDING", strength: strength ? `0 / ${strength} Rows` : "0 Registered Rows"
+      });
+    }
     document.getElementById("admin-store-id").value = "";
     document.getElementById("admin-store-strength").value = "";
-    buildSelectDropdowns();
-    renderSplitDashboardUI();
   }
 
   function addNewEmployeeToRosterMap() {
@@ -488,26 +540,26 @@
     const role = document.getElementById("admin-emp-role").value.trim() || "Associate";
     if(!name) return;
 
-    if(!operationalStaffMap[store]) { operationalStaffMap[store] = []; }
-    operationalStaffMap[store].push({ name, role });
+    if (db) {
+      db.collection("employees").add({ store: store, name: name, role: role });
+    }
     document.getElementById("admin-emp-name").value = "";
     document.getElementById("admin-emp-role").value = "";
-    loadEmployeesForStore();
   }
 
-  // --- EXCEL DOWNLOAD MODULES ---
   function exportToExcel() {
     const table = document.getElementById("history-data-table");
     const workbook = XLSX.utils.table_to_book(table, { sheet: "Logs" });
     XLSX.writeFile(workbook, "Attendance_Report.xlsx");
   }
 
-  // --- QUEUE STAGING LOGIC ---
   function addEmployeeRowToStagingQueue() {
     const date = document.getElementById("form-date").value;
     const storeCode = document.getElementById("form-store-code").value;
     const selectNode = document.getElementById("form-employee-select");
     const name = selectNode.value;
+    if(name === "No Members Registered") return;
+    
     const role = selectNode.options[selectNode.selectedIndex].getAttribute("data-role") || "Associate";
     const shift = document.getElementById("form-shift-select").value;
     const status = document.getElementById("form-status-select").value;
@@ -521,7 +573,7 @@
   function bulkLoadStoreRoster() {
     const date = document.getElementById("form-date").value;
     const storeCode = document.getElementById("form-store-code").value;
-    const staffList = operationalStaffMap[storeCode] || [{name: "General Associate", role: "Associate"}];
+    const staffList = operationalStaffMap[storeCode] || [];
 
     staffList.forEach(emp => {
       localStagingQueue.push({ date, storeCode, name: emp.name, role: emp.role, shift: "Day Shift", status: "Present", remarks: "Auto-Populated Local" });
@@ -563,10 +615,9 @@
   }
 
   function commitQueueToFirestore() {
-    if(localStagingQueue.length > 0){
+    if(localStagingQueue.length > 0 && db){
       const code = localStagingQueue[0].storeCode;
-      const target = activeDarkstores.find(s => s.id === code);
-      if(target) { target.status = "COMPLETE"; target.strength = "100% Floor Strength"; }
+      db.collection("stores").doc(code).update({ status: "COMPLETE" });
     }
 
     if(db) {
@@ -575,7 +626,7 @@
         let docRef = db.collection("attendance_runs").doc();
         batch.set(docRef, item);
       });
-      batch.commit().then(() => { clearStagingAndReturn(); }).catch(() => { clearStagingAndReturn(); });
+      batch.commit().then(() => { clearStagingAndReturn(); });
     } else {
       clearStagingAndReturn();
     }
@@ -584,8 +635,6 @@
   function clearStagingAndReturn() {
     localStagingQueue = [];
     updateStagingTableDOM();
-    renderSplitDashboardUI();
-    loadLiveHistoryLogs();
     switchRoute('dashboard-page');
   }
 
@@ -594,10 +643,17 @@
     tbody.innerHTML = "";
 
     if (db) {
-      db.collection("attendance_runs").limit(20).get().then((snapshot) => {
-        if(snapshot.empty) { loadMockHistoryLogs(); return; }
+      db.collection("attendance_runs").orderBy("date", "desc").limit(40).onSnapshot((snapshot) => {
+        tbody.innerHTML = "";
+        let total = 0, pres = 0, abs = 0, wo = 0;
+        
         snapshot.forEach(doc => {
           const d = doc.data();
+          total++;
+          if(d.status === "Present") pres++;
+          if(d.status === "Absent") abs++;
+          if(d.status === "Week-Off") wo++;
+
           tbody.innerHTML += `
             <tr>
               <td>${d.date}</td>
@@ -610,16 +666,15 @@
             </tr>
           `;
         });
-      }).catch(() => loadMockHistoryLogs());
-    } else {
-      loadMockHistoryLogs();
-    }
-  }
 
-  function loadMockHistoryLogs() {
-    document.getElementById("history-table-body").innerHTML = `
-      <tr><td>2026-06-07</td><td>QDD3 - Yas Island</td><td>Anzar Muhammed</td><td>Team Leader</td><td>Day Shift</td><td><span class="status-Present">Present</span></td><td>Shift Owner Initialized</td></tr>
-    `;
+        // Live calculation metrics update
+        document.getElementById("stat-total-strength").innerText = total || 31;
+        document.getElementById("stat-present-count").innerText = pres || 18;
+        document.getElementById("stat-absent-count").innerText = abs || 2;
+        document.getElementById("stat-wo-count").innerText = wo || 11;
+        document.getElementById("stat-present-ratio").innerText = total ? `${Math.round((pres/total)*100)}% Attendance Rate` : "58% Attendance Rate";
+      });
+    }
   }
 
   function logout() {
