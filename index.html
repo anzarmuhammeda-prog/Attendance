@@ -1141,12 +1141,12 @@
     });
   }// --- NEW METRICS ENGINE ---
 function refreshDashboardMetrics() {
-    const staffRef = db.collection("staff");
+    // We changed "staff" to "employee_directory"
+    const staffRef = db.collection("employee_directory");
 
     // Total Strength
     staffRef.get().then((snapshot) => {
-        const total = snapshot.size;
-        document.getElementById("count-total-strength").innerText = total;
+        document.getElementById("count-total-strength").innerText = snapshot.size;
     });
 
     // Present
@@ -1163,6 +1163,7 @@ function refreshDashboardMetrics() {
     staffRef.where("status", "==", "Week-Off").get().then((snapshot) => {
         document.getElementById("count-total-weekoff").innerText = snapshot.size;
     });
+}
 }
 </script>
 </body>
