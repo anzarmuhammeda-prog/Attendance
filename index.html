@@ -709,26 +709,38 @@
       }
     }
 
-    function initializeLogonTerminalInterface() {
+   function initializeLogonTerminalInterface() {
       document.getElementById("login-view-node").style.display = "flex";
       document.getElementById("dashboard-view-node").style.display = "none";
       
+      const selectMenu = document.getElementById("login-store-select-menu");
+      const adminStoreMenu = document.getElementById("admin-new-worker-store");
+
+      // Hardcoded baseline to ensure your dropdown is active immediately
+      const standardHubList = ["QDD3 - Yas Island", "QAA9 - Al Ain", "DXB1 - Dubai"];
+      
+      function renderDropdownOptions(storesArray) {
+        if(selectMenu) {
+          selectMenu.innerHTML = "";
+          storesArray.forEach(store => { selectMenu.innerHTML += `<option value="${store}">${store}</option>`; });
+        }
+        if(adminStoreMenu) {
+          adminStoreMenu.innerHTML = "";
+          storesArray.forEach(store => { adminStoreMenu.innerHTML += `<option value="${store}">${store}</option>`; });
+        }
+      }
+
+      // First run with baseline fallbacks so it's never empty
+      databaseCachedStoresList = standardHubList;
+      renderDropdownOptions(databaseCachedStoresList);
+      
+      // Attempt to pull dynamically from system configurations
       db.collection("system_configs").doc("stores_matrix").get().then((doc) => {
         if(doc.exists && doc.data().stores) {
           databaseCachedStoresList = doc.data().stores;
-          const selectMenu = document.getElementById("login-store-select-menu");
-          const adminStoreMenu = document.getElementById("admin-new-worker-store");
-          
-          if(selectMenu) {
-            selectMenu.innerHTML = "";
-            databaseCachedStoresList.forEach(store => { selectMenu.innerHTML += `<option value="${store}">${store}</option>`; });
-          }
-          if(adminStoreMenu) {
-            adminStoreMenu.innerHTML = "";
-            databaseCachedStoresList.forEach(store => { adminStoreMenu.innerHTML += `<option value="${store}">${store}</option>`; });
-          }
+          renderDropdownOptions(databaseCachedStoresList);
         }
-      });
+      }).catch(err => console.log("Config document sync skipped, using baseline locations:", err));
       
       db.collection("system_configs").doc("pin_authorization_matrix").get().then((doc) => {
         if(doc.exists) databaseCachedPinMap = doc.data();
