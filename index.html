@@ -1128,12 +1128,15 @@
 
     if(!name) { alert("Please provide a name to create a valid record object."); return; }
 
-    db.collection("employee_directory").add({
-      storeCode: store,
-      name: name,
-      agency: agency,
-      role: role,
-      shift: shift
+// REPLACE THIS BLOCK IN commitNewWorkerToDirectory
+db.collection("employee_directory").add({
+    storeCode: store,
+    name: name,
+    agency: agency,
+    role: role,
+    shift: shift,
+    status: "Present" // This is the line that allows the dashboard to count them
+})
     }).then(() => { 
       document.getElementById("admin-new-worker-name").value = ""; 
       document.getElementById("admin-new-worker-agency").value = "";
