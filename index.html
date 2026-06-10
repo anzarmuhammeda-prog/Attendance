@@ -655,6 +655,8 @@
     document.getElementById("login-view-node").style.display = "none";
     document.getElementById("dashboard-view-node").style.display = "block";
     
+    refreshDashboardMetrics();
+    
     const adminTab = document.getElementById("nav-target-btn-infrastructure");
     const sessionIdentityBadge = document.getElementById("session-identity-badge");
 
@@ -1137,7 +1139,31 @@
       document.getElementById("admin-new-worker-agency").value = "";
       alert(`Profile added successfully for: ${name}`); 
     });
-  }
+  }// --- NEW METRICS ENGINE ---
+function refreshDashboardMetrics() {
+    const staffRef = db.collection("staff");
+
+    // Total Strength
+    staffRef.get().then((snapshot) => {
+        const total = snapshot.size;
+        document.getElementById("count-total-strength").innerText = total;
+    });
+
+    // Present
+    staffRef.where("status", "==", "Present").get().then((snapshot) => {
+        document.getElementById("count-total-present").innerText = snapshot.size;
+    });
+
+    // Absent
+    staffRef.where("status", "==", "Absent").get().then((snapshot) => {
+        document.getElementById("count-total-absent").innerText = snapshot.size;
+    });
+
+    // Week-Off
+    staffRef.where("status", "==", "Week-Off").get().then((snapshot) => {
+        document.getElementById("count-total-weekoff").innerText = snapshot.size;
+    });
+}
 </script>
 </body>
 </html>
