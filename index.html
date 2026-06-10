@@ -280,7 +280,6 @@
       <p id="gateway-callback-error-log" style="color:#ff6b6b; font-size:13px; font-weight:bold; margin-top:15px; display:none;"></p>
     </div>
   </div>
-
   <div id="dashboard-view-node" class="master-dashboard-layout">
     
     <div class="darkstore-app-header">
@@ -367,7 +366,7 @@
           <div class="desktop-responsive-layout-grid">
             <input type="text" id="quick-add-name" class="custom-text-field" placeholder="Full Name">
             <input type="text" id="quick-add-agency" class="custom-text-field" placeholder="Agency (e.g., Flexitalent, Align)">
-            <button class="apply-mini-btn" style="background:var(--accent-purple); color:#000;" onclick="executeQuickAssociateOnboarding()">Add Inline</button>
+            <button type="button" class="apply-mini-btn" style="background:var(--accent-purple); color:#000;" onclick="executeQuickAssociateOnboarding()">Add Inline</button>
           </div>
         </div>
 
@@ -380,7 +379,7 @@
               <option value="Absent">Absent</option>
               <option value="Week-Off">Week-Off</option>
             </select>
-            <button class="apply-mini-btn" onclick="executeGlobalRosterBulkOverride()">Apply</button>
+            <button type="button" class="apply-mini-btn" onclick="executeGlobalRosterBulkOverride()">Apply</button>
           </div>
         </div>
 
@@ -394,8 +393,8 @@
           </div>
         </div>
 
-        <button class="radiant-action-btn" style="background:#00e676; margin-top:15px; color:#000;" onclick="pushAttendanceDatasetToCloudDatabase()">Submit Attendance →</button>
-        <button class="radiant-action-btn" style="background:transparent; color:var(--text-muted); border:1px solid var(--border-color); margin-top:8px;" onclick="fallbackToDirectoryStagingStage()">← Re-adjust Activated Roster List</button>
+        <button type="button" class="radiant-action-btn" style="background:#00e676; margin-top:15px; color:#000;" onclick="pushAttendanceDatasetToCloudDatabase()">Submit Attendance →</button>
+        <button type="button" class="radiant-action-btn" style="background:transparent; color:var(--text-muted); border:1px solid var(--border-color); margin-top:8px;" onclick="fallbackToDirectoryStagingStage()">← Re-adjust Activated Roster List</button>
       </div>
 
       <div id="roster-review-verification-panel" class="content-panel-card" style="display:none; border-color:#00e676;">
@@ -411,26 +410,164 @@
           </table>
         </div>
 
-        <button class="radiant-action-btn" style="background:#00e676; color:#000;" onclick="confirmAndFinalizeSubmissionPipeline()">Confirm Information & Close Session →</button>
-        <button class="radiant-action-btn" style="background:transparent; color:var(--accent-orange); border:1px solid var(--accent-orange); margin-top:8px;" onclick="unlockReviewSheetForLiveEditing()">⚠️ Modify Current Sheet Metrics</button>
+        <button type="button" class="radiant-action-btn" style="background:#00e676; color:#000;" onclick="confirmAndFinalizeSubmissionPipeline()">Confirm Information & Close Session →</button>
+        <button type="button" class="radiant-action-btn" style="background:transparent; color:var(--accent-orange); border:1px solid var(--accent-orange); margin-top:8px;" onclick="unlockReviewSheetForLiveEditing()">⚠️ Modify Current Sheet Metrics</button>
       </div>
-
+    </div>
+    <div id="dashboard-view-node" class="master-dashboard-layout">
+    
+    <div class="darkstore-app-header">
+      <div class="brand-logo-node">GWC DARKSTORE<span>TRACK</span></div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span id="session-identity-badge" style="font-size:12px; font-family:monospace; color:var(--text-muted);">Session Context Pending</span>
+        <button class="disconnect-session-trigger" onclick="killTerminalSessionState()">Disconnect</button>
+      </div>
     </div>
 
+    <div class="app-navigation-bar">
+      <button id="nav-target-btn-dash" class="navigation-tab-item tab-state-active" onclick="routeWorkspaceNavigation('page-overview-analytics')">Dashboard</button>
+      <button id="nav-target-btn-attendance" class="navigation-tab-item" onclick="routeWorkspaceNavigation('page-attendance-hub')">Submit Attendance</button>
+      <button id="nav-target-btn-history" class="navigation-tab-item" onclick="routeWorkspaceNavigation('page-historical-ledger')">History Logs</button>
+      <button id="nav-target-btn-incident" class="navigation-tab-item" onclick="routeWorkspaceNavigation('page-incident-reporting')">Report Issue</button>
+      <button id="nav-target-btn-infrastructure" class="navigation-tab-item" style="border:1px dashed var(--accent-purple); color:var(--accent-purple); display:none;" onclick="routeWorkspaceNavigation('page-infrastructure-controls')">Admin Settings</button>
+    </div>
+
+    <div id="page-overview-analytics" class="workspace-view-page page-state-active">
+      <div class="metric-summary-grid">
+        <div class="metric-counter-card" style="border-left: 4px solid var(--accent-blue);">
+          <h4>TOTAL STAFF STRENGTH</h4>
+          <div class="counter-value" id="count-total-strength">0</div>
+          <div class="counter-subtext">Across active matching channels</div>
+        </div>
+        <div class="metric-counter-card" style="border-left: 4px solid #00e676;">
+          <h4>PRESENT PERSONNEL</h4>
+          <div class="counter-value" id="count-total-present" style="color:#00e676;">0</div>
+          <div class="counter-subtext" id="rate-total-attendance">0% Attendance Rate</div>
+        </div>
+        <div class="metric-counter-card" style="border-left: 4px solid #ff5252;">
+          <h4>ABSENT ROWS</h4>
+          <div class="counter-value" id="count-total-absent" style="color:#ff5252;">0</div>
+          <div class="counter-subtext">Floor replacements requested</div>
+        </div>
+        <div class="metric-counter-card" style="border-left: 4px solid #90a4ae;">
+          <h4>SCHEDULED WEEK-OFFS</h4>
+          <div class="counter-value" id="count-total-weekoff" style="color:#90a4ae;">0</div>
+          <div class="counter-subtext">Rotating roster allocations</div>
+        </div>
+      </div>
+
+      <div class="desktop-responsive-layout-grid">
+        <div class="content-panel-card">
+          <h3>Regional Hub Submission Status Tracker</h3>
+          <div id="regional-hub-status-list-container" style="display:grid; gap:10px;"></div>
+        </div>
+        <div class="content-panel-card">
+          <h3>Active Operational Bulletins</h3>
+          <div style="background:rgba(0,195,255,0.03); border-left:4px solid var(--accent-blue); padding:15px; border-radius:8px; font-size:13px; line-height:1.5;">
+            <strong>Notice:</strong> Ensure all attendance markings are logged within 45 minutes of shift startup sequence to prevent automation delays.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-attendance-hub" class="workspace-view-page">
+      
+      <div id="roster-pre-selection-panel" class="content-panel-card">
+        <h3>👥 Active Roster Staging Configuration Workspace</h3>
+        <div class="desktop-responsive-layout-grid" style="margin-bottom:20px;">
+          <div>
+            <label style="font-size:11px; color:var(--text-muted); font-weight:700; display:block; margin-bottom:6px;">REPORTING TARGET DATE</label>
+            <input type="date" id="attendance-execution-date" class="custom-text-field" onchange="synchronizeDynamicRosterInterfaceDeck()">
+          </div>
+          <div>
+            <label style="font-size:11px; color:var(--text-muted); font-weight:700; display:block; margin-bottom:6px;">ASSIGNED WINDOW SHIFT</label>
+            <select id="attendance-execution-shift" class="custom-select-input" onchange="synchronizeDynamicRosterInterfaceDeck()">
+              <option value="Day">Day Shift</option>
+              <option value="Mid">Mid Shift</option>
+              <option value="Night">Night Shift</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="roster-pre-selection-deck-wrapper" style="max-height:350px; overflow-y:auto; padding-right:4px; margin-bottom:15px;"></div>
+        <button class="radiant-action-btn" onclick="commitStagedSelectionToRosterStatusDeck()">Generate Live Attendance Roster Cards →</button>
+      </div>
+
+      <div id="roster-status-mapping-panel" class="content-panel-card" style="display:none;">
+        
+        <div class="quick-onboard-section">
+          <h4 style="margin:0 0 10px 0; color:var(--accent-purple); font-size:13px;">➕ Quick Add New Associate to Current Shift</h4>
+          <div class="desktop-responsive-layout-grid">
+            <input type="text" id="quick-add-name" class="custom-text-field" placeholder="Full Name">
+            <input type="text" id="quick-add-agency" class="custom-text-field" placeholder="Agency (e.g., Flexitalent, Align)">
+            <button type="button" class="apply-mini-btn" style="background:var(--accent-purple); color:#000;" onclick="executeQuickAssociateOnboarding()">Add Inline</button>
+          </div>
+        </div>
+
+        <h3>📝 Attendance Status Matrix Assignment</h3>
+        <div class="set-all-utility-box">
+          <label style="font-size:11px; color:var(--accent-blue); font-weight:700; margin-bottom:6px; display:block;">Global Roster Modifier Tool</label>
+          <div class="inline-split-flex-container">
+            <select id="global-bulk-status-selector" class="custom-select-input">
+              <option value="Present">Present</option>
+              <option value="Absent">Absent</option>
+              <option value="Week-Off">Week-Off</option>
+            </select>
+            <button type="button" class="apply-mini-btn" onclick="executeGlobalRosterBulkOverride()">Apply</button>
+          </div>
+        </div>
+
+        <div id="active-attendance-card-deck-wrapper"></div>
+        
+        <div class="content-panel-card" style="background:rgba(255,255,255,0.01); margin-top:20px; padding:15px;">
+          <h3>👤 Submitter Verification Context</h3>
+          <div class="form-block-element" style="margin:0;">
+            <label>Your Name *</label>
+            <input type="text" id="attendance-submitter-signature" class="custom-text-field" placeholder="Enter your name (TL or staff name)...">
+          </div>
+        </div>
+
+        <button type="button" class="radiant-action-btn" style="background:#00e676; margin-top:15px; color:#000;" onclick="pushAttendanceDatasetToCloudDatabase()">Submit Attendance →</button>
+        <button type="button" class="radiant-action-btn" style="background:transparent; color:var(--text-muted); border:1px solid var(--border-color); margin-top:8px;" onclick="fallbackToDirectoryStagingStage()">← Re-adjust Activated Roster List</button>
+      </div>
+
+      <div id="roster-review-verification-panel" class="content-panel-card" style="display:none; border-color:#00e676;">
+        <h3 style="color:#00e676;">✅ Review Logged Sheet Verification Parameters</h3>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:20px;">Review your entry mappings below before releasing active terminal write controls.</p>
+        
+        <div class="scroll-table-box" style="margin-bottom:20px;">
+          <table>
+            <thead>
+              <tr><th>Associate Name</th><th>Agency</th><th>Shift Context</th><th>Assigned Status Mapping</th><th>Exceptions/Remarks</th></tr>
+            </thead>
+            <tbody id="review-verification-table-body"></tbody>
+          </table>
+        </div>
+
+        <button type="button" class="radiant-action-btn" style="background:#00e676; color:#000;" onclick="confirmAndFinalizeSubmissionPipeline()">Confirm Information & Close Session →</button>
+        <button type="button" class="radiant-action-btn" style="background:transparent; color:var(--accent-orange); border:1px solid var(--accent-orange); margin-top:8px;" onclick="unlockReviewSheetForLiveEditing()">⚠️ Modify Current Sheet Metrics</button>
+      </div>
+    </div>
     <div id="page-historical-ledger" class="workspace-view-page">
       <div class="content-panel-card">
         <h3>📊 Activity Filter Engine Matrix</h3>
         <div class="desktop-responsive-layout-grid" style="margin-bottom:15px;">
-          <input type="date" id="ledger-query-date-filter" class="custom-text-field" onchange="fetchHistoricalLedgerDocuments()">
-          <select id="ledger-query-shift-filter" class="custom-select-input" onchange="fetchHistoricalLedgerDocuments()">
-            <option value="All">All Shift Allocations</option>
-            <option value="Day">Day Shift</option>
-            <option value="Mid">Mid Shift</option>
-            <option value="Night">Night Shift</option>
-          </select>
-          <div style="display:flex; gap:6px;">
-            <button class="apply-mini-btn" style="background:var(--border-color); color:white; flex:1;" onclick="clearHistoricalSearchFilters()">Reset</button>
-            <button class="apply-mini-btn" style="background:#1565c0; color:white;" onclick="triggerCsvExportSequence()">Export CSV</button>
+          <div>
+            <label style="font-size:11px; color:var(--text-muted); font-weight:700; display:block; margin-bottom:6px;">FILTER BY DATE</label>
+            <input type="date" id="ledger-query-date-filter" class="custom-text-field" onchange="fetchHistoricalLedgerDocuments()">
+          </div>
+          <div>
+            <label style="font-size:11px; color:var(--text-muted); font-weight:700; display:block; margin-bottom:6px;">SHIFT RANGE FILTER</label>
+            <select id="ledger-query-shift-filter" class="custom-select-input" onchange="fetchHistoricalLedgerDocuments()">
+              <option value="All">All Shift Allocations</option>
+              <option value="Day">Day Shift</option>
+              <option value="Mid">Mid Shift</option>
+              <option value="Night">Night Shift</option>
+            </select>
+          </div>
+          <div style="display:flex; gap:6px; align-items:flex-end;">
+            <button type="button" class="apply-mini-btn" style="background:var(--border-color); color:white; flex:1;" onclick="clearHistoricalSearchFilters()">Reset</button>
+            <button type="button" class="apply-mini-btn" style="background:#1565c0; color:white; flex:1;" onclick="triggerCsvExportSequence()">Export CSV</button>
           </div>
         </div>
         
@@ -456,7 +593,7 @@
           <label>Problem Profile Details & Explicit Action Request</label>
           <textarea id="ticket-issue-details" class="custom-text-field" rows="4" placeholder="Detail the system operational adjustments needed..." style="resize:vertical; font-family:inherit;"></textarea>
         </div>
-        <button class="radiant-action-btn" onclick="submitNewEscalationTicket()">Transmit Ticket Queue →</button>
+        <button type="button" class="radiant-action-btn" onclick="submitNewEscalationTicket()">Transmit Ticket Queue →</button>
       </div>
     </div>
 
@@ -464,7 +601,7 @@
       <div class="content-panel-card" style="border-color:var(--accent-purple);">
         <h3 style="color:var(--accent-purple);">⚡ Global Security Hub Gateway Tokens (PIN Access Control Panel)</h3>
         <div id="admin-pin-matrix-config-grid" class="desktop-responsive-layout-grid" style="margin-bottom:15px;"></div>
-        <button class="apply-mini-btn" style="background:var(--accent-purple); color:black;" onclick="commitUpdatedTerminalSecurityPins()">Save PIN Configurations</button>
+        <button type="button" class="apply-mini-btn" style="background:var(--accent-purple); color:black;" onclick="commitUpdatedTerminalSecurityPins()">Save PIN Configurations</button>
       </div>
 
       <div class="desktop-responsive-layout-grid">
@@ -472,7 +609,7 @@
           <h3>📌 Register Pinned Node Location</h3>
           <div class="inline-split-flex-container">
             <input type="text" id="admin-new-store-input" class="custom-text-field" placeholder="e.g., QAA9 - Al Ain">
-            <button class="apply-mini-btn" onclick="createNewDarkstoreLocationNode()">+</button>
+            <button type="button" class="apply-mini-btn" onclick="createNewDarkstoreLocationNode()">+</button>
           </div>
         </div>
         <div class="content-panel-card">
@@ -491,7 +628,7 @@
               <option value="Mid Shift">Mid Shift</option>
               <option value="Night Shift">Night Shift</option>
             </select>
-            <button class="radiant-action-btn" style="background:var(--accent-purple);" onclick="commitNewWorkerToDirectory()">Commit Worker Record</button>
+            <button type="button" class="radiant-action-btn" style="background:var(--accent-purple);" onclick="commitNewWorkerToDirectory()">Commit Worker Record</button>
           </div>
         </div>
       </div>
@@ -499,675 +636,717 @@
 
   </div>
 
-<script>
-  // YOUR SECURE REPOSITORY FIREBASE CONFIGURATION PARAMS
-  const firebaseConfig = {
-    apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
-    authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
-    projectId: "attendance-management-sy-7a8dc",
-    storageBucket: "attendance-management-sy-7a8dc.firebasestorage.app",
-    messagingSenderId: "251165221601",
-    appId: "1:251165221601:web:2d58e00b38656e9452cda0"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
-
-  let activeSessionStoreContext = "";
-  let currentSessionOperatorEmail = "";
-  let isCurrentSessionAdmin = false;
-  
-  let databaseCachedStoresList = [];
-  let databaseCachedStaffDirectory = [];
-  let databaseCachedPinMap = {};
-  let currentPhaseSelectedWorkerArray = [];
-  let pinnedReviewDatasetBuffer = [];
-
-  const currentSystemCalendarIsoDateStr = new Date().toISOString().split('T')[0];
-  document.getElementById("attendance-execution-date").value = currentSystemCalendarIsoDateStr;
-  document.getElementById("attendance-execution-date").setAttribute("max", currentSystemCalendarIsoDateStr);
-
-  function handlePinInputChain(currentBox, nextFieldId, prevFieldId) {
-    if (currentBox.value.length >= 1 && nextFieldId) {
-      document.getElementById(nextFieldId).focus();
-    }
-    if (window.event.keyCode === 8 && prevFieldId) {
-      document.getElementById(prevFieldId).focus();
-    }
-  }
-
-  function togglePinObscurityState() {
-    const fields = ['p1', 'p2', 'p3', 'p4'];
-    fields.forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.type = el.type === "password" ? "text" : "password";
-    });
-  }
-
-  auth.onAuthStateChanged(user => {
-    if(user) {
-      currentSessionOperatorEmail = user.email;
-      evaluateUserPermissionNode(user.email);
-    } else {
-      if(!activeSessionStoreContext) { initializeLogonTerminalInterface(); }
-    }
-  });
-
-  function switchVerificationPathway(selectedMode) {
-    document.getElementById("gateway-callback-error-log").style.display = "none";
-    const opBtn = document.getElementById("toggle-op-mode-btn");
-    const adminBtn = document.getElementById("toggle-admin-mode-btn");
-    
-    if(selectedMode === 'operator') {
-      document.getElementById("wrapper-operator-credentials").style.display = "block";
-      document.getElementById("wrapper-admin-credentials").style.display = "none";
-      opBtn.className = "pathway-toggle-btn active-mode";
-      adminBtn.className = "pathway-toggle-btn inactive-mode";
-    } else {
-      document.getElementById("wrapper-operator-credentials").style.display = "none";
-      document.getElementById("wrapper-admin-credentials").style.display = "block";
-      opBtn.className = "pathway-toggle-btn inactive-mode";
-      adminBtn.className = "pathway-toggle-btn active-mode";
-    }
-  }
-
-  function initializeLogonTerminalInterface() {
-    document.getElementById("login-view-node").style.display = "flex";
-    document.getElementById("dashboard-view-node").style.display = "none";
-    
-    db.collection("system_configs").doc("stores_matrix").get().then((doc) => {
-      if(doc.exists && doc.data().stores) {
-        databaseCachedStoresList = doc.data().stores;
-        const selectMenu = document.getElementById("login-store-select-menu");
-        selectMenu.innerHTML = "";
-        databaseCachedStoresList.forEach(store => { selectMenu.innerHTML += `<option value="${store}">${store}</option>`; });
-      }
-    });
-    
-    db.collection("system_configs").doc("pin_authorization_matrix").get().then((doc) => {
-      if(doc.exists) databaseCachedPinMap = doc.data();
-    });
-  }
-
-  function executeOperatorSecurityValidation() {
-    const chosenStore = document.getElementById("login-store-select-menu").value;
-    const digit1 = document.getElementById("p1").value.trim();
-    const digit2 = document.getElementById("p2").value.trim();
-    const digit3 = document.getElementById("p3").value.trim();
-    const digit4 = document.getElementById("p4").value.trim();
-    const concatenatedPin = digit1 + digit2 + digit3 + digit4;
-    
-    const errorDisplay = document.getElementById("gateway-callback-error-log");
-
-    if(!chosenStore) { alert("Please specify your operational darkstore hub location context."); return; }
-    if(concatenatedPin.length < 4) { alert("Please complete the 4-digit verification sequence entry."); return; }
-    
-    const registeredTargetPin = databaseCachedPinMap[chosenStore] || "1234";
-    
-    if(concatenatedPin === registeredTargetPin) {
-      errorDisplay.style.display = "none";
-      activeSessionStoreContext = chosenStore;
-      isCurrentSessionAdmin = false;
-      currentSessionOperatorEmail = `terminal.${btoa(chosenStore).replace(/=/g,'').substring(0,6).toLowerCase()}@gwc.local`;
-      
-      document.getElementById("p1").value = ""; document.getElementById("p2").value = "";
-      document.getElementById("p3").value = ""; document.getElementById("p4").value = "";
-      
-      constructWorkspaceLayout();
-    } else {
-      errorDisplay.innerText = "❌ Site Authentication PIN mismatch. Check credentials and retry.";
-      errorDisplay.style.display = "block";
-    }
-  }
-
-  function executeAdminDatabaseAuthentication() {
-    const email = document.getElementById("login-admin-email").value.trim();
-    const password = document.getElementById("login-admin-password").value;
-    const errorDisplay = document.getElementById("gateway-callback-error-log");
-
-    if(!email || !password) { alert("Please fulfill administrative authorization tokens."); return; }
-
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => { errorDisplay.style.display = "none"; })
-      .catch(err => { errorDisplay.innerText = "Access Denied: " + err.message; errorDisplay.style.display = "block"; });
-  }
-
-  function killTerminalSessionState() {
-    auth.signOut();
-    activeSessionStoreContext = "";
-    currentSessionOperatorEmail = "";
-    isCurrentSessionAdmin = false;
-    initializeLogonTerminalInterface();
-  }
-
-  function evaluateUserPermissionNode(email) {
-    if(email === "anzarmuhammed.a@gmail.com" || email === "admin@attendance.com" || email === "anzar.mhd@gmail.com") {
-      isCurrentSessionAdmin = true;
-      activeSessionStoreContext = "";
-    } else {
-      isCurrentSessionAdmin = false;
-    }
-    constructWorkspaceLayout();
-  }
-
-  function constructWorkspaceLayout() {
-    document.getElementById("login-view-node").style.display = "none";
-    document.getElementById("dashboard-view-node").style.display = "block";
-    
-    refreshDashboardMetrics();
-    
-    const adminTab = document.getElementById("nav-target-btn-infrastructure");
-    const sessionIdentityBadge = document.getElementById("session-identity-badge");
-
-    if(isCurrentSessionAdmin) {
-      sessionIdentityBadge.innerHTML = `OPERATOR: <span style="color:var(--accent-purple); font-weight:bold;">ROOT ADMIN</span>`;
-      adminTab.style.display = "block";
-    } else {
-      sessionIdentityBadge.innerHTML = `SITE: <span style="color:var(--accent-blue); font-weight:bold;">${activeSessionStoreContext}</span>`;
-      adminTab.style.display = "none";
-    }
-
-    startRealtimeSyncEngines();
-    routeWorkspaceNavigation('page-overview-analytics');
-  }
-
-  function routeWorkspaceNavigation(targetPageId) {
-    document.querySelectorAll(".workspace-view-page").forEach(page => page.classList.remove("page-state-active"));
-    document.querySelectorAll(".navigation-tab-item").forEach(tab => tab.classList.remove("tab-state-active"));
-    
-    const pageNode = document.getElementById(targetPageId);
-    if(pageNode) pageNode.classList.add("page-state-active");
-
-    if(targetPageId === 'page-overview-analytics') { document.getElementById('nav-target-btn-dash').classList.add('tab-state-active'); calculateOverviewAnalyticsMetrics(); }
-    if(targetPageId === 'page-attendance-hub') document.getElementById('nav-target-btn-attendance').classList.add('tab-state-active');
-    if(targetPageId === 'page-historical-ledger') { document.getElementById('nav-target-btn-history').classList.add('tab-state-active'); fetchHistoricalLedgerDocuments(); }
-    if(targetPageId === 'page-incident-reporting') document.getElementById('nav-target-btn-incident').classList.add('tab-state-active');
-    if(targetPageId === 'page-infrastructure-controls') document.getElementById('nav-target-btn-infrastructure').classList.add('tab-state-active');
-  }
-
-  function startRealtimeSyncEngines() {
-    db.collection("system_configs").doc("stores_matrix").onSnapshot(doc => {
-      if(doc.exists && doc.data().stores) {
-        databaseCachedStoresList = doc.data().stores;
-        const workerStoreSelector = document.getElementById("admin-new-worker-store");
-        if(workerStoreSelector) {
-          workerStoreSelector.innerHTML = "";
-          databaseCachedStoresList.forEach(s => workerStoreSelector.innerHTML += `<option value="${s}">${s}</option>`);
-        }
-      }
-      
-      db.collection("system_configs").doc("pin_authorization_matrix").onSnapshot(pinDoc => {
-        if(pinDoc.exists) databaseCachedPinMap = pinDoc.data();
-        if(isCurrentSessionAdmin) syncAdminPinUIGrid();
-      });
-    });
-
-    db.collection("employee_directory").onSnapshot(snapshot => {
-      databaseCachedStaffDirectory = [];
-      snapshot.forEach(doc => databaseCachedStaffDirectory.push({ id: doc.id, ...doc.data() }));
-      synchronizeDynamicRosterInterfaceDeck();
-      calculateOverviewAnalyticsMetrics();
-    });
-  }
-
-  function calculateOverviewAnalyticsMetrics() {
-    const selectedDate = document.getElementById("attendance-execution-date").value;
-    
-    // Flexible substring matching structure logic to clean empty interface counts
-    let totalStrength = databaseCachedStaffDirectory.length;
-    if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      totalStrength = databaseCachedStaffDirectory.filter(e => 
-        e.storeCode && (e.storeCode.toLowerCase().includes(activeSessionStoreContext.toLowerCase()) || activeSessionStoreContext.toLowerCase().includes(e.storeCode.toLowerCase()))
-      ).length;
-    }
-    document.getElementById("count-total-strength").innerText = totalStrength;
-
-    let queryRef = db.collection("attendance_ledger").where("selectedDate", "==", selectedDate);
-    queryRef.get().then(snapshot => {
-      let presentCount = 0; let absentCount = 0; let weekoffCount = 0;
-      
-      snapshot.forEach(doc => {
-        const item = doc.data();
-        // Structural filter check
-        if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-          if(!item.storeCode || !(item.storeCode.toLowerCase().includes(activeSessionStoreContext.toLowerCase()) || activeSessionStoreContext.toLowerCase().includes(item.storeCode.toLowerCase()))) {
-            return;
-          }
-        }
-        if(item.statusCondition === "Present") presentCount++;
-        else if(item.statusCondition === "Absent") absentCount++;
-        else if(item.statusCondition === "Week-Off") weekoffCount++;
-      });
-
-      document.getElementById("count-total-present").innerText = presentCount;
-      document.getElementById("count-total-absent").innerText = absentCount;
-      document.getElementById("count-total-weekoff").innerText = weekoffCount;
-
-      const totalMarked = presentCount + absentCount;
-      const rate = totalMarked > 0 ? Math.round((presentCount / totalMarked) * 100) : 0;
-      document.getElementById("rate-total-attendance").innerText = `${rate}% Attendance Rate`;
-
-      buildHubSubmissionTrackerCards(selectedDate);
-    });
-  }
-
-  function buildHubSubmissionTrackerCards(dateStr) {
-    const container = document.getElementById("regional-hub-status-list-container");
-    if(!container) return;
-    container.innerHTML = "";
-
-    databaseCachedStoresList.forEach(store => {
-      if(!isCurrentSessionAdmin && activeSessionStoreContext !== store) return;
-
-      db.collection("attendance_ledger")
-        .where("selectedDate", "==", dateStr)
-        .where("storeCode", "==", store)
-        .limit(1).get().then(snap => {
-          const checkStatus = !snap.empty;
-          container.innerHTML += `
-            <div style="background:var(--bg-input); padding:14px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; border:1px solid var(--border-color);">
-              <div>
-                <strong style="font-size:14px; display:block;">${store}</strong>
-                <span style="font-size:12px; color:var(--text-muted);">Target Roster Active</span>
-              </div>
-              <span style="padding:4px 10px; font-size:11px; font-weight:bold; border-radius:6px; background:${checkStatus ? 'rgba(0,230,118,0.15)' : 'rgba(255,82,82,0.15)'}; color:${checkStatus ? '#00e676' : '#ff5252'};">
-                ${checkStatus ? 'COMPLETED' : 'PENDING'}
-              </span>
-            </div>`;
-        });
-    });
-  }
-
-  function synchronizeDynamicRosterInterfaceDeck() {
-    const filterShift = document.getElementById("attendance-execution-shift").value;
-    const wrapperDeck = document.getElementById("roster-pre-selection-deck-wrapper");
-    if(!wrapperDeck) return;
-
-    let targetRoster = databaseCachedStaffDirectory;
-    
-    // FIXED: Soft comparison matching strings prevent false drop outs
-    if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      targetRoster = targetRoster.filter(emp => 
-        emp.storeCode && (emp.storeCode.toLowerCase().includes(activeSessionStoreContext.toLowerCase()) || activeSessionStoreContext.toLowerCase().includes(emp.storeCode.toLowerCase()))
-      );
-    }
-    
-    if(filterShift) {
-      targetRoster = targetRoster.filter(emp => 
-        emp.shift && (emp.shift.toLowerCase().includes(filterShift.toLowerCase()) || filterShift.toLowerCase().includes(emp.shift.toLowerCase()))
-      );
-    }
-
-    if(targetRoster.length === 0) {
-      wrapperDeck.innerHTML = `<p style="color:var(--text-muted); text-align:center; font-size:13px; padding:20px;">No registered logistics staff profiles match selection rules.</p>`;
-      return;
-    }
-
-    wrapperDeck.innerHTML = "";
-    targetRoster.forEach((emp) => {
-      wrapperDeck.innerHTML += `
-        <div class="associate-selection-row-card selected-active">
-          <div class="associate-info-meta">
-            <b>${emp.name}</b>
-            <span>${emp.role || 'Warehouse Associate'} // ${emp.agency || 'GWC Logistics'}</span>
-          </div>
-          <div class="round-checkbox-control-wrapper">
-            <input type="checkbox" class="preselect-roster-checkbox-element" data-name="${emp.name}" data-role="${emp.role || 'Warehouse Associate'}" data-store="${emp.storeCode || activeSessionStoreContext}" data-shift="${emp.shift || filterShift}" data-agency="${emp.agency || 'GWC'}" checked onchange="this.closest('.associate-selection-row-card').classList.toggle('selected-active', this.checked)">
-          </div>
-        </div>`;
-    });
-  }
-
-  function executeQuickAssociateOnboarding() {
-    const name = document.getElementById("quick-add-name").value.trim();
-    const agency = document.getElementById("quick-add-agency").value.trim() || "GWC";
-    const shift = document.getElementById("attendance-execution-shift").value;
-    const store = isCurrentSessionAdmin ? "Admin Hub" : activeSessionStoreContext;
-
-    if(!name) { alert("Please insert employee name."); return; }
-
-    const newWorkerObj = {
-      name: name,
-      agency: agency,
-      role: "Warehouse Associate",
-      shift: shift + " Shift",
-      storeCode: store
+  <script>
+    // CORE FIREBASE ENCRYPTION GATEWAY PROPERTIES
+    const firebaseConfig = {
+      apiKey: "AIzaSyBCc_icnHiLdmKMWoTOfIOFQonWfVn4AOQ",
+      authDomain: "attendance-management-sy-7a8dc.firebaseapp.com",
+      projectId: "attendance-management-sy-7a8dc",
+      storageBucket: "attendance-management-sy-7a8dc.firebasestorage.app",
+      messagingSenderId: "251165221601",
+      appId: "1:251165221601:web:2d58e00b38656e9452cda0"
     };
 
-    // Add locally to staging array immediately
-    currentPhaseSelectedWorkerArray.push(newWorkerObj);
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    let activeSessionStoreContext = "";
+    let currentSessionOperatorEmail = "";
+    let isCurrentSessionAdmin = false;
     
-    // Save to server database silently in background
-    db.collection("employee_directory").add(newWorkerObj);
+    let databaseCachedStoresList = [];
+    let databaseCachedStaffDirectory = [];
+    let databaseCachedPinMap = {};
+    let currentPhaseSelectedWorkerArray = [];
+    let pinnedReviewDatasetBuffer = [];
 
-    // Flush fields and rebuild view
-    document.getElementById("quick-add-name").value = "";
-    document.getElementById("quick-add-agency").value = "";
-    
-    buildActiveRosterStatusGridCardsFromStagedArray();
-  }
+    const currentSystemCalendarIsoDateStr = new Date().toISOString().split('T')[0];
+    document.getElementById("attendance-execution-date").value = currentSystemCalendarIsoDateStr;
+    document.getElementById("attendance-execution-date").setAttribute("max", currentSystemCalendarIsoDateStr);
 
-  function commitStagedSelectionToRosterStatusDeck() {
-    const nodesChecked = document.querySelectorAll(".preselect-roster-checkbox-element:checked");
-    if(nodesChecked.length === 0) { alert("Please select at least one active employee checklist card to populate."); return; }
+    function handlePinInputChain(currentBox, nextFieldId, prevFieldId) {
+      if (currentBox.value.length >= 1 && nextFieldId) {
+        document.getElementById(nextFieldId).focus();
+      }
+      if (window.event.keyCode === 8 && prevFieldId) {
+        document.getElementById(prevFieldId).focus();
+      }
+    }
 
-    currentPhaseSelectedWorkerArray = [];
-    nodesChecked.forEach(box => {
-      currentPhaseSelectedWorkerArray.push({
-        name: box.getAttribute("data-name"),
-        role: box.getAttribute("data-role"),
-        storeCode: box.getAttribute("data-store"),
-        shift: box.getAttribute("data-shift"),
-        agency: box.getAttribute("data-agency")
+    function togglePinObscurityState() {
+      const fields = ['p1', 'p2', 'p3', 'p4'];
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.type = el.type === "password" ? "text" : "password";
       });
+    }
+
+    auth.onAuthStateChanged(user => {
+      if(user) {
+        currentSessionOperatorEmail = user.email;
+        evaluateUserPermissionNode(user.email);
+      } else {
+        if(!activeSessionStoreContext) { initializeLogonTerminalInterface(); }
+      }
     });
 
-    document.getElementById("roster-pre-selection-panel").style.display = "none";
-    document.getElementById("roster-status-mapping-panel").style.display = "block";
-    buildActiveRosterStatusGridCardsFromStagedArray();
-  }
+    function switchVerificationPathway(selectedMode) {
+      document.getElementById("gateway-callback-error-log").style.display = "none";
+      const opBtn = document.getElementById("toggle-op-mode-btn");
+      const adminBtn = document.getElementById("toggle-admin-mode-btn");
+      
+      if(selectedMode === 'operator') {
+        document.getElementById("wrapper-operator-credentials").style.display = "block";
+        document.getElementById("wrapper-admin-credentials").style.display = "none";
+        opBtn.className = "pathway-toggle-btn active-mode";
+        adminBtn.className = "pathway-toggle-btn inactive-mode";
+      } else {
+        document.getElementById("wrapper-operator-credentials").style.display = "none";
+        document.getElementById("wrapper-admin-credentials").style.display = "block";
+        opBtn.className = "pathway-toggle-btn inactive-mode";
+        adminBtn.className = "pathway-toggle-btn active-mode";
+      }
+    }
 
-  function buildActiveRosterStatusGridCardsFromStagedArray() {
-    const mainDeckContainer = document.getElementById("active-attendance-card-deck-wrapper");
-    if(!mainDeckContainer) return;
-    mainDeckContainer.innerHTML = "";
-
-    currentPhaseSelectedWorkerArray.forEach((worker) => {
-      mainDeckContainer.innerHTML += `
-        <div class="attendance-card-item-container live-status-mapping-row-node" data-name="${worker.name}" data-role="${worker.role}" data-store="${worker.storeCode}" data-shift="${worker.shift}" data-agency="${worker.agency}">
-          <div style="margin-bottom:12px;">
-            <h4 style="margin:0 0 3px 0; font-size:16px; font-weight:800;">${worker.name}</h4>
-            <p style="margin:0; font-size:12px; color:var(--text-muted);">${worker.role} • ${worker.agency} • ${worker.storeCode}</p>
-          </div>
+    function initializeLogonTerminalInterface() {
+      document.getElementById("login-view-node").style.display = "flex";
+      document.getElementById("dashboard-view-node").style.display = "none";
+      
+      db.collection("system_configs").doc("stores_matrix").get().then((doc) => {
+        if(doc.exists && doc.data().stores) {
+          databaseCachedStoresList = doc.data().stores;
+          const selectMenu = document.getElementById("login-store-select-menu");
+          const adminStoreMenu = document.getElementById("admin-new-worker-store");
           
-          <div class="form-block-element" style="margin-bottom:12px;">
-            <label style="font-size:10px;">DUTY STATUS CONDITION MATCH</label>
-            <select class="custom-select-input row-level-status-dropdown-element">
-              <option value="Present">Present</option>
+          if(selectMenu) {
+            selectMenu.innerHTML = "";
+            databaseCachedStoresList.forEach(store => { selectMenu.innerHTML += `<option value="${store}">${store}</option>`; });
+          }
+          if(adminStoreMenu) {
+            adminStoreMenu.innerHTML = "";
+            databaseCachedStoresList.forEach(store => { adminStoreMenu.innerHTML += `<option value="${store}">${store}</option>`; });
+          }
+        }
+      });
+      
+      db.collection("system_configs").doc("pin_authorization_matrix").get().then((doc) => {
+        if(doc.exists) databaseCachedPinMap = doc.data();
+      });
+    }
+    function evaluateUserPermissionNode(email) {
+      if (email === "gwcadmin@gmail.com") {
+        isCurrentSessionAdmin = true;
+        activeSessionStoreContext = "HQ-ADMIN-CONTROL";
+        document.getElementById("nav-target-btn-infrastructure").style.display = "block";
+        initializeAdministrativeDashboardLayout();
+      } else {
+        isCurrentSessionAdmin = false;
+        document.getElementById("nav-target-btn-infrastructure").style.display = "none";
+        document.getElementById("gateway-callback-error-log").textContent = "Unauthorized Admin Email Context Mapping.";
+        document.getElementById("gateway-callback-error-log").style.display = "block";
+        killTerminalSessionState();
+      }
+    }
+
+    function executeOperatorSecurityValidation() {
+      const selectedStore = document.getElementById("login-store-select-menu").value;
+      const inputPin = document.getElementById("p1").value + 
+                       document.getElementById("p2").value + 
+                       document.getElementById("p3").value + 
+                       document.getElementById("p4").value;
+      
+      if(inputPin.length !== 4) {
+        showGatewayAuthenticationError("Please enter a complete 4-digit security PIN.");
+        return;
+      }
+      
+      const targetPinKey = selectedStore.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase() + "_pin";
+      const validPin = databaseCachedPinMap[targetPinKey];
+      
+      if(validPin && String(validPin) === String(inputPin)) {
+        activeSessionStoreContext = selectedStore;
+        isCurrentSessionAdmin = false;
+        document.getElementById("nav-target-btn-infrastructure").style.display = "none";
+        bootDashboardUserWorkspace();
+      } else {
+        showGatewayAuthenticationError("Invalid Terminal Entry PIN for this Node Location.");
+      }
+    }
+
+    function executeAdminDatabaseAuthentication() {
+      const email = document.getElementById("login-admin-email").value.trim();
+      const password = document.getElementById("login-admin-password").value;
+      
+      if(!email || !password) {
+        showGatewayAuthenticationError("Credentials fields cannot be left empty.");
+        return;
+      }
+      
+      auth.signInWithEmailAndPassword(email, password).catch(err => {
+        showGatewayAuthenticationError("Authentication Failed: " + err.message);
+      });
+    }
+
+    function showGatewayAuthenticationError(message) {
+      const errLog = document.getElementById("gateway-callback-error-log");
+      errLog.textContent = message;
+      errLog.style.display = "block";
+    }
+
+    function bootDashboardUserWorkspace() {
+      document.getElementById("login-view-node").style.display = "none";
+      document.getElementById("dashboard-view-node").style.display = "block";
+      document.getElementById("session-identity-badge").textContent = `NODE: ${activeSessionStoreContext}`;
+      
+      routeWorkspaceNavigation('page-overview-analytics');
+      runLiveDirectoryCacheSync();
+      fetchHistoricalLedgerDocuments();
+    }
+
+    function initializeAdministrativeDashboardLayout() {
+      document.getElementById("login-view-node").style.display = "none";
+      document.getElementById("dashboard-view-node").style.display = "block";
+      document.getElementById("session-identity-badge").textContent = "ADMIN SYSTEM MASTER";
+      
+      routeWorkspaceNavigation('page-overview-analytics');
+      runLiveDirectoryCacheSync();
+      fetchHistoricalLedgerDocuments();
+      generateAdminPinSettingsGrid();
+    }
+
+    function killTerminalSessionState() {
+      auth.signOut().then(() => {
+        activeSessionStoreContext = "";
+        isCurrentSessionAdmin = false;
+        document.getElementById("login-view-node").style.display = "flex";
+        document.getElementById("dashboard-view-node").style.display = "none";
+        
+        ['p1', 'p2', 'p3', 'p4', 'login-admin-email', 'login-admin-password'].forEach(id => {
+          const el = document.getElementById(id);
+          if(el) el.value = "";
+        });
+        
+        initializeLogonTerminalInterface();
+      });
+    }
+
+    function routeWorkspaceNavigation(targetPageId) {
+      const pages = ['page-overview-analytics', 'page-attendance-hub', 'page-historical-ledger', 'page-incident-reporting', 'page-infrastructure-controls'];
+      pages.forEach(p => {
+        const el = document.getElementById(p);
+        if(el) el.className = "workspace-view-page";
+      });
+      
+      const targetPage = document.getElementById(targetPageId);
+      if(targetPage) targetPage.className = "workspace-view-page page-state-active";
+
+      const navMapping = {
+        'page-overview-analytics': 'nav-target-btn-dash',
+        'page-attendance-hub': 'nav-target-btn-attendance',
+        'page-historical-ledger': 'nav-target-btn-history',
+        'page-incident-reporting': 'nav-target-btn-incident',
+        'page-infrastructure-controls': 'nav-target-btn-infrastructure'
+      };
+
+      Object.values(navMapping).forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.className = "navigation-tab-item";
+      });
+
+      const activeNavButton = document.getElementById(navMapping[targetPageId]);
+      if(activeNavButton) activeNavButton.className = "navigation-tab-item tab-state-active";
+    }
+
+    function runLiveDirectoryCacheSync() {
+      db.collection("associate_directory").onSnapshot(snapshot => {
+        databaseCachedStaffDirectory = [];
+        snapshot.forEach(doc => {
+          databaseCachedStaffDirectory.push({ id: doc.id, ...doc.data() });
+        });
+        synchronizeDynamicRosterInterfaceDeck();
+        calculateRealtimeGlobalAnalytics();
+      });
+    }
+
+    function synchronizeDynamicRosterInterfaceDeck() {
+      const targetDeck = document.getElementById("roster-pre-selection-deck-wrapper");
+      if(!targetDeck) return;
+      
+      targetDeck.innerHTML = "";
+      
+      const currentSelectedShift = document.getElementById("attendance-execution-shift").value;
+      
+      // Filter out records based on current store context rules
+      const filteredRoster = databaseCachedStaffDirectory.filter(worker => {
+        if(!isCurrentSessionAdmin && worker.store !== activeSessionStoreContext) return false;
+        
+        if (worker.shift) {
+          const simplifiedWorkerShift = worker.shift.replace(" Shift", "").trim();
+          if (simplifiedWorkerShift !== currentSelectedShift) return false;
+        }
+        return true;
+      });
+
+      if(filteredRoster.length === 0) {
+        targetDeck.innerHTML = `<p style="color:var(--text-muted); font-size:13px; padding:10px;">No workers matched for ${activeSessionStoreContext} [${currentSelectedShift} Shift].</p>`;
+        return;
+      }
+
+      filteredRoster.forEach(worker => {
+        targetDeck.innerHTML += `
+          <div class="associate-selection-row-card selected-active" id="pre-card-${worker.id}">
+            <div class="associate-info-meta">
+              <b>${worker.name}</b>
+              <span>${worker.agency || 'Internal Direct'} • ${worker.role || 'Associate'} • ${worker.shift || 'Universal'}</span>
+            </div>
+            <div class="round-checkbox-control-wrapper">
+              <input type="checkbox" checked value="${worker.id}" id="check-worker-${worker.id}">
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function commitStagedSelectionToRosterStatusDeck() {
+      const targetDeck = document.getElementById("roster-pre-selection-deck-wrapper");
+      const checkboxes = targetDeck.querySelectorAll('input[type="checkbox"]');
+      
+      currentPhaseSelectedWorkerArray = [];
+      checkboxes.forEach(cb => {
+        if(cb.checked) {
+          const workerData = databaseCachedStaffDirectory.find(w => w.id === cb.value);
+          if(workerData) currentPhaseSelectedWorkerArray.push(workerData);
+        }
+      });
+
+      if(currentPhaseSelectedWorkerArray.length === 0) {
+        alert("Please pick at least one associate profile before launching status adjustments.");
+        return;
+      }
+
+      const statusCardWrapper = document.getElementById("active-attendance-card-deck-wrapper");
+      statusCardWrapper.innerHTML = "";
+
+      currentPhaseSelectedWorkerArray.forEach(worker => {
+        statusCardWrapper.innerHTML += `
+          <div class="attendance-card-item-container">
+            <div style="display:flex; justify-content:between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div style="flex:1; min-width:200px;">
+                <strong style="font-size:16px; color:#fff; display:block; margin-bottom:2px;">${worker.name}</strong>
+                <span style="font-size:12px; color:var(--text-muted);">${worker.agency || 'Internal'} • ${worker.role}</span>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <select id="status-select-${worker.id}" class="custom-select-input" style="padding:10px; width:120px;" onchange="handleSingleCardThemeCorrection('${worker.id}')">
+                  <option value="Present" selected>Present</option>
+                  <option value="Absent">Absent</option>
+                  <option value="Week-Off">Week-Off</option>
+                </select>
+                <input type="text" id="remark-input-${worker.id}" class="custom-text-field" style="padding:10px; width:180px;" placeholder="Optional Remarks...">
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById("roster-pre-selection-panel").style.display = "none";
+      document.getElementById("roster-status-mapping-panel").style.display = "block";
+    }
+
+    function handleSingleCardThemeCorrection(workerId) {
+      // Dynamic adjustments could go here if design variations are desired per choice
+    }
+
+    function executeGlobalRosterBulkOverride() {
+      const globalStatus = document.getElementById("global-bulk-status-selector").value;
+      currentPhaseSelectedWorkerArray.forEach(worker => {
+        const selectMenu = document.getElementById(`status-select-${worker.id}`);
+        if(selectMenu) selectMenu.value = globalStatus;
+      });
+    }
+
+    function executeQuickAssociateOnboarding() {
+      const name = document.getElementById("quick-add-name").value.trim();
+      const agency = document.getElementById("quick-add-agency").value.trim();
+      
+      if(!name || !agency) {
+        alert("Please fill in both Name and Agency for the inline onboarding process.");
+        return;
+      }
+
+      const generatedTempId = "temp_" + Date.now();
+      const currentSelectedShift = document.getElementById("attendance-execution-shift").value;
+      
+      const newInlineWorkerObj = {
+        id: generatedTempId,
+        name: name,
+        agency: agency,
+        role: "Warehouse Associate",
+        store: activeSessionStoreContext,
+        shift: currentSelectedShift + " Shift"
+      };
+
+      currentPhaseSelectedWorkerArray.push(newInlineWorkerObj);
+      
+      const statusCardWrapper = document.getElementById("active-attendance-card-deck-wrapper");
+      const appendCard = document.createElement("div");
+      appendCard.className = "attendance-card-item-container";
+      appendCard.innerHTML = `
+        <div style="display:flex; justify-content:between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div style="flex:1; min-width:200px;">
+            <strong style="font-size:16px; color:#fff; display:block; margin-bottom:2px;">${newInlineWorkerObj.name}</strong>
+            <span style="font-size:12px; color:var(--accent-purple);">${newInlineWorkerObj.agency} • Inline Added</span>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <select id="status-select-${newInlineWorkerObj.id}" class="custom-select-input" style="padding:10px; width:120px;">
+              <option value="Present" selected>Present</option>
               <option value="Absent">Absent</option>
               <option value="Week-Off">Week-Off</option>
             </select>
+            <input type="text" id="remark-input-${newInlineWorkerObj.id}" class="custom-text-field" style="padding:10px; width:180px;" placeholder="Optional Remarks...">
           </div>
-          
-          <div class="form-block-element" style="margin:0;">
-            <label style="font-size:10px;">REMARKS EXCEPTIONS NOTE</label>
-            <input type="text" class="custom-text-field row-level-remarks-input-element" placeholder="Exceptions context notes...">
-          </div>
-        </div>`;
-    });
-  }
-
-  function fallbackToDirectoryStagingStage() {
-    document.getElementById("roster-pre-selection-panel").style.display = "block";
-    document.getElementById("roster-status-mapping-panel").style.display = "none";
-    document.getElementById("roster-review-verification-panel").style.display = "none";
-  }
-
-  function executeGlobalRosterBulkOverride() {
-    const globalVal = document.getElementById("global-bulk-status-selector").value;
-    document.querySelectorAll(".row-level-status-dropdown-element").forEach(select => {
-      select.value = globalVal;
-    });
-  }
-
-  function pushAttendanceDatasetToCloudDatabase() {
-    const signature = document.getElementById("attendance-submitter-signature").value.trim();
-    const targetedActiveCards = document.querySelectorAll(".live-status-mapping-row-node");
-
-    if(!signature) { alert("Please input your authorization name signature execution parameter."); return; }
-    if(targetedActiveCards.length === 0) return;
-
-    pinnedReviewDatasetBuffer = [];
-    targetedActiveCards.forEach(card => {
-      pinnedReviewDatasetBuffer.push({
-        name: card.getAttribute("data-name"),
-        role: card.getAttribute("data-role"),
-        storeCode: card.getAttribute("data-store"),
-        shift: card.getAttribute("data-shift"),
-        agency: card.getAttribute("data-agency"),
-        statusCondition: card.querySelector(".row-level-status-dropdown-element").value,
-        remarks: card.querySelector(".row-level-remarks-input-element").value.trim() || "--"
-      });
-    });
-
-    // OPEN REVIEW SCREEN INSTEAD OF FORCE LOGOUT
-    document.getElementById("roster-status-mapping-panel").style.display = "none";
-    document.getElementById("roster-review-verification-panel").style.display = "block";
-    
-    const reviewTbody = document.getElementById("review-verification-table-body");
-    reviewTbody.innerHTML = "";
-    pinnedReviewDatasetBuffer.forEach(item => {
-      reviewTbody.innerHTML += `
-        <tr>
-          <td><b>${item.name}</b></td>
-          <td>${item.agency}</td>
-          <td>${item.shift}</td>
-          <td><span style="font-weight:bold; color:${item.statusCondition==='Present'?'#00e676':'#ff5252'}">${item.statusCondition}</span></td>
-          <td>${item.remarks}</td>
-        </tr>`;
-    });
-  }
-
-  function unlockReviewSheetForLiveEditing() {
-    document.getElementById("roster-status-mapping-panel").style.display = "block";
-    document.getElementById("roster-review-verification-panel").style.display = "none";
-  }
-
-  function confirmAndFinalizeSubmissionPipeline() {
-    const selectedDate = document.getElementById("attendance-execution-date").value;
-    const signature = document.getElementById("attendance-submitter-signature").value.trim();
-    const atomicBatchTransactionRef = db.batch();
-    const systemTimestampClockStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    pinnedReviewDatasetBuffer.forEach(item => {
-      const docRef = db.collection("attendance_ledger").doc();
-      atomicBatchTransactionRef.set(docRef, {
-        selectedDate: selectedDate,
-        storeCode: item.storeCode,
-        name: item.name,
-        role: item.role,
-        shift: item.shift,
-        agency: item.agency,
-        statusCondition: item.statusCondition,
-        remarks: item.remarks,
-        operatorEmail: currentSessionOperatorEmail,
-        supervisorSignature: signature,
-        transmissionTime: systemTimestampClockStr
-      });
-    });
-
-    atomicBatchTransactionRef.commit().then(() => {
-      alert(`🚀 Success! Sheet parameters successfully written to the secure ledger system.`);
-      document.getElementById("attendance-submitter-signature").value = "";
-      document.getElementById("roster-review-verification-panel").style.display = "none";
+        </div>
+      `;
       
-      if(!isCurrentSessionAdmin) {
-        killTerminalSessionState();
-      } else {
-        fallbackToDirectoryStagingStage();
-        synchronizeDynamicRosterInterfaceDeck();
-        calculateOverviewAnalyticsMetrics();
-      }
-    }).catch(err => alert("Pipeline block failed: " + err.message));
-  }
-
-  function fetchHistoricalLedgerDocuments() {
-    const qDate = document.getElementById("ledger-query-date-filter").value;
-    const qShift = document.getElementById("ledger-query-shift-filter").value;
-    const tableBody = document.getElementById("historical-data-table-body");
-    
-    if(!tableBody) return;
-    tableBody.innerHTML = "";
-
-    let ledgerRef = db.collection("attendance_ledger");
-
-    if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      ledgerRef = ledgerRef.where("storeCode", "==", activeSessionStoreContext);
+      statusCardWrapper.appendChild(appendCard);
+      
+      document.getElementById("quick-add-name").value = "";
+      document.getElementById("quick-add-agency").value = "";
     }
-    if(qDate) ledgerRef = ledgerRef.where("selectedDate", "==", qDate);
-    if(qShift && qShift !== "All") ledgerRef = ledgerRef.where("shift", "==", qShift);
 
-    ledgerRef.orderBy("selectedDate", "desc").limit(40).get().then(snapshot => {
-      tableBody.innerHTML = "";
-      if(snapshot.empty) {
-        tableBody.innerHTML = `<tr><td colspan="7" style="color:var(--text-muted); text-align:center; padding:15px;">No matching ledger logs stored for selection inputs.</td></tr>`;
+    function fallbackToDirectoryStagingStage() {
+      document.getElementById("roster-status-mapping-panel").style.display = "none";
+      document.getElementById("roster-pre-selection-panel").style.display = "block";
+    }
+
+    function pushAttendanceDatasetToCloudDatabase() {
+      const baseSignature = document.getElementById("attendance-submitter-signature").value.trim();
+      if(!baseSignature) {
+        alert("A Submitter Verification Name Signature is required to trace ledger adjustments safely.");
         return;
       }
-      snapshot.forEach(doc => {
-        const item = doc.data();
-        tableBody.innerHTML += `
+
+      pinnedReviewDatasetBuffer = [];
+      const reviewTableBody = document.getElementById("review-verification-table-body");
+      reviewTableBody.innerHTML = "";
+
+      const executionDate = document.getElementById("attendance-execution-date").value;
+      const executionShift = document.getElementById("attendance-execution-shift").value;
+
+      currentPhaseSelectedWorkerArray.forEach(worker => {
+        const statusValue = document.getElementById(`status-select-${worker.id}`).value;
+        const remarkValue = document.getElementById(`remark-input-${worker.id}`).value.trim();
+
+        const dataPayload = {
+          date: executionDate,
+          shift: executionShift,
+          store: worker.store || activeSessionStoreContext,
+          workerName: worker.name,
+          agency: worker.agency || "Internal Direct",
+          role: worker.role || "Warehouse Associate",
+          status: statusValue,
+          remarks: remarkValue,
+          submittedBy: baseSignature,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        pinnedReviewDatasetBuffer.push(dataPayload);
+
+        reviewTableBody.innerHTML += `
           <tr>
-            <td>${item.selectedDate}</td>
-            <td style="color:var(--accent-blue); font-weight:bold;">${item.storeCode}</td>
-            <td><b>${item.name}</b><br><small style="color:var(--text-muted);">${item.agency || 'GWC'}</small></td>
-            <td>${item.shift}</td>
-            <td><span style="font-weight:bold; color:${item.statusCondition==='Present'?'#00e676':item.statusCondition==='Absent'?'#ff5252':'#90a4ae'}">${item.statusCondition}</span></td>
-            <td style="color:var(--text-muted); font-style:italic;">${item.remarks}</td>
-            <td>${item.supervisorSignature || 'System Terminal'}</td>
-          </tr>`;
+            <td><strong>${worker.name}</strong></td>
+            <td>${dataPayload.agency}</td>
+            <td>${executionShift} Shift</td>
+            <td><span style="color:${statusValue==='Present'?'#00e676':statusValue==='Absent'?'#ff5252':'#90a4ae'}">${statusValue}</span></td>
+            <td>${remarkValue || '-'}</td>
+          </tr>
+        `;
       });
-    });
-  }
 
-  function clearHistoricalSearchFilters() {
-    document.getElementById("ledger-query-date-filter").value = "";
-    document.getElementById("ledger-query-shift-filter").value = "All";
-    fetchHistoricalLedgerDocuments();
-  }
-
-  function triggerCsvExportSequence() {
-    let datasetRef = db.collection("attendance_ledger");
-    if(!isCurrentSessionAdmin && activeSessionStoreContext) {
-      datasetRef = datasetRef.where("storeCode", "==", activeSessionStoreContext);
+      document.getElementById("roster-status-mapping-panel").style.display = "none";
+      document.getElementById("roster-review-verification-panel").style.display = "block";
     }
 
-    datasetRef.get().then(snapshot => {
-      if(snapshot.empty) { alert("No compiled records data available to compile."); return; }
+    function unlockReviewSheetForLiveEditing() {
+      document.getElementById("roster-review-verification-panel").style.display = "none";
+      document.getElementById("roster-status-mapping-panel").style.display = "block";
+    }
+
+    function confirmAndFinalizeSubmissionPipeline() {
+      if(pinnedReviewDatasetBuffer.length === 0) return;
+
+      const batch = db.batch();
       
-      let csvOutput = "data:text/csv;charset=utf-8,Date,Hub Code,Employee Name,Agency,Shift,Status,Remarks,Authorized Signature\n";
-      snapshot.forEach(doc => {
-        const r = doc.data();
-        csvOutput += `"${r.selectedDate}","${r.storeCode}","${r.name}","${r.agency || 'GWC'}","${r.shift}","${r.statusCondition}","${r.remarks}","${r.supervisorSignature}"\n`;
+      pinnedReviewDatasetBuffer.forEach(payload => {
+        // Correcting targeted collection path to attendance_ledger precisely
+        const newDocReference = db.collection("attendance_ledger").doc();
+        batch.set(newDocReference, payload);
       });
 
-      const encodedUri = encodeURI(csvOutput);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `GWC_Attendance_Export_${currentSystemCalendarIsoDateStr}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-  }
+      batch.commit().then(() => {
+        alert("Attendance metrics committed to attendance_ledger cloud dataset safely.");
+        
+        document.getElementById("attendance-submitter-signature").value = "";
+        document.getElementById("roster-review-verification-panel").style.display = "none";
+        document.getElementById("roster-pre-selection-panel").style.display = "block";
+        
+        synchronizeDynamicRosterInterfaceDeck();
+        calculateRealtimeGlobalAnalytics();
+        fetchHistoricalLedgerDocuments();
+        routeWorkspaceNavigation('page-overview-analytics');
+      }).catch(err => {
+        alert("Failed to sync attendance batch: " + err.message);
+      });
+    }
 
-  function submitNewEscalationTicket() {
-    const title = document.getElementById("ticket-issue-title").value.trim();
-    const description = document.getElementById("ticket-issue-details").value.trim();
+    function calculateRealtimeGlobalAnalytics() {
+      const todayIsoStr = new Date().toISOString().split('T')[0];
+      
+      // Targeting corrected cloud workspace ledger path
+      db.collection("attendance_ledger").where("date", "==", todayIsoStr).get().then(snapshot => {
+        let presentCount = 0;
+        let absentCount = 0;
+        let weekoffCount = 0;
+        let recordsLogged = 0;
 
-    if(!title || !description) { alert("Please compile issue summary tokens completely."); return; }
+        let hubReportingMap = {};
+        databaseCachedStoresList.forEach(store => {
+          hubReportingMap[store] = { Day: false, Mid: false, Night: false };
+        });
 
-    db.collection("incident_tickets").add({
-      title: title,
-      description: description,
-      status: "Pending",
-      timestamp: new Date().toLocaleString(),
-      originNode: activeSessionStoreContext || "Admin Terminal Override"
-    }).then(() => {
-      alert("🚀 Ticket securely stacked into server queues.");
-      document.getElementById("ticket-issue-title").value = "";
-      document.getElementById("ticket-issue-details").value = "";
-    });
-  }
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          recordsLogged++;
+          
+          if(data.status === "Present") presentCount++;
+          else if(data.status === "Absent") absentCount++;
+          else if(data.status === "Week-Off") weekoffCount++;
 
-  function syncAdminPinUIGrid() {
-    const parentContainerBox = document.getElementById("admin-pin-matrix-config-grid");
-    if(!parentContainerBox) return;
-    parentContainerBox.innerHTML = "";
+          if(hubReportingMap[data.store] && data.shift) {
+            hubReportingMap[data.store][data.shift] = true;
+          }
+        });
 
-    databaseCachedStoresList.forEach(store => {
-      const currentPin = databaseCachedPinMap[store] || "1234";
-      parentContainerBox.innerHTML += `
-        <div>
-          <label style="color:var(--accent-purple); font-size:11px;">${store} ACCESS PIN</label>
-          <input type="text" id="token-pin-identity-${btoa(store).replace(/=/g,'')}" class="custom-text-field" value="${currentPin}" maxlength="4" style="font-weight:bold; text-align:center;">
-        </div>`;
-    });
-  }
+        document.getElementById("count-total-strength").textContent = databaseCachedStaffDirectory.filter(w => isCurrentSessionAdmin || w.store === activeSessionStoreContext).length;
+        document.getElementById("count-total-present").textContent = presentCount;
+        document.getElementById("count-total-absent").textContent = absentCount;
+        document.getElementById("count-total-weekoff").textContent = weekoffCount;
 
-  function commitUpdatedTerminalSecurityPins() {
-    if(!isCurrentSessionAdmin) return;
-    databaseCachedStoresList.forEach(store => {
-      const targetId = `token-pin-identity-${btoa(store).replace(/=/g,'')}`;
-      const elem = document.getElementById(targetId);
-      if(elem) databaseCachedPinMap[store] = elem.value.trim() || "1234";
-    });
+        const ratePercentage = recordsLogged > 0 ? Math.round((presentCount / (presentCount + absentCount)) * 100) : 0;
+        document.getElementById("rate-total-attendance").textContent = `${isNaN(ratePercentage) ? 0 : ratePercentage}% Floor Presence Ratio`;
 
-    db.collection("system_configs").doc("pin_authorization_matrix").set(databaseCachedPinMap)
-      .then(() => alert("🚀 PIN configurations saved successfully."))
-      .catch(err => alert("Error syncing configuration maps: " + err.message));
-  }
+        const hubListContainer = document.getElementById("regional-hub-status-list-container");
+        if(hubListContainer) {
+          hubListContainer.innerHTML = "";
+          Object.keys(hubReportingMap).forEach(hub => {
+            const shiftStatus = hubReportingMap[hub];
+            hubListContainer.innerHTML += `
+              <div style="background:var(--bg-input); padding:12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:bold; font-size:13px;">${hub}</span>
+                <div style="display:flex; gap:6px; font-size:11px;">
+                  <span style="padding:3px 6px; border-radius:4px; background:${shiftStatus.Day ? '#00e676':'#ff5252'}; color:#000;">D</span>
+                  <span style="padding:3px 6px; border-radius:4px; background:${shiftStatus.Mid ? '#00e676':'#ff5252'}; color:#000;">M</span>
+                  <span style="padding:3px 6px; border-radius:4px; background:${shiftStatus.Night ? '#00e676':'#ff5252'}; color:#000;">N</span>
+                </div>
+              </div>
+            `;
+          });
+        }
+      });
+    }
 
-  function createNewDarkstoreLocationNode() {
-    const value = document.getElementById("admin-new-store-input").value.trim();
-    if(!value) return;
+    function fetchHistoricalLedgerDocuments() {
+      const tableBody = document.getElementById("historical-data-table-body");
+      if(!tableBody) return;
 
-    if(databaseCachedStoresList.includes(value)) { alert("Location identifier node already verified."); return; }
-    databaseCachedStoresList.push(value);
+      tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">Querying global databases...</td></tr>`;
 
-    db.collection("system_configs").doc("stores_matrix").set({ stores: databaseCachedStoresList })
-      .then(() => { document.getElementById("admin-new-store-input").value = ""; alert("Location registration successful!"); });
-  }
+      let queryReference = db.collection("attendance_ledger");
 
-  function commitNewWorkerToDirectory() {
-    const name = document.getElementById("admin-new-worker-name").value.trim();
-    const agency = document.getElementById("admin-new-worker-agency").value.trim() || "GWC";
-    const role = document.getElementById("admin-new-worker-role").value;
-    const shift = document.getElementById("admin-new-worker-shift").value;
-    const store = document.getElementById("admin-new-worker-store").value;
+      const filterDate = document.getElementById("ledger-query-date-filter").value;
+      const filterShift = document.getElementById("ledger-query-shift-filter").value;
 
-    if(!name) { alert("Please provide a name to create a valid record object."); return; }
+      if(filterDate) {
+        queryReference = queryReference.where("date", "==", filterDate);
+      }
+      if(filterShift && filterShift !== "All") {
+        queryReference = queryReference.where("shift", "==", filterShift);
+      }
 
-// REPLACE THIS BLOCK IN commitNewWorkerToDirectory
-db.collection("employee_directory").add({
-    storeCode: store,
-    name: name,
-    agency: agency,
-    role: role,
-    shift: shift,
-    status: "Present" // This is the line that allows the dashboard to count them
-})
-    }).then(() => { 
-      document.getElementById("admin-new-worker-name").value = ""; 
-      document.getElementById("admin-new-worker-agency").value = "";
-      alert(`Profile added successfully for: ${name}`); 
-    });
-  }// --- NEW METRICS ENGINE ---
-function refreshDashboardMetrics() {
-    // We changed "staff" to "employee_directory"
-    const staffRef = db.collection("employee_directory");
+      queryReference.orderBy("timestamp", "desc").limit(150).get().then(snapshot => {
+        tableBody.innerHTML = "";
+        
+        let targetMatchesFound = 0;
+        snapshot.forEach(doc => {
+          const row = doc.data();
+          if(!isCurrentSessionAdmin && row.store !== activeSessionStoreContext) return;
 
-    // Total Strength
-    staffRef.get().then((snapshot) => {
-        document.getElementById("count-total-strength").innerText = snapshot.size;
-    });
+          targetMatchesFound++;
+          tableBody.innerHTML += `
+            <tr>
+              <td>${row.date || '-'}</td>
+              <td style="color:var(--accent-blue); font-weight:bold;">${row.store || '-'}</td>
+              <td><b>${row.workerName || 'Unknown'}</b></td>
+              <td>${row.shift || '-'}</td>
+              <td><span style="font-weight:bold; color:${row.status==='Present'?'#00e676':row.status==='Absent'?'#ff5252':'#90a4ae'}">${row.status}</span></td>
+              <td><span style="font-size:12px; color:var(--text-muted);">${row.remarks || '-'}</span></td>
+              <td style="font-family:monospace; font-size:12px;">${row.submittedBy || 'System Automation'}</td>
+            </tr>
+          `;
+        });
 
-    // Present
-    staffRef.where("status", "==", "Present").get().then((snapshot) => {
-        document.getElementById("count-total-present").innerText = snapshot.size;
-    });
+        if(targetMatchesFound === 0) {
+          tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No entries match the specified queries.</td></tr>`;
+        }
+      }).catch(err => {
+        tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#ff5252;">Index / Pipeline Sync Exception: ${err.message}</td></tr>`;
+      });
+    }
 
-    // Absent
-    staffRef.where("status", "==", "Absent").get().then((snapshot) => {
-        document.getElementById("count-total-absent").innerText = snapshot.size;
-    });
+    function clearHistoricalSearchFilters() {
+      document.getElementById("ledger-query-date-filter").value = "";
+      document.getElementById("ledger-query-shift-filter").value = "All";
+      fetchHistoricalLedgerDocuments();
+    }
 
-    // Week-Off
-    staffRef.where("status", "==", "Week-Off").get().then((snapshot) => {
-        document.getElementById("count-total-weekoff").innerText = snapshot.size;
-    });
-}
-}
-</script>
+    function triggerCsvExportSequence() {
+      let queryReference = db.collection("attendance_ledger");
+      const filterDate = document.getElementById("ledger-query-date-filter").value;
+      if(filterDate) queryReference = queryReference.where("date", "==", filterDate);
+
+      queryReference.get().then(snapshot => {
+        let csvContent = "data:text/csv;charset=utf-8,Date,Store,Worker Name,Shift,Status,Remarks,Submitted By\n";
+        
+        snapshot.forEach(doc => {
+          const r = doc.data();
+          if(!isCurrentSessionAdmin && r.store !== activeSessionStoreContext) return;
+          
+          const cleanRemarks = r.remarks ? r.remarks.replace(/,/g, " ") : "";
+          csvContent += `${r.date},${r.store},${r.workerName},${r.shift},${r.status},${cleanRemarks},${r.submittedBy}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const downloadAnchor = document.createElement("a");
+        downloadAnchor.setAttribute("href", encodedUri);
+        downloadAnchor.setAttribute("download", `GWC_Attendance_Export_${filterDate || 'Global'}.csv`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        document.body.removeChild(downloadAnchor);
+      });
+    }
+
+    function submitNewEscalationTicket() {
+      const title = document.getElementById("ticket-issue-title").value.trim();
+      const desc = document.getElementById("ticket-issue-details").value.trim();
+      
+      if(!title || !desc) {
+        alert("Please complete both form inputs to drop an infrastructure ticket.");
+        return;
+      }
+
+      db.collection("escalation_tickets").add({
+        storeNode: activeSessionStoreContext,
+        issueTitle: title,
+        issueDescription: desc,
+        status: "Open Queue",
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert("Ticket added to infrastructure engineering board successfully.");
+        document.getElementById("ticket-issue-title").value = "";
+        document.getElementById("ticket-issue-details").value = "";
+      });
+    }
+
+    function generateAdminPinSettingsGrid() {
+      const pinGrid = document.getElementById("admin-pin-matrix-config-grid");
+      if(!pinGrid) return;
+
+      pinGrid.innerHTML = "";
+      
+      db.collection("system_configs").doc("stores_matrix").get().then(doc => {
+        if(doc.exists && doc.data().stores) {
+          const stores = doc.data().stores;
+          stores.forEach(store => {
+            const normalizedKey = store.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase() + "_pin";
+            const currentPinValue = databaseCachedPinMap[normalizedKey] || "0000";
+
+            pinGrid.innerHTML += `
+              <div>
+                <label style="font-size:11px; color:var(--text-muted); font-weight:700; display:block; margin-bottom:4px;">${store} GATEWAY PIN</label>
+                <input type="text" id="admin-pin-field-${normalizedKey}" class="custom-text-field" maxlength="4" value="${currentPinValue}" style="font-family:monospace; letter-spacing:2px;">
+              </div>
+            `;
+          });
+        }
+      });
+    }
+
+    function commitUpdatedTerminalSecurityPins() {
+      db.collection("system_configs").doc("stores_matrix").get().then(doc => {
+        if(doc.exists && doc.data().stores) {
+          const stores = doc.data().stores;
+          let newPinUpdatePayload = {};
+
+          stores.forEach(store => {
+            const normalizedKey = store.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase() + "_pin";
+            const val = document.getElementById(`admin-pin-field-${normalizedKey}`).value;
+            newPinUpdatePayload[normalizedKey] = val;
+          });
+
+          db.collection("system_configs").doc("pin_authorization_matrix").set(newPinUpdatePayload, { merge: true }).then(() => {
+            alert("Security gateway PIN variations synchronized securely across cloud indices.");
+            databaseCachedPinMap = { ...databaseCachedPinMap, ...newPinUpdatePayload };
+          });
+        }
+      });
+    }
+
+    function createNewDarkstoreLocationNode() {
+      const newStoreName = document.getElementById("admin-new-store-input").value.trim();
+      if(!newStoreName) return;
+
+      if(databaseCachedStoresList.includes(newStoreName)) {
+        alert("This Node Location is already registered inside your workspace mapping matrix.");
+        return;
+      }
+
+      databaseCachedStoresList.push(newStoreName);
+      
+      db.collection("system_configs").doc("stores_matrix").set({
+        stores: databaseCachedStoresList
+      }).then(() => {
+        alert("New hub location successfully bound.");
+        document.getElementById("admin-new-store-input").value = "";
+        initializeLogonTerminalInterface();
+        generateAdminPinSettingsGrid();
+      });
+    }
+
+    function commitNewWorkerToDirectory() {
+      const store = document.getElementById("admin-new-worker-store").value;
+      const name = document.getElementById("admin-new-worker-name").value.trim();
+      const agency = document.getElementById("admin-new-worker-agency").value.trim();
+      const role = document.getElementById("admin-new-worker-role").value;
+      const shift = document.getElementById("admin-new-worker-shift").value;
+
+      if(!name) {
+        alert("Employee Full Name can not be left blank.");
+        return;
+      }
+
+      db.collection("associate_directory").add({
+        store: store,
+        name: name,
+        agency: agency || "Internal Direct",
+        role: role,
+        shift: shift,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert(`${name} registered inside global associate database successfully.`);
+        document.getElementById("admin-new-worker-name").value = "";
+        document.getElementById("admin-new-worker-agency").value = "";
+      });
+    }
+  </script>
 </body>
 </html>
